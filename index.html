@@ -6,27 +6,13 @@
   <meta name="theme-color" content="#0a2f2c">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="data:application/manifest+json,{
-    \"name\": \"Jadwal Sholat Indonesia\",
-    \"short_name\": \"JadwalSholat\",
-    \"start_url\": \".\",
-    \"display\": \"standalone\",
-    \"theme_color\": \"#0a2f2c\",
-    \"background_color\": \"#0a2f2c\",
-    \"icons\": [{
-      \"src\": \"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a2f2c'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='%23FFE6B0'%3E🕌%3C/text%3E%3C/svg%3E\",
-      \"sizes\": \"any\",
-      \"type\": \"image/svg+xml\",
-      \"purpose\": \"any\"
-    }]
-  }">
-  <title>Jadwal Sholat & Iqamah - Lengkap dengan Adzan</title>
+  <title>Jadwal Sholat & Al-Qur'an + Asmaul Husna</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
-    /* Variabel CSS untuk tema */
     :root {
       --bg-gradient-start: #0a2f2c;
       --bg-gradient-end: #0a1f1d;
@@ -83,7 +69,6 @@
       transition: all 0.2s;
     }
 
-    /* Header */
     .header-main {
       display: flex;
       justify-content: space-between;
@@ -113,7 +98,8 @@
       gap: 10px;
       border-left: 3px solid #F9B43A;
     }
-    .theme-toggle, .qibla-toggle, .export-btn, .adzan-toggle {
+    .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+    .action-btn {
       background: rgba(0,0,0,0.4);
       border: none;
       color: white;
@@ -123,12 +109,10 @@
       font-size: 0.8rem;
       transition: all 0.2s;
     }
-    .theme-toggle:hover, .qibla-toggle:hover, .export-btn:hover, .adzan-toggle:hover { background: #F9B43A; color: #1a1a1a; }
-    .adzan-toggle.active { background: #2e7d64; color: white; }
-    .adzan-toggle.active:hover { background: #1a5a48; }
-    .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+    .action-btn:hover { background: #F9B43A; color: #1a1a1a; }
+    .action-btn.active { background: #2e7d64; }
+    .adzan-toggle.active { background: #2e7d64; }
 
-    /* Time Giant */
     .time-giant {
       background: rgba(0, 0, 0, 0.45);
       border-radius: 2rem;
@@ -156,7 +140,6 @@
     .next-prayer-countdown { font-family: monospace; font-size: 1.2rem; background: #00000055; padding: 4px 12px; border-radius: 40px; letter-spacing: 1px; }
     .location-status { background: rgba(0,0,0,0.4); border-radius: 2rem; padding: 0.3rem 1rem; font-size: 0.7rem; display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; }
 
-    /* Schedule Grid */
     .schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 0.9rem; margin: 1.5rem 0; }
     .prayer-card {
       background: rgba(0, 0, 0, 0.45);
@@ -173,7 +156,6 @@
     .next-badge { font-size: 0.65rem; background: #F9B43A30; display: inline-block; padding: 2px 8px; border-radius: 30px; }
     .prayer-card.active-next { background: rgba(220, 160, 60, 0.35); border-bottom: 3px solid #FFC857; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transform: scale(1.02); }
 
-    /* Iqamah Alert */
     .iqamah-alert {
       background: linear-gradient(95deg, #e09d32, #bd7a1c);
       border-radius: 2rem;
@@ -192,67 +174,125 @@
     .iqamah-text { font-size: 1.4rem; display: flex; align-items: center; gap: 12px; }
     .iqamah-timer { font-family: monospace; font-size: 2rem; background: #00000055; padding: 5px 15px; border-radius: 60px; }
 
-    /* Arah Kiblat Panel */
-    .qibla-panel {
-      margin-top: 1rem;
-      display: none;
-      animation: slideDown 0.3s ease;
+    /* Al-Qur'an Panel */
+    .quran-section, .asmaul-husna-section { margin-top: 1.5rem; margin-bottom: 1rem; }
+    .surah-list, .asma-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 0.5rem;
+      padding: 0.5rem;
+      max-height: 450px;
+      overflow-y: auto;
     }
-    .qibla-panel.show { display: block; }
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .compass {
-      text-align: center;
-      padding: 1rem;
-    }
-    .compass-needle {
-      font-size: 4rem;
-      transition: transform 0.3s ease;
-      display: inline-block;
-    }
-    .qibla-degree { font-size: 1.2rem; font-weight: bold; color: #FFD966; margin-top: 10px; }
-
-    /* Masjid Terdekat */
-    .masjid-terdekat-section { margin-top: 1.5rem; margin-bottom: 1rem; }
-    .masjid-header { display: flex; align-items: center; gap: 10px; padding: 0.8rem 1.5rem; border-bottom: 1px solid rgba(255,215,150,0.3); }
-    .masjid-header h3 { font-size: 1.2rem; font-weight: 600; }
-    .masjid-list { padding: 0.5rem; max-height: 300px; overflow-y: auto; }
-    .masjid-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.8rem 1rem;
-      margin: 0.5rem;
+    .surah-item, .asma-item {
       background: rgba(0,0,0,0.3);
-      border-radius: 1.2rem;
-      cursor: pointer;
+      border-radius: 1rem;
+      padding: 0.6rem 1rem;
       transition: all 0.2s;
       border: 1px solid rgba(255,215,150,0.2);
     }
-    .masjid-item:hover { background: rgba(220, 160, 60, 0.3); transform: translateX(5px); border-color: #FFC857; }
-    .masjid-info { flex: 1; }
-    .masjid-name { font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
-    .masjid-name i { color: #FFD966; }
-    .masjid-address { font-size: 0.7rem; opacity: 0.7; margin-top: 3px; }
-    .masjid-distance { background: #2f5e52; padding: 5px 12px; border-radius: 30px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
-
-    /* Offline Indicator */
-    .offline-indicator {
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
-      background: rgba(255, 80, 80, 0.9);
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      display: none;
-      z-index: 100;
+    .surah-item { cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .surah-item:hover, .asma-item:hover { background: rgba(220, 160, 60, 0.3); border-color: #FFC857; }
+    .surah-number { color: #FFD966; font-weight: bold; margin-right: 10px; }
+    .surah-name { flex: 1; }
+    .surah-name-ar { font-family: 'Amiri', serif; font-size: 1.1rem; color: #FFE6B0; }
+    .surah-ayah { font-size: 0.7rem; opacity: 0.7; }
+    
+    /* Asmaul Husna Styles - DIPERBAIKI */
+    .asma-item {
+      display: block;
+      padding: 0.8rem;
     }
-    .offline-indicator.show { display: block; }
+    .asma-header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .asma-number { color: #FFD966; font-weight: bold; font-size: 0.8rem; }
+    .asma-name-ar { font-family: 'Amiri', serif; font-size: 1.2rem; color: #FFE6B0; }
+    .asma-name-latin { font-size: 0.85rem; font-weight: 500; color: #FFD966; }
+    .asma-meaning { 
+      font-size: 0.75rem; 
+      opacity: 0.85; 
+      margin-top: 5px;
+      padding-top: 5px;
+      border-top: 1px dashed rgba(255,215,150,0.2);
+      color: #ccc;
+    }
+    
+    /* Random Asma Widget */
+    .random-asma {
+      background: rgba(0,0,0,0.3);
+      border-radius: 1rem;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid rgba(255,215,150,0.3);
+    }
+    .random-asma:hover { background: rgba(220, 160, 60, 0.2); border-color: #FFC857; }
+    .random-asma-arabic { font-family: 'Amiri', serif; font-size: 2rem; color: #FFE6B0; margin-bottom: 8px; }
+    .random-asma-latin { font-size: 1.1rem; font-weight: 600; margin: 5px 0; color: #FFD966; }
+    .random-asma-meaning { font-size: 0.85rem; opacity: 0.9; margin-top: 5px; color: #ddd; }
+    .refresh-asma { font-size: 0.7rem; margin-top: 8px; color: #FFD966; }
 
-    /* Ticker */
+    .ayat-viewer {
+      padding: 1rem;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .ayat-card {
+      background: rgba(0,0,0,0.2);
+      border-radius: 1rem;
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      border-right: 3px solid #FFD966;
+    }
+    .ayat-arabic {
+      font-family: 'Amiri', serif;
+      font-size: 1.3rem;
+      line-height: 1.8;
+      text-align: right;
+      color: #FFE6B0;
+      margin-bottom: 0.5rem;
+    }
+    .ayat-translation {
+      font-size: 0.85rem;
+      opacity: 0.85;
+      border-top: 1px dashed rgba(255,215,150,0.3);
+      padding-top: 0.5rem;
+    }
+    .surah-info {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(0,0,0,0.3);
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+    }
+    .back-btn {
+      background: rgba(0,0,0,0.4);
+      border: none;
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 2rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+    .search-surah, .search-asma {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      margin: 0.5rem 0;
+      border-radius: 2rem;
+      border: none;
+      background: rgba(0,0,0,0.4);
+      color: white;
+      font-family: 'Inter', sans-serif;
+    }
+    .search-surah::placeholder, .search-asma::placeholder { color: rgba(255,255,255,0.5); }
+
     .ticker-container {
       background: #0c1f1c;
       border-radius: 3rem;
@@ -275,7 +315,6 @@
       100% { transform: translateX(-48%);}
     }
 
-    /* Ayat Section */
     .ayat-section {
       background: rgba(0,0,0,0.35);
       border-radius: 1.2rem;
@@ -287,44 +326,32 @@
     .arabic-ayat { font-size: 1.4rem; font-family: 'Amiri', 'Traditional Arabic', 'Times New Roman', serif; line-height: 2; margin-bottom: 8px; color: #FFE6B0; }
     .terjemahan-ayat { font-size: 0.85rem; opacity: 0.9; font-style: italic; }
     .sumber-ayat { font-size: 0.7rem; margin-top: 6px; opacity: 0.7; }
+    .masjid-header { display: flex; align-items: center; gap: 10px; padding: 0.8rem 1.5rem; border-bottom: 1px solid rgba(255,215,150,0.3); }
+    .masjid-header h3 { font-size: 1.2rem; font-weight: 600; }
+    .compass { text-align: center; padding: 2rem; }
+    .compass-needle { font-size: 4rem; display: inline-block; transition: transform 0.3s ease; }
+    .qibla-degree { font-size: 1.2rem; font-weight: bold; color: #FFD966; margin-top: 1rem; }
 
-    .mode-muadzin { display: inline-flex; align-items: center; background: #2f5e52; border-radius: 2rem; padding: 0.2rem 1rem; font-size: 0.7rem; }
     footer { text-align: center; margin-top: 2rem; font-size: 0.7rem; opacity: 0.6; }
-    .loading-masjid { text-align: center; padding: 2rem; color: #aaa; }
+    .loading { text-align: center; padding: 2rem; color: #aaa; }
+    .hidden { display: none; }
 
-    /* Scrollbar */
-    .masjid-list::-webkit-scrollbar { width: 5px; }
-    .masjid-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
-    .masjid-list::-webkit-scrollbar-thumb { background: #FFC857; border-radius: 10px; }
-
-    /* Responsive & TV Mode */
     @media (max-width: 700px) {
       .live-clock { font-size: 2.8rem; letter-spacing: 2px; }
       .prayer-time { font-size: 1.2rem; }
-      .schedule-grid { gap: 0.5rem; }
-      .iqamah-text { font-size: 1rem; }
-      .iqamah-timer { font-size: 1.3rem; }
-      .next-prayer-countdown { font-size: 0.9rem; }
-      .masjid-title h1 { font-size: 1.1rem; }
-      .arabic-ayat { font-size: 1rem; }
-      .masjid-name { font-size: 0.85rem; }
-      .masjid-distance { font-size: 0.7rem; padding: 3px 8px; }
+      .surah-list, .asma-list { grid-template-columns: 1fr; }
+      .ayat-arabic { font-size: 1rem; }
+      .random-asma-arabic { font-size: 1.3rem; }
     }
-
-    /* Landscape TV Mode */
+    
     @media (orientation: landscape) and (min-width: 1280px) {
       .schedule-grid { grid-template-columns: repeat(5, 1fr); }
       .live-clock { font-size: 7rem; letter-spacing: 10px; }
-      .prayer-time { font-size: 2rem; }
-      .prayer-name { font-size: 1.2rem; }
-      .container { max-width: 1600px; }
     }
-
-    /* Night Mode (Auto Dim) */
-    body.night-mode {
-      filter: brightness(0.7);
-      transition: filter 0.5s ease;
-    }
+    
+    body.night-mode { filter: brightness(0.7); transition: filter 0.5s ease; }
+    .offline-indicator { position: fixed; bottom: 10px; left: 10px; background: rgba(255,80,80,0.9); padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; display: none; z-index: 100; }
+    .offline-indicator.show { display: block; }
   </style>
 </head>
 <body>
@@ -333,13 +360,14 @@
     <div class="masjid-title">
       <h1 id="mainTitle"><i class="fas fa-map-marker-alt"></i> JADWAL SHOLAT DAERAH ...</h1>
       <p><i class="fas fa-globe"></i> Jadwal berdasarkan lokasi Anda saat ini</p>
-      <div class="mode-muadzin"><i class="fas fa-microphone-alt"></i> Mode Muadzin • Aktif</div>
     </div>
     <div class="action-buttons">
-      <button class="adzan-toggle" id="adzanToggle" title="Suara Adzan On/Off"><i class="fas fa-volume-up"></i> Adzan</button>
-      <button class="theme-toggle" id="themeToggle" title="Ganti Tema"><i class="fas fa-moon"></i></button>
-      <button class="qibla-toggle" id="qiblaToggle" title="Arah Kiblat"><i class="fas fa-compass"></i> Kiblat</button>
-      <button class="export-btn" id="exportBtn" title="Export Jadwal"><i class="fas fa-camera"></i></button>
+      <button class="action-btn adzan-toggle" id="adzanToggle" title="Suara Adzan On/Off"><i class="fas fa-volume-up"></i> Adzan</button>
+      <button class="action-btn" id="quranBtn" title="Al-Qur'an"><i class="fas fa-quran"></i> Qur'an</button>
+      <button class="action-btn" id="asmaBtn" title="Asmaul Husna"><i class="fas fa-praying-hands"></i> Asma</button>
+      <button class="action-btn" id="jadwalBtn" title="Jadwal Sholat"><i class="fas fa-clock"></i> Jadwal</button>
+      <button class="action-btn" id="qiblaBtn" title="Arah Kiblat"><i class="fas fa-compass"></i> Kiblat</button>
+      <button class="action-btn" id="themeToggle" title="Ganti Tema"><i class="fas fa-moon"></i></button>
     </div>
     <div class="cuaca-badge" id="weatherWidget">
       <i class="fas fa-cloud-sun"></i> <span id="weatherDesc">Memuat cuaca...</span>
@@ -347,29 +375,31 @@
     </div>
   </div>
 
-  <div class="glass-card time-giant">
-    <div class="live-clock" id="liveClock">--:--:-- <span id="timezoneLabel" style="font-size:1.2rem; letter-spacing:0;">WIB</span></div>
-    <div class="date-info">
-      <span id="fullDateMasehi">Memuat tanggal...</span>
-      <span id="hijriDate">Memuat hijriah...</span>
-      <span class="countdown-idul" id="idulCountdown">-</span>
+  <div id="jadwalSection">
+    <div class="glass-card time-giant">
+      <div class="live-clock" id="liveClock">--:--:-- <span id="timezoneLabel" style="font-size:1.2rem;">WIB</span></div>
+      <div class="date-info">
+        <span id="fullDateMasehi">Memuat tanggal...</span>
+        <span id="hijriDate">Memuat hijriah...</span>
+      </div>
+      <div class="next-prayer-info">
+        <i class="fas fa-hourglass-half"></i> Waktu Menuju Sholat berikutnya: 
+        <span class="next-prayer-name" id="nextPrayerName">--</span>
+        <span class="next-prayer-countdown" id="nextPrayerCountdown">--:--:--</span>
+      </div>
+      <div class="location-status">
+        <i class="fas fa-crosshairs"></i> <span id="locationText">Mendeteksi lokasi...</span>
+      </div>
     </div>
-    <div class="next-prayer-info" id="nextPrayerInfo">
-      <i class="fas fa-hourglass-half"></i> Waktu Menuju Sholat berikutnya: 
-      <span class="next-prayer-name" id="nextPrayerName">--</span>
-      <span class="next-prayer-countdown" id="nextPrayerCountdown">--:--:--</span>
-    </div>
-    <div class="location-status" id="locationStatus">
-      <i class="fas fa-crosshairs"></i> <span id="locationText">Mendeteksi lokasi...</span>
+    <div class="schedule-grid" id="prayerGrid"><div class="loading">Memuat jadwal sholat...</div></div>
+    <div id="iqamahZone" class="iqamah-alert iqamah-hidden">
+      <div class="iqamah-text"><i class="fas fa-bell-ring"></i> <span id="iqamahPrayerName">Sholat Dzuhur</span> — Iqamah dimulai!</div>
+      <div class="iqamah-timer" id="iqamahTimerDisplay">03:00</div>
     </div>
   </div>
 
-  <!-- Panel Arah Kiblat -->
-  <div id="qiblaPanel" class="qibla-panel glass-card">
-    <div class="masjid-header">
-      <i class="fas fa-compass" style="font-size: 1.3rem; color: #FFD966;"></i>
-      <h3>🕋 Arah Kiblat</h3>
-    </div>
+  <div id="qiblaSection" class="glass-card hidden" style="margin-top: 1.5rem;">
+    <div class="masjid-header"><i class="fas fa-compass" style="font-size: 1.3rem; color: #FFD966;"></i><h3>🕋 Arah Kiblat</h3></div>
     <div class="compass">
       <div class="compass-needle" id="compassNeedle">🧭</div>
       <div id="qiblaDirection" class="qibla-degree">Memuat arah kiblat...</div>
@@ -377,24 +407,32 @@
     </div>
   </div>
 
-  <div class="schedule-grid" id="prayerGrid">
-    <div class="loading-shimmer" style="grid-column:1/-1; text-align:center;">Memuat jadwal sholat...</div>
-  </div>
-
-  <div id="iqamahZone" class="iqamah-alert iqamah-hidden">
-    <div class="iqamah-text"><i class="fas fa-bell-ring"></i> <span id="iqamahPrayerName">Sholat Dzuhur</span> — Iqamah dimulai!</div>
-    <div class="iqamah-timer" id="iqamahTimerDisplay">03:00</div>
-  </div>
-
-  <!-- PANEL MASJID TERDEKAT -->
-  <div class="glass-card masjid-terdekat-section">
-    <div class="masjid-header">
-      <i class="fas fa-mosque" style="font-size: 1.3rem; color: #FFD966;"></i>
-      <h3>📌 Masjid Terdekat</h3>
-      <i class="fas fa-location-dot" style="font-size: 0.9rem; opacity: 0.7;"></i>
+  <!-- Al-Qur'an SECTION -->
+  <div id="quranSection" class="glass-card hidden" style="margin-top: 1.5rem;">
+    <div class="masjid-header"><i class="fas fa-quran" style="font-size: 1.3rem; color: #FFD966;"></i><h3>📖 Al-Qur'an & Terjemahan</h3></div>
+    <div id="surahListView">
+      <input type="text" id="searchSurah" class="search-surah" placeholder="Cari surah...">
+      <div id="surahList" class="surah-list"><div class="loading">Memuat daftar surah...</div></div>
     </div>
-    <div id="masjidList" class="masjid-list">
-      <div class="loading-masjid"><i class="fas fa-spinner fa-pulse"></i> Memuat daftar masjid terdekat...</div>
+    <div id="ayatView" class="hidden">
+      <button id="backToSurah" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali ke Daftar Surah</button>
+      <div id="ayatContent"></div>
+    </div>
+  </div>
+
+  <!-- ASMAUL HUSNA SECTION -->
+  <div id="asmaSection" class="glass-card hidden" style="margin-top: 1.5rem;">
+    <div class="masjid-header"><i class="fas fa-praying-hands" style="font-size: 1.3rem; color: #FFD966;"></i><h3>📿 Asmaul Husna (99 Nama Allah)</h3></div>
+    <div id="asmaListView">
+      <!-- Random Asma Widget -->
+      <div id="randomAsma" class="random-asma">
+        <div class="random-asma-arabic" id="randomAsmaArabic">الرحمن</div>
+        <div class="random-asma-latin" id="randomAsmaLatin">Ar-Rahman</div>
+        <div class="random-asma-meaning" id="randomAsmaMeaning">Yang Maha Pengasih</div>
+        <div class="refresh-asma"><i class="fas fa-sync-alt"></i> Klik untuk menampilkan Nama Allah lainnya</div>
+      </div>
+      <input type="text" id="searchAsma" class="search-asma" placeholder="Cari Asmaul Husna (Arab, Latin, atau Artinya)...">
+      <div id="asmaList" class="asma-list"><div class="loading">Memuat Asmaul Husna...</div></div>
     </div>
   </div>
 
@@ -402,9 +440,8 @@
     <div class="ticker-text" id="runningTicker">
       <span>✨ وَاَقِيْمُوا الصَّلٰوةَ وَاٰتُوا الزَّكٰوةَ وَارْكَعُوْا مَعَ الرَّاكِعِيْنَ✨</span>
       <span>🤲 "Tegakkanlah sholat, tunaikanlah zakat, dan rukuklah beserta orang-orang yang rukuk" (QS. Al Baqarah: 43)</span>
-      <span>📢 Jadwal sholat berdasarkan lokasi Anda | Otomatis setiap hari</span>
+      <span>📿 Asmaul Husna - 99 Nama Allah yang Maha Indah</span>
       <span>⏳ Iqamah otomatis 3 menit setelah adzan</span>
-      <span>🤲 Semoga ibadah kita diterima Allah SWT</span>
     </div>
   </div>
 
@@ -414,20 +451,12 @@
     <div class="sumber-ayat">— QS. An Nisa: 103</div>
   </div>
 
-  <footer>
-    <i class="fas fa-clock"></i> Jadwal Sholat<br>
-    <i class="fas fa-code"></i> by Gumilar Utamas
-  </footer>
+  <footer><i class="fas fa-clock"></i> Jadwal Sholat & Al-Qur'an & Asmaul Husna<br><i class="fas fa-code"></i> by Gumilar Utamas</footer>
 </div>
 
-<!-- Offline Indicator -->
-<div id="offlineIndicator" class="offline-indicator">
-  <i class="fas fa-wifi"></i> Offline Mode - Data mungkin tidak terbaru
-</div>
-
-<!-- Audio Element untuk Adzan -->
+<div id="offlineIndicator" class="offline-indicator"><i class="fas fa-wifi"></i> Offline Mode</div>
 <audio id="adzanAudio" preload="auto">
-  <source src="a4.mp3" type="audio/mpeg">
+  <source src="https://raw.githubusercontent.com/agusnurwanto/adzan/master/adzan.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -441,16 +470,117 @@
   let iqamahEndTime = null;
   let activeIqamahPrayer = "";
   let currentPrayerList = [];
-  let nearestMosques = [];
-  let notificationPermission = false;
   let qiblaAngle = 295;
+  let surahList = [];
+  let asmaList = [];
   
-  // ==================== FITUR SUARA ADZAN ====================
+  // ==================== DATA ASMAUL HUSNA LENGKAP (LENGKAP DENGAN ARTI) ====================
+  const completeAsmaulHusna = [
+    { number: 1, name: "الرحمن", transliteration: "Ar-Rahman", translation: "Yang Maha Pengasih" },
+    { number: 2, name: "الرحيم", transliteration: "Ar-Rahim", translation: "Yang Maha Penyayang" },
+    { number: 3, name: "الملك", transliteration: "Al-Malik", translation: "Yang Maha Merajai" },
+    { number: 4, name: "القدوس", transliteration: "Al-Quddus", translation: "Yang Maha Suci" },
+    { number: 5, name: "السلام", transliteration: "As-Salam", translation: "Yang Maha Memberi Kesejahteraan" },
+    { number: 6, name: "المؤمن", transliteration: "Al-Mu'min", translation: "Yang Maha Memberi Keamanan" },
+    { number: 7, name: "المهيمن", transliteration: "Al-Muhaymin", translation: "Yang Maha Pemelihara" },
+    { number: 8, name: "العزيز", transliteration: "Al-Aziz", translation: "Yang Maha Perkasa" },
+    { number: 9, name: "الجبار", transliteration: "Al-Jabbar", translation: "Yang Maha Perkasa (Memaksa)" },
+    { number: 10, name: "المتكبر", transliteration: "Al-Mutakabbir", translation: "Yang Maha Megah" },
+    { number: 11, name: "الخالق", transliteration: "Al-Khaliq", translation: "Yang Maha Pencipta" },
+    { number: 12, name: "البارئ", transliteration: "Al-Bari'", translation: "Yang Maha Mengadakan" },
+    { number: 13, name: "المصور", transliteration: "Al-Musawwir", translation: "Yang Maha Membentuk Rupa" },
+    { number: 14, name: "الغفار", transliteration: "Al-Ghaffar", translation: "Yang Maha Pengampun" },
+    { number: 15, name: "القهار", transliteration: "Al-Qahhar", translation: "Yang Maha Menundukkan" },
+    { number: 16, name: "الوهاب", transliteration: "Al-Wahhab", translation: "Yang Maha Pemberi" },
+    { number: 17, name: "الرزاق", transliteration: "Ar-Razzaq", translation: "Yang Maha Pemberi Rezeki" },
+    { number: 18, name: "الفتاح", transliteration: "Al-Fattah", translation: "Yang Maha Pembuka" },
+    { number: 19, name: "العليم", transliteration: "Al-Alim", translation: "Yang Maha Mengetahui" },
+    { number: 20, name: "القابض", transliteration: "Al-Qabid", translation: "Yang Maha Menyempitkan" },
+    { number: 21, name: "الباسط", transliteration: "Al-Basit", translation: "Yang Maha Melapangkan" },
+    { number: 22, name: "الخافض", transliteration: "Al-Khafid", translation: "Yang Maha Merendahkan" },
+    { number: 23, name: "الرافع", transliteration: "Ar-Rafi", translation: "Yang Maha Meninggikan" },
+    { number: 24, name: "المعز", transliteration: "Al-Mu'izz", translation: "Yang Maha Memuliakan" },
+    { number: 25, name: "المذل", transliteration: "Al-Mudhill", translation: "Yang Maha Menghinakan" },
+    { number: 26, name: "السميع", transliteration: "As-Sami", translation: "Yang Maha Mendengar" },
+    { number: 27, name: "البصير", transliteration: "Al-Basir", translation: "Yang Maha Melihat" },
+    { number: 28, name: "الحكم", transliteration: "Al-Hakam", translation: "Yang Maha Menetapkan" },
+    { number: 29, name: "العدل", transliteration: "Al-Adl", translation: "Yang Maha Adil" },
+    { number: 30, name: "اللطيف", transliteration: "Al-Latif", translation: "Yang Maha Lembut" },
+    { number: 31, name: "الخبير", transliteration: "Al-Khabir", translation: "Yang Maha Teliti" },
+    { number: 32, name: "الحليم", transliteration: "Al-Halim", translation: "Yang Maha Penyantun" },
+    { number: 33, name: "العظيم", transliteration: "Al-Azim", translation: "Yang Maha Agung" },
+    { number: 34, name: "الغفور", transliteration: "Al-Ghafur", translation: "Yang Maha Pengampun" },
+    { number: 35, name: "الشكور", transliteration: "Asy-Syakur", translation: "Yang Maha Pembalas Budi" },
+    { number: 36, name: "العلي", transliteration: "Al-Aliyy", translation: "Yang Maha Tinggi" },
+    { number: 37, name: "الكبير", transliteration: "Al-Kabir", translation: "Yang Maha Besar" },
+    { number: 38, name: "الحفيظ", transliteration: "Al-Hafiz", translation: "Yang Maha Memelihara" },
+    { number: 39, name: "المقيت", transliteration: "Al-Muqit", translation: "Yang Maha Pemberi Kekuatan" },
+    { number: 40, name: "الحسيب", transliteration: "Al-Hasib", translation: "Yang Maha Membuat Perhitungan" },
+    { number: 41, name: "الجليل", transliteration: "Al-Jalil", translation: "Yang Maha Luhur" },
+    { number: 42, name: "الكريم", transliteration: "Al-Karim", translation: "Yang Maha Mulia" },
+    { number: 43, name: "الرقيب", transliteration: "Ar-Raqib", translation: "Yang Maha Mengawasi" },
+    { number: 44, name: "المجيب", transliteration: "Al-Mujib", translation: "Yang Maha Mengabulkan" },
+    { number: 45, name: "الواسع", transliteration: "Al-Wasi", translation: "Yang Maha Luas" },
+    { number: 46, name: "الحكيم", transliteration: "Al-Hakim", translation: "Yang Maha Bijaksana" },
+    { number: 47, name: "الودود", transliteration: "Al-Wadud", translation: "Yang Maha Mengasihi" },
+    { number: 48, name: "المجيد", transliteration: "Al-Majid", translation: "Yang Maha Mulia" },
+    { number: 49, name: "الباعث", transliteration: "Al-Ba'its", translation: "Yang Maha Membangkitkan" },
+    { number: 50, name: "الشهيد", transliteration: "Asy-Syahid", translation: "Yang Maha Menyaksikan" },
+    { number: 51, name: "الحق", transliteration: "Al-Haqq", translation: "Yang Maha Benar" },
+    { number: 52, name: "الوكيل", transliteration: "Al-Wakil", translation: "Yang Maha Mewakili" },
+    { number: 53, name: "القوي", transliteration: "Al-Qawiyyu", translation: "Yang Maha Kuat" },
+    { number: 54, name: "المتين", transliteration: "Al-Matin", translation: "Yang Maha Kokoh" },
+    { number: 55, name: "الولي", transliteration: "Al-Waliyy", translation: "Yang Maha Melindungi" },
+    { number: 56, name: "الحميد", transliteration: "Al-Hamid", translation: "Yang Maha Terpuji" },
+    { number: 57, name: "المحصي", transliteration: "Al-Muhsi", translation: "Yang Maha Menghitung" },
+    { number: 58, name: "المبدئ", transliteration: "Al-Mubdi'", translation: "Yang Maha Memulai" },
+    { number: 59, name: "المعيد", transliteration: "Al-Mu'id", translation: "Yang Maha Mengembalikan" },
+    { number: 60, name: "المحيي", transliteration: "Al-Muhyi", translation: "Yang Maha Menghidupkan" },
+    { number: 61, name: "المميت", transliteration: "Al-Mumit", translation: "Yang Maha Mematikan" },
+    { number: 62, name: "الحي", transliteration: "Al-Hayyu", translation: "Yang Maha Hidup" },
+    { number: 63, name: "القيوم", transliteration: "Al-Qayyum", translation: "Yang Maha Mandiri" },
+    { number: 64, name: "الواجد", transliteration: "Al-Wajid", translation: "Yang Maha Penemu" },
+    { number: 65, name: "الماجد", transliteration: "Al-Majid", translation: "Yang Maha Mulia" },
+    { number: 66, name: "الواحد", transliteration: "Al-Wahid", translation: "Yang Maha Esa" },
+    { number: 67, name: "الأحد", transliteration: "Al-Ahad", translation: "Yang Maha Tunggal" },
+    { number: 68, name: "الصمد", transliteration: "As-Samad", translation: "Yang Maha Dibutuhkan" },
+    { number: 69, name: "القادر", transliteration: "Al-Qadir", translation: "Yang Maha Kuasa" },
+    { number: 70, name: "المقتدر", transliteration: "Al-Muqtadir", translation: "Yang Maha Berkuasa" },
+    { number: 71, name: "المقدم", transliteration: "Al-Muqaddim", translation: "Yang Maha Mendahulukan" },
+    { number: 72, name: "المؤخر", transliteration: "Al-Mu'akhkhir", translation: "Yang Maha Mengakhirkan" },
+    { number: 73, name: "الأول", transliteration: "Al-Awwal", translation: "Yang Maha Awal" },
+    { number: 74, name: "الأخر", transliteration: "Al-Akhir", translation: "Yang Maha Akhir" },
+    { number: 75, name: "الظاهر", transliteration: "Az-Zahir", translation: "Yang Maha Nyata" },
+    { number: 76, name: "الباطن", transliteration: "Al-Batin", translation: "Yang Maha Tersembunyi" },
+    { number: 77, name: "الوالي", transliteration: "Al-Wali", translation: "Yang Maha Memerintah" },
+    { number: 78, name: "المتعالي", transliteration: "Al-Muta'ali", translation: "Yang Maha Tinggi" },
+    { number: 79, name: "البر", transliteration: "Al-Barr", translation: "Yang Maha Penderma" },
+    { number: 80, name: "التواب", transliteration: "At-Tawwab", translation: "Yang Maha Penerima Taubat" },
+    { number: 81, name: "المنتقم", transliteration: "Al-Muntaqim", translation: "Yang Maha Pembalas" },
+    { number: 82, name: "العفو", transliteration: "Al-Afuww", translation: "Yang Maha Pemaaf" },
+    { number: 83, name: "الرؤوف", transliteration: "Ar-Ra'uf", translation: "Yang Maha Belas Kasih" },
+    { number: 84, name: "مالك الملك", transliteration: "Malikul Mulk", translation: "Yang Maha Penguasa Kerajaan" },
+    { number: 85, name: "ذو الجلال والإكرام", transliteration: "Dzul Jalali Wal Ikram", translation: "Yang Maha Memiliki Kebesaran dan Kemuliaan" },
+    { number: 86, name: "المقسط", transliteration: "Al-Muqsit", translation: "Yang Maha Adil" },
+    { number: 87, name: "الجامع", transliteration: "Al-Jami'", translation: "Yang Maha Mengumpulkan" },
+    { number: 88, name: "الغني", transliteration: "Al-Ghaniyy", translation: "Yang Maha Kaya" },
+    { number: 89, name: "المغني", transliteration: "Al-Mughni", translation: "Yang Maha Memberi Kekayaan" },
+    { number: 90, name: "المانع", transliteration: "Al-Mani'", translation: "Yang Maha Mencegah" },
+    { number: 91, name: "الضار", transliteration: "Ad-Darr", translation: "Yang Maha Memberi Derita" },
+    { number: 92, name: "النافع", transliteration: "An-Nafi'", translation: "Yang Maha Memberi Manfaat" },
+    { number: 93, name: "النور", transliteration: "An-Nur", translation: "Yang Maha Bercahaya" },
+    { number: 94, name: "الهادي", transliteration: "Al-Hadi", translation: "Yang Maha Pemberi Petunjuk" },
+    { number: 95, name: "البديع", transliteration: "Al-Badi'", translation: "Yang Maha Pencipta" },
+    { number: 96, name: "الباقي", transliteration: "Al-Baqi", translation: "Yang Maha Kekal" },
+    { number: 97, name: "الوارث", transliteration: "Al-Warits", translation: "Yang Maha Pewaris" },
+    { number: 98, name: "الرشيد", transliteration: "Ar-Rasyid", translation: "Yang Maha Pandai" },
+    { number: 99, name: "الصبور", transliteration: "As-Sabur", translation: "Yang Maha Sabar" }
+  ];
+  
+  // Adzan
   let adzanEnabled = localStorage.getItem('adzanEnabled') === 'true';
-  let playedAdzanPrayers = {}; // Track adzan yang sudah diputar
+  let playedAdzanPrayers = {};
   const adzanAudio = document.getElementById('adzanAudio');
-  
-  // Inisialisasi tombol adzan
   const adzanToggle = document.getElementById('adzanToggle');
   
   function updateAdzanButtonUI() {
@@ -468,9 +598,8 @@
     adzanEnabled = !adzanEnabled;
     updateAdzanButtonUI();
     if (adzanEnabled) {
-      // Test play dengan izin user (karena browser butuh interaksi user dulu)
       adzanAudio.volume = 0.5;
-      adzanAudio.play().catch(e => console.log("User interaction needed for audio"));
+      adzanAudio.play().catch(e => console.log("Klik interaksi user terlebih dahulu untuk mengaktifkan suara"));
     } else {
       adzanAudio.pause();
     }
@@ -478,131 +607,308 @@
   
   function playAdzan(prayerName) {
     if (!adzanEnabled) return;
-    // Cegah adzan ganda untuk sholat yang sama
     if (playedAdzanPrayers[prayerName]) return;
-    
-    // Reset at midnight
     const now = new Date();
-    if (now.getHours() === 0 && now.getMinutes() === 0) {
-      playedAdzanPrayers = {};
-    }
-    
+    if (now.getHours() === 0 && now.getMinutes() === 0) playedAdzanPrayers = {};
     playedAdzanPrayers[prayerName] = true;
-    
-    // Play adzan
     adzanAudio.currentTime = 0;
     adzanAudio.volume = 0.7;
-    adzanAudio.play().catch(e => {
-      console.log("Audio play failed:", e);
-      // Fallback: jika autoplay diblokir, coba setelah user interaksi
-    });
-    
-    // Jeda 3 detik lalu pause (opsional)
-    setTimeout(() => {
-      if (adzanAudio.duration > 0 && adzanAudio.currentTime < adzanAudio.duration - 1) {
-        // Biarkan adzan selesai alami
-      }
-    }, 3000);
+    adzanAudio.play().catch(e => console.log("Audio play failed"));
   }
   
-  // ==================== DOM Elements ====================
-  const prayerGrid = document.getElementById("prayerGrid");
-  const iqamahZone = document.getElementById("iqamahZone");
-  const iqamahPrayerNameSpan = document.getElementById("iqamahPrayerName");
-  const iqamahTimerDisplay = document.getElementById("iqamahTimerDisplay");
-  const liveClockSpan = document.getElementById("liveClock");
-  const fullDateSpan = document.getElementById("fullDateMasehi");
-  const hijriDateSpan = document.getElementById("hijriDate");
-  const weatherDescSpan = document.getElementById("weatherDesc");
-  const weatherTempSpan = document.getElementById("weatherTemp");
-  const nextPrayerNameSpan = document.getElementById("nextPrayerName");
-  const nextPrayerCountdownSpan = document.getElementById("nextPrayerCountdown");
-  const locationTextSpan = document.getElementById("locationText");
-  const mainTitle = document.getElementById("mainTitle");
-  const masjidListDiv = document.getElementById("masjidList");
-  const qiblaPanel = document.getElementById("qiblaPanel");
-  const qiblaDirectionSpan = document.getElementById("qiblaDirection");
-  const compassNeedle = document.getElementById("compassNeedle");
+  // DOM Elements
+  const jadwalSection = document.getElementById("jadwalSection");
+  const qiblaSection = document.getElementById("qiblaSection");
+  const quranSection = document.getElementById("quranSection");
+  const asmaSection = document.getElementById("asmaSection");
+  const quranBtn = document.getElementById("quranBtn");
+  const asmaBtn = document.getElementById("asmaBtn");
+  const jadwalBtn = document.getElementById("jadwalBtn");
+  const qiblaBtn = document.getElementById("qiblaBtn");
   const themeToggle = document.getElementById("themeToggle");
-  const qiblaToggle = document.getElementById("qiblaToggle");
-  const exportBtn = document.getElementById("exportBtn");
-  const offlineIndicator = document.getElementById("offlineIndicator");
-  const timezoneLabelSpan = document.getElementById("timezoneLabel");
-  const idulCountdownSpan = document.getElementById("idulCountdown");
-
-  // ==================== UTILITY FUNCTIONS ====================
+  const surahListDiv = document.getElementById("surahList");
+  const searchInput = document.getElementById("searchSurah");
+  const surahListView = document.getElementById("surahListView");
+  const ayatView = document.getElementById("ayatView");
+  const asmaListDiv = document.getElementById("asmaList");
+  const searchAsma = document.getElementById("searchAsma");
+  
+  // ==================== ASMAUL HUSNA ====================
+  // LANGSUNG PAKAI FALLBACK DATA (LENGKAP DENGAN ARTI)
+  async function fetchAsmaulHusna() {
+    // Langsung gunakan data lengkap yang sudah disiapkan
+    asmaList = completeAsmaulHusna;
+    renderAsmaList(asmaList);
+    updateRandomAsma();
+    
+    // Coba fetch dari API untuk update jika ada (tapi tidak mengganti data arti yang kosong)
+    try {
+      const response = await fetch('https://api.aladhan.com/v1/asmaAlHusna');
+      const data = await response.json();
+      if (data.code === 200 && data.data && data.data.length > 0) {
+        // Gabungkan data API dengan data lokal (prioritas data lokal untuk arti)
+        const mergedList = [];
+        for (let i = 0; i < completeAsmaulHusna.length; i++) {
+          const localItem = completeAsmaulHusna[i];
+          const apiItem = data.data.find(item => item.number === localItem.number);
+          mergedList.push({
+            number: localItem.number,
+            name: apiItem?.name || localItem.name,
+            transliteration: apiItem?.transliteration || localItem.transliteration,
+            translation: localItem.translation // Tetap pakai arti dari data lokal
+          });
+        }
+        asmaList = mergedList;
+        renderAsmaList(asmaList);
+        updateRandomAsma();
+      }
+    } catch (error) {
+      console.log("Using fallback Asmaul Husna data");
+    }
+  }
+  
+  function renderAsmaList(asma) {
+    if (!asma || asma.length === 0) {
+      asmaListDiv.innerHTML = '<div class="loading">Tidak ada data Asmaul Husna</div>';
+      return;
+    }
+    let html = '';
+    for (const item of asma) {
+      html += `<div class="asma-item">
+        <div class="asma-header">
+          <span class="asma-number">${item.number}.</span>
+          <span class="asma-name-ar">${item.name}</span>
+          <span class="asma-name-latin">(${item.transliteration})</span>
+        </div>
+        <div class="asma-meaning"><i class="fas fa-heart" style="color: #FFD966; font-size: 0.7rem; margin-right: 5px;"></i>${item.translation}</div>
+      </div>`;
+    }
+    asmaListDiv.innerHTML = html;
+  }
+  
+  function updateRandomAsma() {
+    if (!asmaList || asmaList.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * asmaList.length);
+    const randomAsma = asmaList[randomIndex];
+    document.getElementById("randomAsmaArabic").innerText = randomAsma.name;
+    document.getElementById("randomAsmaLatin").innerText = randomAsma.transliteration;
+    document.getElementById("randomAsmaMeaning").innerHTML = `<i class="fas fa-heart" style="color: #FFD966;"></i> Artinya: ${randomAsma.translation}`;
+  }
+  
+  // Refresh random asma saat diklik
+  document.getElementById("randomAsma")?.addEventListener("click", updateRandomAsma);
+  
+  // Search Asma
+  if (searchAsma) {
+    searchAsma.addEventListener("input", (e) => {
+      const term = e.target.value.toLowerCase();
+      const filtered = asmaList.filter(a => 
+        (a.name || "").toLowerCase().includes(term) || 
+        (a.transliteration || "").toLowerCase().includes(term) ||
+        (a.translation || "").toLowerCase().includes(term) ||
+        a.number.toString().includes(term)
+      );
+      renderAsmaList(filtered);
+    });
+  }
+  
+  // ==================== AL-QUR'AN API ====================
+  async function fetchSurahList() {
+    try {
+      const response = await fetch('https://api.alquran.cloud/v1/surah');
+      const data = await response.json();
+      if (data.code === 200) {
+        surahList = data.data;
+        renderSurahList(surahList);
+      } else throw new Error("Gagal memuat surah");
+    } catch (error) {
+      surahListDiv.innerHTML = '<div class="loading">Gagal memuat daftar surah</div>';
+    }
+  }
+  
+  function renderSurahList(surahs) {
+    if (!surahs || surahs.length === 0) {
+      surahListDiv.innerHTML = '<div class="loading">Tidak ada data surah</div>';
+      return;
+    }
+    let html = '';
+    for (const surah of surahs) {
+      const arabicName = surah.name || surah.arabicName || "سورة";
+      html += `<div class="surah-item" onclick="loadSurah(${surah.number})">
+        <div class="surah-number">${surah.number}</div>
+        <div class="surah-name">
+          <div class="surah-name-ar">${arabicName}</div>
+          <div>${surah.englishName || surah.name}</div>
+        </div>
+        <div class="surah-ayah">${surah.numberOfAyahs} ayat</div>
+      </div>`;
+    }
+    surahListDiv.innerHTML = html;
+  }
+  
+  window.loadSurah = async function(surahNumber) {
+    try {
+      const response = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/editions/ar.alias,id.indonesian`);
+      const data = await response.json();
+      if (data.code === 200 && data.data && data.data.length >= 2) {
+        const arabicEdition = data.data[0];
+        const indonesianEdition = data.data[1];
+        displaySurahContent(arabicEdition, indonesianEdition, surahNumber);
+      } else {
+        const fallbackResponse = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/id.indonesian`);
+        const fallbackData = await fallbackResponse.json();
+        if (fallbackData.code === 200) {
+          displaySurahContentFallback(fallbackData.data);
+        } else throw new Error("Gagal memuat surah");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      document.getElementById("ayatContent").innerHTML = '<div class="loading">Gagal memuat ayat. Coba lagi nanti.</div>';
+    }
+  };
+  
+  function displaySurahContent(arabicEdition, indonesianEdition, surahNumber) {
+    const surahInfo = surahList.find(s => s.number === surahNumber);
+    let ayatHtml = `<div class="surah-info">
+      <h2>${arabicEdition.name || surahInfo?.name} (${indonesianEdition.englishName || surahInfo?.englishName})</h2>
+      <p>${indonesianEdition.englishNameTranslation || ""} • ${arabicEdition.ayahs?.length || 0} Ayat</p>
+    </div>`;
+    
+    const arabicAyahs = arabicEdition.ayahs || [];
+    const indonesianAyahs = indonesianEdition.ayahs || [];
+    
+    for (let i = 0; i < arabicAyahs.length; i++) {
+      const arabic = arabicAyahs[i]?.text || "";
+      const indonesian = indonesianAyahs[i]?.text || "";
+      ayatHtml += `<div class="ayat-card">
+        <div class="ayat-arabic">${arabic}</div>
+        <div class="ayat-translation"><strong>${i + 1}. </strong>${indonesian}</div>
+      </div>`;
+    }
+    
+    document.getElementById("ayatContent").innerHTML = ayatHtml;
+    surahListView.classList.add("hidden");
+    ayatView.classList.remove("hidden");
+  }
+  
+  function displaySurahContentFallback(surah) {
+    let ayatHtml = `<div class="surah-info">
+      <h2>${surah.name} (${surah.englishName})</h2>
+      <p>${surah.englishNameTranslation} • ${surah.numberOfAyahs} Ayat</p>
+    </div>`;
+    
+    for (const ayah of surah.ayahs) {
+      ayatHtml += `<div class="ayat-card">
+        <div class="ayat-arabic">${ayah.text}</div>
+        <div class="ayat-translation"><strong>${ayah.numberInSurah}. </strong>${ayah.translation}</div>
+      </div>`;
+    }
+    
+    document.getElementById("ayatContent").innerHTML = ayatHtml;
+    surahListView.classList.add("hidden");
+    ayatView.classList.remove("hidden");
+  }
+  
+  function backToSurahList() {
+    surahListView.classList.remove("hidden");
+    ayatView.classList.add("hidden");
+    if (searchInput) searchInput.value = "";
+    renderSurahList(surahList);
+  }
+  
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const term = e.target.value.toLowerCase();
+      const filtered = surahList.filter(s => 
+        (s.name || "").toLowerCase().includes(term) || 
+        (s.englishName || "").toLowerCase().includes(term) ||
+        s.number.toString().includes(term)
+      );
+      renderSurahList(filtered);
+    });
+  }
+  
+  document.getElementById("backToSurah")?.addEventListener("click", backToSurahList);
+  
+  // ==================== NAVIGASI ====================
+  function showSection(section) {
+    jadwalSection.classList.add("hidden");
+    qiblaSection.classList.add("hidden");
+    quranSection.classList.add("hidden");
+    asmaSection.classList.add("hidden");
+    
+    if (section === 'jadwal') jadwalSection.classList.remove("hidden");
+    else if (section === 'qibla') qiblaSection.classList.remove("hidden");
+    else if (section === 'quran') { quranSection.classList.remove("hidden"); if (surahList.length === 0) fetchSurahList(); }
+    else if (section === 'asma') { asmaSection.classList.remove("hidden"); if (asmaList.length === 0) fetchAsmaulHusna(); }
+  }
+  
+  quranBtn.addEventListener("click", () => showSection('quran'));
+  asmaBtn.addEventListener("click", () => showSection('asma'));
+  jadwalBtn.addEventListener("click", () => showSection('jadwal'));
+  qiblaBtn.addEventListener("click", () => { showSection('qibla'); updateQiblaDirection(); });
+  
+  // ==================== FUNGSI UTILITY ====================
   function getIndonesiaTimezone(lon) {
     if (lon >= 95 && lon < 108) return "WIB";
     if (lon >= 108 && lon < 120) return "WITA";
     return "WIT";
   }
-
+  
   async function getLocationName(lat, lon) {
     try {
       const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1&accept-language=id`);
       const data = await response.json();
-      if (data && data.address) {
+      if (data?.address) {
         const city = data.address.city || data.address.town || data.address.village || data.address.district;
         if (city) return city;
-        const displayParts = data.display_name?.split(',') || [];
-        return displayParts[0] || `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
       }
       return `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
-    } catch (e) {
-      return `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
-    }
+    } catch (e) { return `${lat.toFixed(2)}, ${lon.toFixed(2)}`; }
   }
-
+  
   async function getUserLocation() {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) reject(new Error("Geolocation tidak didukung"));
       navigator.geolocation.getCurrentPosition(
         (position) => resolve({ lat: position.coords.latitude, lon: position.coords.longitude }),
         (error) => reject(error),
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+        { enableHighAccuracy: true, timeout: 10000 }
       );
     });
   }
-
+  
   function updateTitleWithLocation() {
-    mainTitle.innerHTML = `<i class="fas fa-map-marker-alt"></i> JADWAL SHOLAT DAERAH ${currentCityOnly.toUpperCase()}`;
-    locationTextSpan.innerText = `${currentCityOnly}`;
+    document.getElementById("mainTitle").innerHTML = `<i class="fas fa-map-marker-alt"></i> JADWAL SHOLAT DAERAH ${currentCityOnly.toUpperCase()}`;
+    document.getElementById("locationText").innerText = `${currentCityOnly}`;
   }
-
-  // ==================== QIBLA DIRECTION ====================
+  
+  // ==================== QIBLA ====================
   function calculateQiblaAngle(lat, lon) {
-    const kaabaLat = 21.4225;
-    const kaabaLon = 39.8262;
-    const phi1 = lat * Math.PI / 180;
-    const phi2 = kaabaLat * Math.PI / 180;
+    const kaabaLat = 21.4225, kaabaLon = 39.8262;
+    const phi1 = lat * Math.PI / 180, phi2 = kaabaLat * Math.PI / 180;
     const deltaLambda = (kaabaLon - lon) * Math.PI / 180;
     const x = Math.sin(deltaLambda) * Math.cos(phi2);
     const y = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(deltaLambda);
     let angle = Math.atan2(x, y) * 180 / Math.PI;
-    angle = (angle + 360) % 360;
-    return angle;
+    return (angle + 360) % 360;
   }
-
-  async function updateQiblaDirection() {
+  
+  function updateQiblaDirection() {
     qiblaAngle = calculateQiblaAngle(currentLat, currentLon);
-    qiblaDirectionSpan.innerHTML = `Arah Kiblat: ${Math.round(qiblaAngle)}° dari Utara<br><i class="fas fa-arrow-up"></i> Menuju ${Math.round(qiblaAngle)}° Timur dari Utara`;
+    const qiblaDir = document.getElementById("qiblaDirection");
+    if (qiblaDir) qiblaDir.innerHTML = `Arah Kiblat: ${Math.round(qiblaAngle)}° dari Utara`;
     if (window.DeviceOrientationEvent) {
-      window.addEventListener('deviceorientation', function(event) {
-        const alpha = event.alpha;
-        if (alpha !== null) {
-          const needleAngle = (qiblaAngle - alpha + 360) % 360;
-          compassNeedle.style.transform = `rotate(${needleAngle}deg)`;
+      window.addEventListener('deviceorientation', (event) => {
+        if (event.alpha !== null) {
+          const needleAngle = (qiblaAngle - event.alpha + 360) % 360;
+          document.getElementById("compassNeedle").style.transform = `rotate(${needleAngle}deg)`;
         }
       });
     }
   }
-
-  qiblaToggle.addEventListener('click', () => {
-    qiblaPanel.classList.toggle('show');
-    updateQiblaDirection();
-  });
-
-  // ==================== THEME TOGGLE ====================
+  
+  // ==================== THEME ====================
   let currentTheme = localStorage.getItem('theme') || 'dark';
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
@@ -610,172 +916,18 @@
     currentTheme = theme;
     themeToggle.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
   }
-  themeToggle.addEventListener('click', () => {
-    setTheme(currentTheme === 'dark' ? 'light' : 'dark');
-  });
+  themeToggle.addEventListener('click', () => setTheme(currentTheme === 'dark' ? 'light' : 'dark'));
   setTheme(currentTheme);
-
-  // ==================== NIGHT MODE ====================
+  
   function checkNightMode() {
     const hour = new Date().getHours();
-    if (hour >= 19 || hour < 4) {
-      document.body.classList.add('night-mode');
-    } else {
-      document.body.classList.remove('night-mode');
-    }
+    if (hour >= 19 || hour < 4) document.body.classList.add('night-mode');
+    else document.body.classList.remove('night-mode');
   }
   setInterval(checkNightMode, 60000);
   checkNightMode();
-
-  // ==================== EXPORT ====================
-  exportBtn.addEventListener('click', async () => {
-    try {
-      const html2canvas = await import('https://cdn.skypack.dev/html2canvas');
-      const element = document.querySelector('.schedule-grid');
-      const canvas = await html2canvas(element);
-      const link = document.createElement('a');
-      link.download = 'jadwal-sholat.png';
-      link.href = canvas.toDataURL();
-      link.click();
-    } catch(e) {
-      alert("Fitur export membutuhkan library html2canvas. Buka di browser modern.");
-    }
-  });
-
-  // ==================== NOTIFICATION ====================
-  async function requestNotificationPermission() {
-    if ('Notification' in window) {
-      const permission = await Notification.requestPermission();
-      notificationPermission = permission === 'granted';
-    }
-  }
   
-  function sendNotification(title, body) {
-    if (notificationPermission && !document.hidden) {
-      new Notification(title, { body, icon: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext x="50" y="67" font-size="50" text-anchor="middle" fill="%23FFE6B0"%3E🕌%3C/text%3E%3C/svg%3E' });
-    }
-  }
-
-  let lastNotifiedPrayer = "";
-  let lastPlayedAdzanPrayer = "";
-  
-  function checkAndNotifyPrayer(now) {
-    const fardhu = ["Subuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
-    for (let prayer of fardhu) {
-      if (!prayerTimes[prayer]) continue;
-      const prayerDate = timeStringToDate(prayerTimes[prayer]);
-      const diffMs = prayerDate.getTime() - now.getTime();
-      
-      // Notifikasi 1 menit sebelum adzan
-      if (diffMs > 0 && diffMs <= 60000 && lastNotifiedPrayer !== prayer) {
-        lastNotifiedPrayer = prayer;
-        sendNotification(`⏰ Waktu ${prayer}`, `Segera persiapkan sholat ${prayer}`);
-      }
-      
-      // Play adzan saat waktu adzan tiba (0-2 detik setelah waktu)
-      if (diffMs <= 0 && diffMs > -2000 && lastPlayedAdzanPrayer !== prayer) {
-        lastPlayedAdzanPrayer = prayer;
-        playAdzan(prayer);
-      }
-    }
-    // Reset di tengah malam
-    if (now.getHours() === 0 && now.getMinutes() === 0) {
-      lastNotifiedPrayer = "";
-      lastPlayedAdzanPrayer = "";
-      playedAdzanPrayers = {};
-    }
-  }
-
-  // ==================== DISTANCE CALCULATION ====================
-  function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
-  }
-
-  function formatDistance(distanceKm) {
-    if (distanceKm < 1) return `${Math.round(distanceKm * 1000)} m`;
-    return `${distanceKm.toFixed(1)} km`;
-  }
-
-  // ==================== FETCH NEARBY MOSQUES ====================
-  async function fetchNearbyMosques(lat, lon, radius = 3000) {
-    try {
-      const overpassUrl = "https://overpass-api.de/api/interpreter";
-      const query = `[out:json];(node["amenity"="place_of_worship"]["religion"="muslim"](around:${radius},${lat},${lon});way["amenity"="place_of_worship"]["religion"="muslim"](around:${radius},${lat},${lon}););out body;>;out skel qt;`;
-      const response = await fetch(overpassUrl, { method: 'POST', body: query, headers: { 'Content-Type': 'text/plain' } });
-      const data = await response.json();
-      if (!data.elements || data.elements.length === 0) return getFallbackMosques(lat, lon);
-      
-      const mosques = [];
-      const seenIds = new Set();
-      for (const element of data.elements) {
-        if ((element.type !== 'node' && element.type !== 'way') || seenIds.has(element.id)) continue;
-        seenIds.add(element.id);
-        const tags = element.tags || {};
-        const latMosque = element.lat || (element.center?.lat);
-        const lonMosque = element.lon || (element.center?.lon);
-        if (!latMosque || !lonMosque) continue;
-        const name = tags.name || tags['name:id'] || "Masjid";
-        const address = tags['addr:street'] || tags['addr:village'] || "";
-        const distance = calculateDistance(lat, lon, latMosque, lonMosque);
-        mosques.push({ id: element.id, name, address, lat: latMosque, lon: lonMosque, distance, distanceFormatted: formatDistance(distance) });
-      }
-      mosques.sort((a, b) => a.distance - b.distance);
-      return mosques.slice(0, 8);
-    } catch (error) {
-      return getFallbackMosques(lat, lon);
-    }
-  }
-  
-  function getFallbackMosques(lat, lon) {
-    const fallbackData = [
-      { name: "Masjid Raya Al-Jabbar", lat: -6.9369, lon: 107.6644, address: "Jl. Cimincrang, Gedebage" },
-      { name: "Masjid Raya Bandung", lat: -6.9175, lon: 107.6069, address: "Jl. Dalem Kaum No.14" },
-      { name: "Masjid Salman ITB", lat: -6.8915, lon: 107.6106, address: "Jl. Ganesha No.7" },
-      { name: "Masjid Pusdai", lat: -6.9025, lon: 107.6189, address: "Jl. Diponegoro No.129" },
-      { name: "Masjid Al-Ukhuwwah", lat: -6.8946, lon: 107.6097, address: "Jl. Sangkuriang No.1" }
-    ];
-    return fallbackData.map(m => {
-      const distance = calculateDistance(lat, lon, m.lat, m.lon);
-      return { ...m, id: m.name, distance, distanceFormatted: formatDistance(distance) };
-    }).sort((a, b) => a.distance - b.distance);
-  }
-  
-  function renderMosqueList(mosques) {
-    if (!mosques?.length) {
-      masjidListDiv.innerHTML = `<div class="loading-masjid"><i class="fas fa-map-marker-alt"></i> Tidak ditemukan masjid di sekitar Anda</div>`;
-      return;
-    }
-    let html = '';
-    for (const mosque of mosques) {
-      html += `<div class="masjid-item" onclick="openGoogleMaps(${mosque.lat}, ${mosque.lon}, '${encodeURIComponent(mosque.name)}')">
-        <div class="masjid-info"><div class="masjid-name"><i class="fas fa-mosque"></i> ${escapeHtml(mosque.name)}</div>${mosque.address ? `<div class="masjid-address"><i class="fas fa-location-dot"></i> ${escapeHtml(mosque.address)}</div>` : ''}</div>
-        <div class="masjid-distance"><i class="fas fa-walking"></i> ${mosque.distanceFormatted}</div>
-      </div>`;
-    }
-    masjidListDiv.innerHTML = html;
-  }
-  
-  function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
-  window.openGoogleMaps = function(lat, lon, name) { window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}&travelmode=driving`, '_blank'); };
-  
-  async function loadNearbyMosques(lat, lon) {
-    masjidListDiv.innerHTML = `<div class="loading-masjid"><i class="fas fa-spinner fa-pulse"></i> Mencari masjid terdekat...</div>`;
-    const mosques = await fetchNearbyMosques(lat, lon);
-    nearestMosques = mosques;
-    renderMosqueList(mosques);
-  }
-
-  // ==================== PRAYER SCHEDULE FUNCTIONS ====================
-  function getPrayerAPIUrl(lat, lon) { return `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=20&adjustment=0`; }
-  function getWeatherApiUrl(lat, lon) { return `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`; }
-  
+  // ==================== PRAYER SCHEDULE ====================
   function timeStringToDate(timeStr) {
     const now = new Date();
     const [hours, minutes] = timeStr.split(":").map(Number);
@@ -792,9 +944,7 @@
   
   function updateAllCountdownsAndNext() {
     const now = new Date();
-    let minDiff = Infinity;
-    let nextPrayer = null;
-    let nextTimeDate = null;
+    let minDiff = Infinity, nextPrayer = null, nextTimeDate = null;
     for (let p of currentPrayerList) {
       const pTime = prayerTimes[p.key];
       if (!pTime) continue;
@@ -804,22 +954,23 @@
     }
     if (nextPrayer) {
       let displayName = (nextPrayer.key === "Dzuhur" && isFridayToday()) ? "Jum'atan" : nextPrayer.label;
-      nextPrayerNameSpan.innerText = displayName;
-      nextPrayerCountdownSpan.innerText = formatCountdown(nextTimeDate - now);
+      document.getElementById("nextPrayerName").innerText = displayName;
+      document.getElementById("nextPrayerCountdown").innerText = formatCountdown(nextTimeDate - now);
     } else {
       const tomorrowSubuh = findTomorrowSubuh();
-      if (tomorrowSubuh) { nextPrayerNameSpan.innerText = "Subuh (Besok)"; nextPrayerCountdownSpan.innerText = formatCountdown(tomorrowSubuh - now); }
-      else { nextPrayerNameSpan.innerText = "---"; nextPrayerCountdownSpan.innerText = "--:--:--"; }
+      if (tomorrowSubuh) {
+        document.getElementById("nextPrayerName").innerText = "Subuh (Besok)";
+        document.getElementById("nextPrayerCountdown").innerText = formatCountdown(tomorrowSubuh - now);
+      }
     }
     document.querySelectorAll('.prayer-card').forEach(card => {
       const prayerKey = card.getAttribute('data-prayer');
       if (prayerKey && prayerTimes[prayerKey]) {
         const diffMs = timeStringToDate(prayerTimes[prayerKey]) - now;
-        const countdownSpan = card.querySelector('.prayer-countdown');
-        if (countdownSpan) {
-          if (diffMs > 0) { countdownSpan.innerText = `⌛ ${formatCountdown(diffMs)}`; countdownSpan.style.color = "#FFD966"; }
-          else if (diffMs < 0 && Math.abs(diffMs) < 3600000) { countdownSpan.innerText = `✅ Telah lewat`; countdownSpan.style.color = "#aaa"; }
-          else { countdownSpan.innerText = `✅ Selesai`; countdownSpan.style.color = "#aaa"; }
+        const cs = card.querySelector('.prayer-countdown');
+        if (cs) {
+          if (diffMs > 0) cs.innerText = `⌛ ${formatCountdown(diffMs)}`;
+          else cs.innerText = `✅ Selesai`;
         }
       }
     });
@@ -831,8 +982,30 @@
     if (!prayerTimes.Subuh) return null;
     const now = new Date();
     const [hours, minutes] = prayerTimes.Subuh.split(":").map(Number);
-    const tomorrow = new Date(now); tomorrow.setDate(now.getDate() + 1); tomorrow.setHours(hours, minutes, 0, 0);
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+    tomorrow.setHours(hours, minutes, 0, 0);
     return tomorrow;
+  }
+  
+  let lastPlayedAdzanPrayer = "";
+  
+  function checkPrayerTriggers(now) {
+    const fardhu = ["Subuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
+    for (let prayer of fardhu) {
+      if (!prayerTimes[prayer]) continue;
+      const prayerDate = timeStringToDate(prayerTimes[prayer]);
+      const diffMs = prayerDate - now;
+      
+      if (diffMs <= 0 && diffMs > -3000 && lastPlayedAdzanPrayer !== prayer) {
+        lastPlayedAdzanPrayer = prayer;
+        playAdzan(prayer);
+      }
+    }
+    if (now.getHours() === 0 && now.getMinutes() === 0) {
+      lastPlayedAdzanPrayer = "";
+      playedAdzanPrayers = {};
+    }
   }
   
   function checkIqamahTrigger(now) {
@@ -847,14 +1020,17 @@
           activeIqamahPrayer = prayer;
           iqamahEndTime = Date.now() + (180000 - diffMs);
           let displayName = (prayer === "Dzuhur" && isFridayToday()) ? "Jum'atan" : prayer;
-          iqamahPrayerNameSpan.innerText = `Sholat ${displayName}`;
-          iqamahZone.classList.remove("iqamah-hidden");
-          sendNotification(`🕌 Iqamah ${displayName}`, "Segera persiapkan sholat berjamaah!");
+          document.getElementById("iqamahPrayerName").innerText = `Sholat ${displayName}`;
+          document.getElementById("iqamahZone").classList.remove("iqamah-hidden");
         }
         return;
       }
     }
-    if (iqamahActive) { iqamahActive = false; iqamahZone.classList.add("iqamah-hidden"); iqamahEndTime = null; }
+    if (iqamahActive) {
+      iqamahActive = false;
+      document.getElementById("iqamahZone").classList.add("iqamah-hidden");
+      iqamahEndTime = null;
+    }
   }
   
   function isFridayToday() { return new Date().getDay() === 5; }
@@ -871,49 +1047,21 @@
         html += `<div class="prayer-card" data-prayer="${key}"><div class="prayer-name">${labels[key]}</div><div class="prayer-time">${prayerTimes[key]}</div><div class="prayer-countdown">⌛ --:--:--</div><div class="next-badge"><i class="far fa-clock"></i> Waktu</div></div>`;
       }
     }
-    if (prayerTimes.Terbit) html += `<div class="prayer-card" style="opacity:0.8;"><div class="prayer-name">Terbit</div><div class="prayer-time">${prayerTimes.Terbit}</div><div class="next-badge">Imsak ${prayerTimes.Imsak || '-'}</div></div>`;
-    prayerGrid.innerHTML = html;
+    document.getElementById("prayerGrid").innerHTML = html;
     updateAllCountdownsAndNext();
-  }
-  
-  async function updateDateAndHijri(apiData) {
-    if (apiData?.data?.date) {
-      const gregorian = apiData.data.date.gregorian;
-      const hijri = apiData.data.date.hijri;
-      if (gregorian) fullDateSpan.innerText = `${gregorian.weekday.en}, ${gregorian.day} ${gregorian.month.en} ${gregorian.year}`;
-      if (hijri) hijriDateSpan.innerText = `${hijri.day} ${hijri.month.en} ${hijri.year} H`;
-    } else {
-      fullDateSpan.innerText = new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-      hijriDateSpan.innerText = "-";
-    }
-  }
-  
-  async function fetchWeather() {
-    try {
-      const resp = await fetch(getWeatherApiUrl(currentLat, currentLon));
-      const data = await resp.json();
-      if (data.current_weather) {
-        const temp = data.current_weather.temperature;
-        const wc = data.current_weather.weathercode;
-        let condition = "Cerah";
-        if (wc >= 51 && wc <= 67) condition = "Hujan";
-        else if (wc >= 80 && wc <= 99) condition = "Hujan Lebat";
-        else if (wc <= 3) condition = "Cerah / Berawan";
-        weatherDescSpan.innerText = condition;
-        weatherTempSpan.innerText = `${Math.round(temp)}°C`;
-      }
-    } catch(e) { weatherDescSpan.innerText = "Cuaca"; weatherTempSpan.innerText = "--°C"; }
   }
   
   async function fetchPrayerSchedule() {
     try {
-      const res = await fetch(getPrayerAPIUrl(currentLat, currentLon));
+      const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${currentLat}&longitude=${currentLon}&method=20`);
       const json = await res.json();
       if (json.code === 200 && json.data?.timings) {
         const t = json.data.timings;
         prayerTimes = { Subuh: t.Fajr, Dzuhur: t.Dhuhr, Ashar: t.Asr, Maghrib: t.Maghrib, Isya: t.Isha, Imsak: t.Imsak, Terbit: t.Sunrise };
         renderPrayerSchedule();
-        await updateDateAndHijri(json);
+        const g = json.data.date.gregorian, h = json.data.date.hijri;
+        if (g) document.getElementById("fullDateMasehi").innerText = `${g.weekday.en}, ${g.day} ${g.month.en} ${g.year}`;
+        if (h) document.getElementById("hijriDate").innerText = `${h.day} ${h.month.en} ${h.year} H`;
         checkIqamahTrigger(new Date());
       } else throw new Error("Invalid");
     } catch(error) { fallbackPrayer(); }
@@ -922,44 +1070,49 @@
   function fallbackPrayer() {
     prayerTimes = { Subuh: "04:33", Dzuhur: "11:50", Ashar: "15:10", Maghrib: "17:48", Isya: "18:56", Imsak: "04:23", Terbit: "05:44" };
     renderPrayerSchedule();
-    fullDateSpan.innerText = new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-    hijriDateSpan.innerText = "20 Dzulqadah 1447 H";
+    document.getElementById("fullDateMasehi").innerText = new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    document.getElementById("hijriDate").innerText = "20 Dzulqadah 1447 H";
     checkIqamahTrigger(new Date());
   }
   
-  // ==================== OFFLINE DETECTION ====================
-  window.addEventListener('online', () => {
-    offlineIndicator.classList.remove('show');
-    fetchPrayerSchedule();
-    fetchWeather();
-  });
-  window.addEventListener('offline', () => { offlineIndicator.classList.add('show'); });
+  async function fetchWeather() {
+    try {
+      const resp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${currentLat}&longitude=${currentLon}&current_weather=true&timezone=auto`);
+      const data = await resp.json();
+      if (data.current_weather) {
+        const temp = data.current_weather.temperature;
+        const wc = data.current_weather.weathercode;
+        let condition = "Cerah";
+        if (wc >= 51 && wc <= 67) condition = "Hujan";
+        else if (wc >= 80 && wc <= 99) condition = "Hujan Lebat";
+        else if (wc <= 3) condition = "Cerah / Berawan";
+        document.getElementById("weatherDesc").innerText = condition;
+        document.getElementById("weatherTemp").innerText = `${Math.round(temp)}°C`;
+      }
+    } catch(e) {}
+  }
   
-  // ==================== CLOCK & MAIN LOOP ====================
+  // ==================== CLOCK & MAIN ====================
   function updateClock() {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2,'0');
     const minutes = now.getMinutes().toString().padStart(2,'0');
     const seconds = now.getSeconds().toString().padStart(2,'0');
-    liveClockSpan.innerHTML = `${hours}:${minutes}:${seconds} <span id="timezoneLabel" style="font-size:1.2rem; letter-spacing:0;">${currentTimezone}</span>`;
+    document.getElementById("liveClock").innerHTML = `${hours}:${minutes}:${seconds} <span style="font-size:1.2rem;">${currentTimezone}</span>`;
     if (iqamahActive && iqamahEndTime) {
       const remaining = iqamahEndTime - now;
-      if (remaining <= 0) { iqamahActive = false; iqamahZone.classList.add("iqamah-hidden"); iqamahEndTime = null; }
-      else {
+      if (remaining <= 0) {
+        iqamahActive = false;
+        document.getElementById("iqamahZone").classList.add("iqamah-hidden");
+      } else {
         const mins = Math.floor(remaining/60000);
         const secs = Math.floor((remaining%60000)/1000);
-        iqamahTimerDisplay.innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        document.getElementById("iqamahTimerDisplay").innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
       }
     }
     checkIqamahTrigger(now);
     updateAllCountdownsAndNext();
-    checkAndNotifyPrayer(now);
-  }
-  
-  let currentDateCheck = '';
-  async function refreshDailyIfNeeded() {
-    const todayStr = new Date().toDateString();
-    if (currentDateCheck !== todayStr) { currentDateCheck = todayStr; await fetchPrayerSchedule(); }
+    checkPrayerTriggers(now);
   }
   
   async function initLocationAndSchedule() {
@@ -967,58 +1120,43 @@
       const userLoc = await getUserLocation();
       currentLat = userLoc.lat; currentLon = userLoc.lon;
       currentTimezone = getIndonesiaTimezone(currentLon);
-      timezoneLabelSpan.innerText = currentTimezone;
+      document.getElementById("liveClock").innerHTML = document.getElementById("liveClock").innerHTML.replace(/W.I[BT]/, currentTimezone);
       currentCityOnly = await getLocationName(currentLat, currentLon);
       updateTitleWithLocation();
       await fetchPrayerSchedule();
       await fetchWeather();
-      await loadNearbyMosques(currentLat, currentLon);
       updateQiblaDirection();
-      requestNotificationPermission();
     } catch (error) {
-      console.warn("Gagal mendapatkan lokasi user, menggunakan default Bandung:", error);
-      locationTextSpan.innerText = "Bandung (Default)";
+      document.getElementById("locationText").innerText = "Bandung (Default)";
       currentCityOnly = "Bandung";
-      currentTimezone = "WIB";
-      timezoneLabelSpan.innerText = currentTimezone;
       updateTitleWithLocation();
       await fetchPrayerSchedule();
       await fetchWeather();
-      await loadNearbyMosques(currentLat, currentLon);
     }
   }
   
-  // ==================== INTERVALS ====================
-  setInterval(() => { updateClock(); refreshDailyIfNeeded(); }, 1000);
-  
+  setInterval(() => { updateClock(); }, 1000);
   setInterval(() => {
-    const tickerDiv = document.getElementById("runningTicker");
-    if (tickerDiv) {
+    const ticker = document.getElementById("runningTicker");
+    if (ticker) {
       const waktu = new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
-      const statusIq = iqamahActive ? `🔔 IQAMAH BERLANGSUNG!` : `Menunggu waktu sholat berikutnya`;
-      tickerDiv.innerHTML = `<span>🕌 JADWAL SHOLAT ${currentCityOnly} | ${waktu} ${currentTimezone} | ${statusIq}</span>
-      <span>📍 Lokasi: ${currentCityOnly} | Jadwal berdasarkan koordinat Anda</span>
-      <span>⏳ Iqamah otomatis 3 menit setelah adzan | Countdown menuju adzan</span>
-      <span>🤲 "Tegakkanlah sholat, tunaikanlah zakat, dan rukuklah beserta orang-orang yang rukuk" (QS. Al Baqarah: 43)</span>`;
-      const newTicker = tickerDiv.cloneNode(true);
-      tickerDiv.parentNode.replaceChild(newTicker, tickerDiv);
+      const statusIq = iqamahActive ? '🔔 IQAMAH BERLANGSUNG!' : 'Menunggu waktu sholat';
+      ticker.innerHTML = `<span>🕌 JADWAL SHOLAT ${currentCityOnly} | ${waktu} ${currentTimezone} | ${statusIq}</span>
+      <span>🎵 Adzan otomatis saat waktu sholat | Aktif/Nonaktif via tombol Adzan</span>
+      <span>📖 Baca Al-Qur'an & 99 Asmaul Husna dari aplikasi ini</span>
+      <span>🤲 "Sungguh, sholat itu adalah kewajiban yang ditentukan waktunya" (QS. An Nisa: 103)</span>`;
+      const newTicker = ticker.cloneNode(true);
+      ticker.parentNode.replaceChild(newTicker, ticker);
       newTicker.style.animation = 'none';
       newTicker.offsetHeight;
       newTicker.style.animation = 'tickerMove 28s linear infinite';
     }
   }, 50000);
   
-  // AUTO REFRESH TV MODE (setiap 6 jam)
-  setTimeout(() => { location.reload(); }, 6 * 60 * 60 * 1000);
-  
-  // Inisialisasi UI Adzan
   updateAdzanButtonUI();
-  
-  // START
   (async () => {
     await initLocationAndSchedule();
     setInterval(fetchWeather, 600000);
-    currentDateCheck = new Date().toDateString();
     updateClock();
   })();
 </script>
