@@ -19,11 +19,13 @@
 
     :root {
       --primary-cyan: #00f2ff;
+      --cyan-shadow: rgba(0, 242, 255, 0.6);
+      --alert-red: #ff003c;
+      --alert-shadow: rgba(255, 0, 60, 0.5);
       --deep-bg: #0a0c10;
       --card-gradient: linear-gradient(145deg, #161b22, #0d1117);
-      --racing-red: #ff003c;
       --text-color: #ffffff;
-      --border-color: rgba(0, 242, 255, 0.2);
+      --border-color: rgba(0, 242, 255, 0.15);
     }
 
     [data-theme="light"] {
@@ -31,6 +33,8 @@
       --card-gradient: linear-gradient(145deg, #ffffff, #f0f0f0);
       --text-color: #1a2f2c;
       --border-color: rgba(0, 0, 0, 0.1);
+      --primary-cyan: #00a0aa;
+      --cyan-shadow: rgba(0, 160, 170, 0.5);
     }
 
     body {
@@ -38,10 +42,11 @@
       background-color: var(--deep-bg);
       color: var(--text-color);
       overflow-x: hidden;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease;
+      position: relative;
     }
 
-    /* IDE 1: EFEK SCANLINE MONITOR CRT */
+    /* EFEK SCANLINE MONITOR CRT */
     body::after {
       content: " ";
       display: block;
@@ -53,7 +58,7 @@
       pointer-events: none;
     }
 
-    /* IDE 1: LASER SCANNER HORIZONTAL */
+    /* LASER SCANNER HORIZONTAL */
     .cyber-scanner {
       position: fixed;
       top: 0;
@@ -72,7 +77,7 @@
       100% { transform: translateY(100vh); }
     }
 
-    /* IDE 2: FLOATING PARTICLES CONTAINER */
+    /* FLOATING PARTICLES */
     .particles-container {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -98,7 +103,7 @@
 
     body::before {
       content: "SALSABILA";
-	  position: fixed;
+      position: fixed;
       top: 10%;
       left: -5%;
       font-size: 20vw;
@@ -116,6 +121,7 @@
       100% { transform: translateY(0) rotate(0deg); }
     }
 
+    /* NAVIGATION */
     .nav-dynamic {
       padding: 30px 50px;
       display: flex;
@@ -123,6 +129,8 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 20px;
+      position: relative;
+      z-index: 10;
     }
 
     .brand {
@@ -132,13 +140,13 @@
       color: var(--primary-cyan);
       text-transform: uppercase;
       letter-spacing: 2px;
-      text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+      text-shadow: 0 0 10px var(--cyan-shadow);
       animation: pulseGlow 2s ease-in-out infinite alternate;
     }
 
     @keyframes pulseGlow {
-      from { text-shadow: 0 0 8px rgba(0, 242, 255, 0.2); }
-      to { text-shadow: 0 0 18px rgba(0, 242, 255, 0.6); }
+      from { text-shadow: 0 0 8px var(--cyan-shadow); }
+      to { text-shadow: 0 0 18px var(--primary-cyan); }
     }
 
     .nav-menu {
@@ -147,46 +155,50 @@
       flex-wrap: wrap;
     }
 
+    /* ============================================================
+       NEON FLICKER & OVERLOAD PADA NAV ITEMS (TOMOL MENU)
+    ============================================================ */
     .nav-item {
-      background: rgba(0,0,0,0.4);
-      border: 1px solid transparent;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid var(--border-color);
       color: white;
-      padding: 0.4rem 1.2rem;
+      padding: 0.5rem 1.3rem;
       border-radius: 2rem;
       cursor: pointer;
       font-size: 0.85rem;
       font-weight: 600;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       font-family: 'Barlow', sans-serif;
+      transition: all 0.05s ease;
       position: relative;
       overflow: hidden;
-    }
-
-    .nav-item::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 120%;
-      height: 0;
-      background: rgba(0, 242, 255, 0.2);
-      transform: translate(-50%, -50%) rotate(45deg);
-      transition: all 0.3s ease;
-      z-index: 1;
-    }
-
-    .nav-item:hover::after {
-      height: 300%;
     }
 
     .nav-item:hover, .nav-item.active {
       background: var(--primary-cyan);
       color: #000;
       border-color: var(--primary-cyan);
-      box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
       transform: translateY(-2px);
+      animation: neonOverloadExtreme 0.4s ease-in-out 3 alternate;
     }
 
+    .nav-item:hover::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+      animation: electricSpark 0.3s ease-out forwards;
+    }
+
+    @keyframes electricSpark {
+      0% { left: -100%; opacity: 0; }
+      50% { left: 0%; opacity: 1; }
+      100% { left: 100%; opacity: 0; }
+    }
+
+    /* HERO SECTION */
     .hero-section {
       display: flex;
       padding: 0 50px;
@@ -207,38 +219,43 @@
       letter-spacing: 5px;
       color: var(--primary-cyan);
       margin-bottom: 10px;
+      text-shadow: 0 0 5px var(--cyan-shadow);
     }
 
-    .hero-content .clock-giant {
+    .clock-giant {
       font-family: 'Orbitron', sans-serif;
       font-size: 6rem;
       line-height: 1;
       font-weight: 900;
       margin-bottom: 20px;
-      filter: drop-shadow(0 0 15px rgba(0, 242, 255, 0.3));
+      filter: drop-shadow(0 0 15px var(--cyan-shadow));
       animation: clockGlow 4s ease-in-out infinite alternate;
     }
 
     @keyframes clockGlow {
-      0% { filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.3)); }
-      100% { filter: drop-shadow(0 0 25px rgba(0, 242, 255, 0.6)); }
+      0% { filter: drop-shadow(0 0 10px var(--cyan-shadow)); }
+      100% { filter: drop-shadow(0 0 30px var(--primary-cyan)); }
     }
 
+    /* STATUS BADGE DENGAN FLICKER */
     .status-badge {
       display: inline-block;
       padding: 10px 25px;
-      background: var(--racing-red);
+      background: var(--alert-red);
       font-weight: 800;
       font-style: italic;
       text-transform: uppercase;
       transform: skewX(-15deg);
-      box-shadow: 0 5px 15px rgba(255, 0, 60, 0.3);
-      animation: pulseAlert 1.5s ease-in-out infinite alternate;
+      animation: alertFlicker 0.8s ease-in-out infinite alternate;
     }
 
-    @keyframes pulseAlert {
-      from { box-shadow: 0 5px 10px rgba(255, 0, 60, 0.3); opacity: 0.9; }
-      to { box-shadow: 0 5px 20px rgba(255, 0, 60, 0.6); opacity: 1; }
+    @keyframes alertFlicker {
+      0% { box-shadow: 0 5px 10px var(--alert-shadow); opacity: 0.9; filter: brightness(1); }
+      20% { box-shadow: 0 5px 20px var(--alert-shadow); opacity: 0.6; filter: brightness(1.5); }
+      40% { box-shadow: 0 5px 8px var(--alert-shadow); opacity: 1; filter: brightness(1); }
+      60% { box-shadow: 0 5px 30px var(--alert-shadow); opacity: 0.5; filter: brightness(2); }
+      80% { box-shadow: 0 5px 15px var(--alert-shadow); opacity: 0.9; filter: brightness(1.2); }
+      100% { box-shadow: 0 5px 25px var(--alert-shadow); opacity: 1; filter: brightness(1); }
     }
 
     .next-prayer-detail {
@@ -249,57 +266,119 @@
     .next-prayer-detail span {
       color: var(--primary-cyan);
       font-weight: bold;
+      text-shadow: 0 0 5px var(--cyan-shadow);
     }
 
+    /* PRAYER GRID */
     .prayer-container {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 20px;
       padding: 50px;
-      background: rgba(255,255,255,0.02);
-      transform: skewY(-2deg);
+      background: rgba(0,242,255,0.01);
+      transform: skewY(-1.5deg);
       animation: skewIn 0.8s ease-out;
-    }
-
-    .prayer-box {
-      background: var(--card-gradient);
-      padding: 30px 20px;
-      border-left: 4px solid #333;
-      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-      transform: skewY(2deg);
-      text-align: center;
       position: relative;
     }
 
-    .prayer-box::before {
-      content: '';
-      position: absolute;
-      top:0; left:0; width:100%; height:100%;
-      background: linear-gradient(to bottom, rgba(0,242,255,0.05), transparent);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .prayer-box:hover::before {
-      opacity: 1;
+    /* ============================================================
+       NEON FLICKER & OVERLOAD PADA PRAYER BOXES (KARTU JADWAL)
+    ============================================================ */
+    .prayer-box {
+      background: var(--card-gradient);
+      padding: 35px 20px;
+      border-left: 4px solid #333;
+      transition: all 0.08s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transform: skewY(1.5deg);
+      text-align: center;
+      position: relative;
     }
 
     .prayer-box:hover {
       border-left-color: var(--primary-cyan);
       background: #1c2128;
-      transform: skewY(2deg) translateY(-8px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 242, 255, 0.1);
+      transform: skewY(1.5deg) translateY(-8px) scale(1.02);
+      animation: neonFlickerExtreme 0.35s ease-in-out 3 alternate;
+    }
+
+    .prayer-box:hover .time {
+      animation: textFlicker 0.2s steps(3) 3 alternate;
+    }
+
+    .prayer-box:hover::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0,242,255,0.3), transparent 70%);
+      pointer-events: none;
+      animation: sparkFade 0.3s ease-out forwards;
     }
 
     .prayer-box.active {
       border-left-color: var(--primary-cyan);
-      box-shadow: -10px 0 30px rgba(0, 242, 255, 0.15), inset 0 0 15px rgba(0, 242, 255, 0.05);
-      animation: activeBoxGlow 3s ease-in-out infinite alternate;
+      box-shadow: -10px 0 30px var(--cyan-shadow), inset 0 0 15px rgba(0, 242, 255, 0.1);
+      animation: activeOverloadPulse 1.5s ease-in-out infinite alternate;
     }
 
-    @keyframes activeBoxGlow {
-      0% { border-left-color: rgba(0, 242, 255, 0.6); }
-      100% { border-left-color: var(--primary-cyan); }
+    @keyframes activeOverloadPulse {
+      0% { border-left-color: rgba(0, 242, 255, 0.5); box-shadow: -5px 0 15px var(--cyan-shadow), inset 0 0 5px rgba(0,242,255,0.05); }
+      25% { border-left-color: var(--primary-cyan); box-shadow: -15px 0 35px var(--cyan-shadow), inset 0 0 20px rgba(0,242,255,0.15); }
+      50% { border-left-color: rgba(0, 242, 255, 0.7); box-shadow: -8px 0 20px var(--cyan-shadow), inset 0 0 10px rgba(0,242,255,0.1); }
+      75% { border-left-color: var(--primary-cyan); box-shadow: -20px 0 40px var(--cyan-shadow), inset 0 0 25px rgba(0,242,255,0.2); }
+      100% { border-left-color: rgba(0, 242, 255, 0.6); box-shadow: -10px 0 25px var(--cyan-shadow), inset 0 0 15px rgba(0,242,255,0.1); }
+    }
+
+    @keyframes neonFlickerExtreme {
+      0% { opacity: 1; filter: brightness(1) drop-shadow(0 0 2px var(--primary-cyan)); }
+      8% { opacity: 0.5; filter: brightness(2.5); box-shadow: 0 0 0px var(--cyan-shadow); }
+      12% { opacity: 1; filter: brightness(1.2); box-shadow: 0 0 20px var(--cyan-shadow); }
+      16% { opacity: 0.2; filter: brightness(3); box-shadow: 0 0 0px var(--cyan-shadow); }
+      20% { opacity: 1; filter: brightness(1); box-shadow: 0 0 15px var(--cyan-shadow); }
+      25% { opacity: 0.6; filter: brightness(2); box-shadow: 0 0 5px var(--cyan-shadow); }
+      28% { opacity: 1; filter: brightness(1.5); box-shadow: 0 0 25px var(--cyan-shadow); }
+      32% { opacity: 0.1; filter: brightness(4); box-shadow: 0 0 0px var(--cyan-shadow); }
+      36% { opacity: 1; filter: brightness(1); box-shadow: 0 0 10px var(--cyan-shadow); }
+      50% { opacity: 0.4; filter: brightness(2.2); box-shadow: 0 0 0px var(--cyan-shadow); }
+      55% { opacity: 1; filter: brightness(1.3); box-shadow: 0 0 20px var(--cyan-shadow); }
+      70% { opacity: 0.7; filter: brightness(1.6); box-shadow: 0 0 12px var(--cyan-shadow); }
+      75% { opacity: 1; filter: brightness(1); box-shadow: 0 0 8px var(--cyan-shadow); }
+      82% { opacity: 0.3; filter: brightness(2.8); box-shadow: 0 0 0px var(--cyan-shadow); }
+      88% { opacity: 1; filter: brightness(1.2); box-shadow: 0 0 18px var(--cyan-shadow); }
+      100% { opacity: 1; filter: brightness(1); box-shadow: 0 0 10px var(--cyan-shadow); }
+    }
+
+    @keyframes neonOverloadExtreme {
+      0% { opacity: 1; filter: brightness(1); box-shadow: 0 0 5px var(--cyan-shadow); }
+      8% { opacity: 0.5; filter: brightness(2.5); box-shadow: 0 0 0px var(--cyan-shadow); }
+      12% { opacity: 1; filter: brightness(1.2); box-shadow: 0 0 20px var(--cyan-shadow); }
+      16% { opacity: 0.2; filter: brightness(3); box-shadow: 0 0 0px var(--cyan-shadow); }
+      20% { opacity: 1; filter: brightness(1); box-shadow: 0 0 15px var(--cyan-shadow); }
+      25% { opacity: 0.6; filter: brightness(2); box-shadow: 0 0 5px var(--cyan-shadow); }
+      28% { opacity: 1; filter: brightness(1.5); box-shadow: 0 0 25px var(--cyan-shadow); }
+      32% { opacity: 0.1; filter: brightness(4); box-shadow: 0 0 0px var(--cyan-shadow); }
+      36% { opacity: 1; filter: brightness(1); box-shadow: 0 0 10px var(--cyan-shadow); }
+      50% { opacity: 0.4; filter: brightness(2.2); box-shadow: 0 0 0px var(--cyan-shadow); }
+      55% { opacity: 1; filter: brightness(1.3); box-shadow: 0 0 20px var(--cyan-shadow); }
+      70% { opacity: 0.7; filter: brightness(1.6); box-shadow: 0 0 12px var(--cyan-shadow); }
+      75% { opacity: 1; filter: brightness(1); box-shadow: 0 0 8px var(--cyan-shadow); }
+      82% { opacity: 0.3; filter: brightness(2.8); box-shadow: 0 0 0px var(--cyan-shadow); }
+      88% { opacity: 1; filter: brightness(1.2); box-shadow: 0 0 18px var(--cyan-shadow); }
+      100% { opacity: 1; filter: brightness(1); box-shadow: 0 0 10px var(--cyan-shadow); }
+    }
+
+    @keyframes textFlicker {
+      0% { opacity: 1; text-shadow: 0 0 5px var(--cyan-shadow); }
+      33% { opacity: 0.5; text-shadow: 0 0 20px var(--cyan-shadow); }
+      66% { opacity: 1; text-shadow: 0 0 2px var(--cyan-shadow); }
+      100% { opacity: 0.8; text-shadow: 0 0 15px var(--cyan-shadow); }
+    }
+
+    @keyframes sparkFade {
+      0% { opacity: 0.8; }
+      100% { opacity: 0; }
     }
 
     .prayer-box .name {
@@ -312,14 +391,15 @@
 
     .prayer-box .time {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 700;
       margin-top: 10px;
-      transition: color 0.3s;
+      transition: color 0.3s, text-shadow 0.1s;
     }
-    
+
     .prayer-box:hover .time {
       color: var(--primary-cyan);
+      text-shadow: 0 0 15px var(--cyan-shadow);
     }
 
     .prayer-box .countdown {
@@ -328,14 +408,17 @@
       opacity: 0.7;
     }
 
+    /* PANELS */
     .glass-panel {
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(12px);
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(15px);
       border-radius: 2rem;
       border: 1px solid var(--border-color);
       margin: 1.5rem;
-      padding: 1.5rem;
-      animation: pageTransition 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      padding: 2rem;
+      animation: pageTransition 0.5s cubic-bezier(0.23, 1, 0.32, 1) both;
+      position: relative;
+      overflow: hidden;
     }
 
     .panel-header {
@@ -352,6 +435,7 @@
       color: var(--primary-cyan);
     }
 
+    /* SURAH & ASMA LIST */
     .surah-list, .asma-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -374,7 +458,7 @@
       background: rgba(0, 242, 255, 0.15);
       border-color: var(--primary-cyan);
       transform: translateX(5px);
-      box-shadow: -5px 0 10px rgba(0, 242, 255, 0.2);
+      box-shadow: -5px 0 10px var(--cyan-shadow);
     }
 
     .surah-number { color: var(--primary-cyan); font-weight: bold; margin-right: 10px; }
@@ -384,7 +468,6 @@
     .asma-item {
       display: block;
       padding: 0.8rem;
-      cursor: pointer;
     }
     .asma-header {
       display: flex;
@@ -398,6 +481,7 @@
     .asma-name-latin { font-size: 0.85rem; font-weight: 500; color: var(--primary-cyan); }
     .asma-meaning { font-size: 0.75rem; opacity: 0.8; margin-top: 5px; padding-top: 5px; border-top: 1px dashed var(--border-color); }
 
+    /* SELECTED ASMA CARD */
     .selected-asma-card {
       position: relative;
       overflow: hidden;
@@ -434,7 +518,7 @@
       font-size: 2.5rem;
       line-height: 1.4;
       color: #fff;
-      text-shadow: 0 0 10px rgba(0,242,255,0.6), 0 0 20px rgba(0,242,255,0.4);
+      text-shadow: 0 0 10px var(--cyan-shadow), 0 0 20px rgba(0,242,255,0.4);
       margin-bottom: 10px;
     }
 
@@ -464,8 +548,8 @@
     }
 
     @keyframes cyberGlow {
-      from { box-shadow: 0 0 10px rgba(0,242,255,0.15), 0 0 20px rgba(0,242,255,0.08); }
-      to { box-shadow: 0 0 20px rgba(0,242,255,0.35), 0 0 40px rgba(0,242,255,0.15); }
+      from { box-shadow: 0 0 10px var(--cyan-shadow), 0 0 20px rgba(0,242,255,0.08); }
+      to { box-shadow: 0 0 20px var(--primary-cyan), 0 0 40px var(--cyan-shadow); }
     }
 
     @keyframes scanline {
@@ -491,6 +575,7 @@
     .random-asma-arabic { font-family: 'Amiri', serif; font-size: 1.8rem; margin-bottom: 8px; }
     .random-asma-latin { font-size: 1rem; font-weight: 600; margin: 5px 0; color: var(--primary-cyan); }
 
+    /* VIDEO GRID */
     .video-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -504,7 +589,11 @@
       border: 1px solid var(--border-color);
       cursor: pointer;
     }
-    .video-card:hover { transform: translateY(-6px) scale(1.02); border-color: var(--primary-cyan); box-shadow: 0 10px 20px rgba(0,242,255,0.1); }
+    .video-card:hover { 
+      transform: translateY(-6px) scale(1.02); 
+      border-color: var(--primary-cyan); 
+      box-shadow: 0 10px 20px var(--cyan-shadow);
+    }
     .video-thumbnail { position: relative; overflow: hidden; }
     .video-thumbnail img { width: 100%; aspect-ratio: 16/9; object-fit: cover; transition: transform 0.5s ease; }
     .video-card:hover .video-thumbnail img { transform: scale(1.08); }
@@ -531,13 +620,13 @@
     .video-title { font-size: 0.85rem; font-weight: 600; line-height: 1.3; }
     .video-date { font-size: 0.7rem; opacity: 0.6; margin-top: 5px; }
 
+    /* AYAT VIEWER */
     .ayat-viewer {
       padding: 1rem;
       max-height: 500px;
       overflow-y: auto;
     }
 
-    /* IDE 3: ANIMASI MEMBUKA HALAMAN AL-QURAN 3D FLIP */
     .ayat-card {
       background: rgba(0,0,0,0.2);
       border-radius: 1rem;
@@ -554,25 +643,18 @@
     }
 
     @keyframes flipAyat {
-      0% {
-        transform: perspective(600px) rotateX(-25deg);
-        opacity: 0;
-        filter: blur(2px);
-      }
-      100% {
-        transform: perspective(600px) rotateX(0deg);
-        opacity: 1;
-        filter: blur(0);
-      }
+      0% { transform: perspective(600px) rotateX(-25deg); opacity: 0; filter: blur(2px); }
+      100% { transform: perspective(600px) rotateX(0deg); opacity: 1; filter: blur(0); }
     }
     
+    /* BISMILLAH CARD */
     .bismillah-card {
       position: relative;
       overflow: hidden;
       text-align: center;
       background: linear-gradient(145deg, rgba(0, 242, 255, 0.12), rgba(0, 242, 255, 0.03));
       border: 1px solid rgba(0, 242, 255, 0.35);
-      box-shadow: 0 0 15px rgba(0,242,255,0.15), inset 0 0 25px rgba(0,242,255,0.05);
+      box-shadow: 0 0 15px var(--cyan-shadow), inset 0 0 25px rgba(0,242,255,0.05);
     }
 
     .bismillah-card::before {
@@ -589,7 +671,7 @@
       font-size: 2rem;
       line-height: 2;
       color: #fff;
-      text-shadow: 0 0 10px rgba(0,242,255,0.6), 0 0 20px rgba(0,242,255,0.4);
+      text-shadow: 0 0 10px var(--cyan-shadow), 0 0 20px rgba(0,242,255,0.4);
     }
 
     .bismillah-latin {
@@ -641,7 +723,7 @@
     .back-btn:hover {
       background: var(--primary-cyan);
       color: #000;
-      box-shadow: 0 0 10px rgba(0,242,255,0.3);
+      box-shadow: 0 0 10px var(--cyan-shadow);
     }
     .search-input {
       width: 100%;
@@ -657,10 +739,10 @@
     .search-input:focus {
       outline: none;
       border-color: var(--primary-cyan);
-      box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+      box-shadow: 0 0 10px var(--cyan-shadow);
     }
 
-    /* IDE 4: TYPING EFFECT FOR TERMINAL COMPUTER VIBES */
+    /* TYPING EFFECT */
     .typing-effect {
       display: inline-block;
       overflow: hidden;
@@ -678,6 +760,7 @@
       50% { border-color: var(--primary-cyan); }
     }
 
+    /* IQAMAH ALERT */
     .iqamah-alert {
       background: linear-gradient(95deg, #e09d32, #bd7a1c);
       border-radius: 2rem;
@@ -700,7 +783,7 @@
     
     .iqamah-hidden { display: none; }
 
-    /* IDE 5: 3D COMPASS ZONE INTERACTIVE TILT */
+    /* COMPASS 3D */
     .compass { 
       text-align: center; 
       padding: 2.5rem; 
@@ -710,7 +793,7 @@
       font-size: 5.5rem; 
       display: inline-block; 
       transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-      filter: drop-shadow(0 0 15px rgba(0,242,255,0.5));
+      filter: drop-shadow(0 0 15px var(--cyan-shadow));
       transform-style: preserve-3d;
     }
 
@@ -726,6 +809,7 @@
       opacity: 0.5;
     }
 
+    /* ANIMATIONS */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -737,10 +821,11 @@
     }
 
     @keyframes skewIn {
-      from { opacity: 0; transform: skewY(-2deg) translateY(30px); }
-      to { opacity: 1; transform: skewY(-2deg) translateY(0); }
+      from { opacity: 0; transform: skewY(-1.5deg) translateY(30px); }
+      to { opacity: 1; transform: skewY(-1.5deg) translateY(0); }
     }
 
+    /* RESPONSIVE */
     @media (max-width: 900px) {
       .prayer-container { grid-template-columns: repeat(2, 1fr); transform: none; padding: 20px; animation: fadeInUp 0.6s ease-out; }
       .prayer-box { transform: none; }
@@ -758,7 +843,6 @@
 <body>
 
   <div class="cyber-scanner"></div>
-  
   <div class="particles-container" id="particles"></div>
 
   <nav class="nav-dynamic">
@@ -774,6 +858,7 @@
     </div>
   </nav>
 
+  <!-- JADWAL SECTION -->
   <div id="jadwalSection">
     <section class="hero-section">
       <div class="hero-content">
@@ -787,7 +872,7 @@
       <div style="flex: 1; text-align: right;">
         <p style="font-size: 1rem; opacity: 0.7" id="locationInfo">Bandung, West Java</p>
         <p style="font-size: 0.8rem; opacity: 0.5" id="dateInfo">--.--.----</p>
-        <div class="cuaca-badge" style="margin-top: 10px;">
+        <div style="margin-top: 10px;">
           <i class="fas fa-cloud-sun"></i> <span id="weatherDesc">Memuat cuaca...</span> <span id="weatherTemp">--°C</span>
         </div>
       </div>
@@ -801,6 +886,7 @@
     </div>
   </div>
 
+  <!-- QURAN SECTION -->
   <div id="quranSection" class="glass-panel hidden">
     <div class="panel-header"><i class="fas fa-quran" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📖 Al-Qur'an & Terjemahan</h3></div>
     <div id="surahListView">
@@ -813,11 +899,10 @@
     </div>
   </div>
 
+  <!-- ASMAUL HUSNA SECTION -->
   <div id="asmaSection" class="glass-panel hidden">
     <div class="panel-header"><i class="fas fa-praying-hands" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📿 Asmaul Husna (99 Nama Allah)</h3></div>
-    
     <div id="selectedAsmaContainer" class="hidden"></div>
-    
     <div id="randomAsma" class="random-asma">
       <div class="random-asma-arabic" id="randomAsmaArabic">الرحمن</div>
       <div class="random-asma-latin" id="randomAsmaLatin">Ar-Rahman</div>
@@ -828,6 +913,7 @@
     <div id="asmaList" class="asma-list"><div class="loading">Memuat Asmaul Husna...</div></div>
   </div>
 
+  <!-- VIDEO SECTION -->
   <div id="videoSection" class="glass-panel hidden">
     <div class="panel-header"><i class="fas fa-video" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>🎥 Video Kajian Terkini</h3></div>
     <div class="channel-tabs" style="display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap;">
@@ -839,6 +925,7 @@
     <div style="text-align: center; padding: 1rem; font-size: 0.7rem; opacity: 0.7;"><i class="fab fa-youtube"></i> Klik pada video untuk menonton di YouTube</div>
   </div>
 
+  <!-- QIBLA SECTION -->
   <div id="qiblaSection" class="glass-panel hidden">
     <div class="panel-header"><i class="fas fa-compass" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>🕋 Arah Kiblat</h3></div>
     <div class="compass" id="compassContainer">
@@ -880,7 +967,7 @@
       { number: 19, name: "العليم", transliteration: "Al-Alim", translation: "Yang Maha Mengetahui" },
       { number: 20, name: "القابض", transliteration: "Al-Qabid", translation: "Yang Maha Menyempitkan" },
       { number: 21, name: "الباسط", transliteration: "Al-Basit", translation: "Yang Maha Melapangkan" },
-      { number: 22, name: "الخافdf", transliteration: "Al-Khafid", translation: "Yang Maha Merendahkan" },
+      { number: 22, name: "الخافض", transliteration: "Al-Khafid", translation: "Yang Maha Merendahkan" },
       { number: 23, name: "الرافع", transliteration: "Ar-Rafi", translation: "Yang Maha Meninggikan" },
       { number: 24, name: "المعز", transliteration: "Al-Mu'izz", translation: "Yang Maha Memuliakan" },
       { number: 25, name: "المذل", transliteration: "Al-Mudhill", translation: "Yang Maha Menghinakan" },
@@ -956,7 +1043,7 @@
       { number: 95, name: "البديع", transliteration: "Al-Badi'", translation: "Yang Maha Pencipta" },
       { number: 96, name: "الباقي", transliteration: "Al-Baqi", translation: "Yang Maha Kekal" },
       { number: 97, name: "الوارث", transliteration: "Al-Warits", translation: "Yang Maha Pewaris" },
-      { number: 98, name: "الرشid", transliteration: "Ar-Rasyid", translation: "Yang Maha Pandai" },
+      { number: 98, name: "الرشيد", transliteration: "Ar-Rasyid", translation: "Yang Maha Pandai" },
       { number: 99, name: "الصبور", transliteration: "As-Sabur", translation: "Yang Maha Sabar" }
     ];
 
@@ -978,17 +1065,17 @@
     let currentPrayerList = [], surahList = [], asmaList = [];
     let adzanEnabled = localStorage.getItem('adzanEnabled') === 'true';
     let playedAdzanPrayers = {};
-    let qiblaBaseAngle = 295; // Default Bandung ke Mekah
+    let qiblaBaseAngle = 295;
     const adzanAudio = document.getElementById('adzanAudio');
     
     const sections = ['jadwalSection', 'quranSection', 'asmaSection', 'videoSection', 'qiblaSection'];
     const prayerGrid = document.getElementById('prayerGrid');
     
-    // ==================== IDE 2: GENERATE PARTIKEL MELAYANG ====================
+    // ==================== PARTICLES ====================
     function createParticles() {
       const container = document.getElementById('particles');
       if(!container) return;
-      container.innerHTML = ''; // Reset
+      container.innerHTML = '';
       for (let i = 0; i < 25; i++) {
         let p = document.createElement('div');
         p.className = 'particle';
@@ -1076,7 +1163,7 @@
       }
     }
     
-    function showSelectedAsma(asma) {
+    window.showSelectedAsma = function(asma) {
       const container = document.getElementById("selectedAsmaContainer");
       container.innerHTML = `
         <div class="selected-asma-card">
@@ -1089,25 +1176,27 @@
       `;
       container.classList.remove("hidden");
       container.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    };
     
     function updateRandomAsma() {
       if (!asmaList.length) return;
       const random = asmaList[Math.floor(Math.random() * asmaList.length)];
       const box = document.getElementById("randomAsma");
-      box.style.opacity = 0.3;
-      setTimeout(() => {
-        document.getElementById("randomAsmaArabic").innerText = random.name;
-        document.getElementById("randomAsmaLatin").innerText = random.transliteration;
-        document.getElementById("randomAsmaMeaning").innerHTML = `<i class="fas fa-heart" style="color: var(--primary-cyan);"></i> Artinya: ${random.translation}`;
-        box.style.opacity = 1;
-      }, 150);
+      if(box) {
+        box.style.opacity = 0.3;
+        setTimeout(() => {
+          document.getElementById("randomAsmaArabic").innerText = random.name;
+          document.getElementById("randomAsmaLatin").innerText = random.transliteration;
+          document.getElementById("randomAsmaMeaning").innerHTML = `<i class="fas fa-heart" style="color: var(--primary-cyan);"></i> Artinya: ${random.translation}`;
+          box.style.opacity = 1;
+        }, 150);
+      }
     }
     
     function renderAsmaList(list) {
       let html = '';
       for (const item of list) {
-        html += `<div class="asma-item" onclick="showSelectedAsma(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+        html += `<div class="asma-item" onclick='showSelectedAsma(${JSON.stringify(item)})'>
           <div class="asma-header">
             <span class="asma-number">${item.number}.</span>
             <span class="asma-name-ar">${item.name}</span>
@@ -1154,7 +1243,6 @@
           `;
           const shouldAddBismillah = (surahNumber !== 9 && surahNumber !== 1);
           if (shouldAddBismillah) {
-            // IDE 3: Ditambahkan Staggered Delay Pada Lembaran Card
             ayatHtml += `
               <div class="ayat-card bismillah-card" style="animation-delay: 0.05s">
                 <div class="bismillah-arabic">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
@@ -1169,8 +1257,6 @@
               const bismillahPatterns = ["بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "بسم الله الرحمن الرحيم"];
               bismillahPatterns.forEach(pattern => { if (arabText.startsWith(pattern)) arabText = arabText.replace(pattern, "").trim(); });
             }
-            
-            // IDE 3: Staggered Delay Kalkulasi Efek Flip 3D Bertahap
             let delayCalculation = Math.min(0.08 + (i * 0.04), 1.2);
             ayatHtml += `
               <div class="ayat-card" style="animation-delay: ${delayCalculation}s;">
@@ -1221,49 +1307,54 @@
       let angle = Math.atan2(x, y) * 180 / Math.PI;
       qiblaBaseAngle = (angle + 360) % 360;
       
-      // IDE 4: Menerapkan Typing Effect saat teks kompas dimuat
       const descContainer = document.getElementById("qiblaDirection");
-      descContainer.classList.remove("typing-effect");
-      void descContainer.offsetWidth; // Trigger Reflow
-      descContainer.innerHTML = `Arah Kiblat: ${Math.round(qiblaBaseAngle)}° dari Utara`;
-      descContainer.classList.add("typing-effect");
-
-      document.getElementById("compassNeedle").style.transform = `rotate(${qiblaBaseAngle}deg)`;
+      if(descContainer) {
+        descContainer.classList.remove("typing-effect");
+        void descContainer.offsetWidth;
+        descContainer.innerHTML = `Arah Kiblat: ${Math.round(qiblaBaseAngle)}° dari Utara`;
+        descContainer.classList.add("typing-effect");
+      }
+      const compassNeedle = document.getElementById("compassNeedle");
+      if(compassNeedle) compassNeedle.style.transform = `rotate(${qiblaBaseAngle}deg)`;
       
       if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', (e) => {
-          if (e.alpha !== null) {
-            document.getElementById("compassNeedle").style.transform = `rotate(${(qiblaBaseAngle - e.alpha + 360) % 360}deg)`;
+          if (e.alpha !== null && compassNeedle) {
+            compassNeedle.style.transform = `rotate(${(qiblaBaseAngle - e.alpha + 360) % 360}deg)`;
           }
         });
       }
     }
     
-    // ==================== IDE 5: LOGIKA 3D COMPASS TILT COMPASS PARALLAX ====================
+    // ==================== 3D COMPASS TILT ====================
     const compassZone = document.getElementById('compassContainer');
     if(compassZone) {
       compassZone.addEventListener('mousemove', (e) => {
         const needle = document.getElementById("compassNeedle");
+        if(!needle) return;
         const rect = compassZone.getBoundingClientRect();
         const x = e.clientX - rect.left - (rect.width/2);
         const y = e.clientY - rect.top - (rect.height/2);
-        
         needle.style.transform = `rotate(${qiblaBaseAngle}deg) rotateX(${-y * 0.25}deg) rotateY(${x * 0.25}deg) translateZ(20px)`;
       });
       compassZone.addEventListener('mouseleave', () => {
         const needle = document.getElementById("compassNeedle");
-        needle.style.transform = `rotate(${qiblaBaseAngle}deg) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+        if(needle) needle.style.transform = `rotate(${qiblaBaseAngle}deg) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
       });
     }
 
+    // ==================== NAVIGATION ====================
     document.querySelectorAll('.nav-item[data-section]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.nav-item[data-section]').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
         const section = btn.dataset.section + 'Section';
-        sections.forEach(s => document.getElementById(s)?.classList.add('hidden'));
-        document.getElementById(section).classList.remove('hidden');
+        sections.forEach(s => {
+          const el = document.getElementById(s);
+          if(el) el.classList.add('hidden');
+        });
+        const targetEl = document.getElementById(section);
+        if(targetEl) targetEl.classList.remove('hidden');
         if (section === 'quranSection' && !surahList.length) fetchSurahList();
         if (section === 'asmaSection' && !asmaList.length) { asmaList = fullAsmaulHusna; renderAsmaList(asmaList); updateRandomAsma(); }
         if (section === 'videoSection') loadChannelVideos(channels.aagym.channelId, "Aa Gym", "@aagym");
@@ -1289,21 +1380,24 @@
     
     function updateAdzanUI() {
       const btn = document.getElementById("adzanToggle");
+      if(!btn) return;
       if (adzanEnabled) { btn.innerHTML = '<i class="fas fa-volume-up"></i> Adzan ON'; btn.style.background = "var(--primary-cyan)"; btn.style.color = "#000"; }
       else { btn.innerHTML = '<i class="fas fa-volume-mute"></i> Adzan OFF'; btn.style.background = "rgba(0,0,0,0.4)"; btn.style.color = "white"; }
       localStorage.setItem('adzanEnabled', adzanEnabled);
     }
-    document.getElementById("adzanToggle").addEventListener("click", () => {
+    document.getElementById("adzanToggle")?.addEventListener("click", () => {
       adzanEnabled = !adzanEnabled;
       updateAdzanUI();
-      if (adzanEnabled) adzanAudio.play().catch(e=>console.log);
-      else adzanAudio.pause();
+      if (adzanEnabled && adzanAudio) adzanAudio.play().catch(e=>console.log);
+      else if(adzanAudio) adzanAudio.pause();
     });
     function playAdzan(prayer) {
       if (!adzanEnabled || playedAdzanPrayers[prayer]) return;
       playedAdzanPrayers[prayer] = true;
-      adzanAudio.currentTime = 0;
-      adzanAudio.play().catch(e=>console.log);
+      if(adzanAudio) {
+        adzanAudio.currentTime = 0;
+        adzanAudio.play().catch(e=>console.log);
+      }
       setTimeout(() => { delete playedAdzanPrayers[prayer]; }, 60000);
     }
     
@@ -1311,32 +1405,32 @@
     function setTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
-      document.getElementById("themeToggle").innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i> Tema' : '<i class="fas fa-moon"></i> Tema';
+      const themeBtn = document.getElementById("themeToggle");
+      if(themeBtn) themeBtn.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i> Tema' : '<i class="fas fa-moon"></i> Tema';
     }
-    document.getElementById("themeToggle").addEventListener("click", () => setTheme(currentTheme === 'dark' ? 'light' : 'dark'));
+    document.getElementById("themeToggle")?.addEventListener("click", () => setTheme(currentTheme === 'dark' ? 'light' : 'dark'));
     setTheme(currentTheme);
     
     function updateClock() {
       const now = new Date();
-      document.getElementById("liveClockHero").innerHTML = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-      document.getElementById("dateInfo").innerHTML = now.toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+      const clockEl = document.getElementById("liveClockHero");
+      if(clockEl) clockEl.innerHTML = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+      const dateEl = document.getElementById("dateInfo");
+      if(dateEl) dateEl.innerHTML = now.toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
     }
     
     async function fetchWeather() {
       try {
         const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${currentLat}&longitude=${currentLon}&current_weather=true&timezone=auto`);
         const data = await res.json();
-        if (data.current_weather) {
+        if (data.current_weather && document.getElementById("weatherDesc")) {
           const condition = data.current_weather.weathercode <= 3 ? "Cerah" : "Berawan";
           const temp = `${Math.round(data.current_weather.temperature)}°C`;
-          
-          // IDE 4: Menerapkan Typing Effect pada data cuaca
           const descEl = document.getElementById("weatherDesc");
           descEl.classList.remove("typing-effect");
-          void descEl.offsetWidth; 
+          void descEl.offsetWidth;
           descEl.innerHTML = condition;
           descEl.classList.add("typing-effect");
-          
           document.getElementById("weatherTemp").innerHTML = temp;
         }
       } catch(e) {}
@@ -1353,9 +1447,13 @@
             const data = await rev.json();
             currentCityOnly = data.address?.city || data.address?.town || "Bandung";
           } catch(e) { currentCityOnly = "Bandung"; }
-          document.getElementById("locationInfo").innerHTML = `${currentCityOnly}, ${currentTimezone}`;
+          const locEl = document.getElementById("locationInfo");
+          if(locEl) locEl.innerHTML = `${currentCityOnly}, ${currentTimezone}`;
           updateQiblaDirection();
-        }, () => { document.getElementById("locationInfo").innerHTML = `Bandung, WIB`; });
+        }, () => { 
+          const locEl = document.getElementById("locationInfo");
+          if(locEl) locEl.innerHTML = `Bandung, WIB`; 
+        });
       }
     }
     
@@ -1367,8 +1465,10 @@
           if (!iqamahActive) {
             iqamahActive = true;
             iqamahEndTime = Date.now() + (180000 - diff);
-            document.getElementById("iqamahPrayerName").innerText = `Sholat ${prayer}`;
-            document.getElementById("iqamahZone").classList.remove("iqamah-hidden");
+            const iqamahNameEl = document.getElementById("iqamahPrayerName");
+            if(iqamahNameEl) iqamahNameEl.innerText = `Sholat ${prayer}`;
+            const iqamahZone = document.getElementById("iqamahZone");
+            if(iqamahZone) iqamahZone.classList.remove("iqamah-hidden");
             playAdzan(prayer);
           }
           return;
@@ -1376,16 +1476,17 @@
       }
       if (iqamahActive) {
         iqamahActive = false;
-        document.getElementById("iqamahZone").classList.add("iqamah-hidden");
+        const iqamahZone = document.getElementById("iqamahZone");
+        if(iqamahZone) iqamahZone.classList.add("iqamah-hidden");
       }
     }
     
-    // ==================== INIT EXECUTIONS ====================
+    // ==================== INIT ====================
     renderPrayerSchedule();
     initLocation();
     fetchWeather();
     fetchSurahList();
-    createParticles(); // Inisialisasi Partikel Ide 2
+    createParticles();
     asmaList = fullAsmaulHusna;
     renderAsmaList(asmaList);
     updateRandomAsma();
@@ -1398,8 +1499,14 @@
       updateAllCountdownsAndNext();
       if (iqamahActive && iqamahEndTime) {
         const remaining = iqamahEndTime - now;
-        if (remaining <= 0) { iqamahActive = false; document.getElementById("iqamahZone").classList.add("iqamah-hidden"); }
-        else { document.getElementById("iqamahTimerDisplay").innerHTML = `${Math.floor(remaining/60000).toString().padStart(2,'0')}:${Math.floor((remaining%60000)/1000).toString().padStart(2,'0')}`; }
+        const timerEl = document.getElementById("iqamahTimerDisplay");
+        if(remaining <= 0) { 
+          iqamahActive = false; 
+          const iqamahZone = document.getElementById("iqamahZone");
+          if(iqamahZone) iqamahZone.classList.add("iqamah-hidden"); 
+        } else if(timerEl) { 
+          timerEl.innerHTML = `${Math.floor(remaining/60000).toString().padStart(2,'0')}:${Math.floor((remaining%60000)/1000).toString().padStart(2,'0')}`; 
+        }
       }
       checkIqamahTrigger(now);
     }, 1000);
