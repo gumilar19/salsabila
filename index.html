@@ -22,6 +22,10 @@
       --cyan-shadow: rgba(0, 242, 255, 0.6);
       --alert-red: #ff003c;
       --alert-shadow: rgba(255, 0, 60, 0.5);
+      --alert-yellow: #ffcc00;
+      --alert-yellow-shadow: rgba(255, 204, 0, 0.5);
+      --alert-green: #00ff88;
+      --alert-green-shadow: rgba(0, 255, 136, 0.5);
       --deep-bg: #0a0c10;
       --card-gradient: linear-gradient(145deg, #161b22, #0d1117);
       --text-color: #ffffff;
@@ -58,7 +62,6 @@
       pointer-events: none;
     }
 
-    /* LASER SCANNER HORIZONTAL */
     .cyber-scanner {
       position: fixed;
       top: 0;
@@ -155,9 +158,6 @@
       flex-wrap: wrap;
     }
 
-    /* ============================================================
-       NEON FLICKER & OVERLOAD PADA NAV ITEMS (TOMOL MENU)
-    ============================================================ */
     .nav-item {
       background: rgba(0,0,0,0.6);
       border: 1px solid var(--border-color);
@@ -198,7 +198,6 @@
       100% { left: 100%; opacity: 0; }
     }
 
-    /* HERO SECTION */
     .hero-section {
       display: flex;
       padding: 0 50px;
@@ -237,25 +236,37 @@
       100% { filter: drop-shadow(0 0 30px var(--primary-cyan)); }
     }
 
-    /* STATUS BADGE DENGAN FLICKER */
+    /* STATUS BADGE DENGAN WARNA DINAMIS */
     .status-badge {
       display: inline-block;
       padding: 10px 25px;
-      background: var(--alert-red);
       font-weight: 800;
       font-style: italic;
       text-transform: uppercase;
       transform: skewX(-15deg);
-      animation: alertFlicker 0.8s ease-in-out infinite alternate;
+      transition: all 0.3s ease;
+      animation: badgePulse 1s ease-in-out infinite alternate;
     }
 
-    @keyframes alertFlicker {
-      0% { box-shadow: 0 5px 10px var(--alert-shadow); opacity: 0.9; filter: brightness(1); }
-      20% { box-shadow: 0 5px 20px var(--alert-shadow); opacity: 0.6; filter: brightness(1.5); }
-      40% { box-shadow: 0 5px 8px var(--alert-shadow); opacity: 1; filter: brightness(1); }
-      60% { box-shadow: 0 5px 30px var(--alert-shadow); opacity: 0.5; filter: brightness(2); }
-      80% { box-shadow: 0 5px 15px var(--alert-shadow); opacity: 0.9; filter: brightness(1.2); }
-      100% { box-shadow: 0 5px 25px var(--alert-shadow); opacity: 1; filter: brightness(1); }
+    .status-badge.green {
+      background: var(--alert-green);
+      box-shadow: 0 0 20px var(--alert-green-shadow);
+    }
+
+    .status-badge.yellow {
+      background: var(--alert-yellow);
+      box-shadow: 0 0 20px var(--alert-yellow-shadow);
+      color: #000;
+    }
+
+    .status-badge.red {
+      background: var(--alert-red);
+      box-shadow: 0 0 20px var(--alert-shadow);
+    }
+
+    @keyframes badgePulse {
+      0% { transform: skewX(-15deg) scale(1); }
+      100% { transform: skewX(-15deg) scale(1.02); }
     }
 
     .next-prayer-detail {
@@ -269,7 +280,6 @@
       text-shadow: 0 0 5px var(--cyan-shadow);
     }
 
-    /* PRAYER GRID */
     .prayer-container {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -281,9 +291,6 @@
       position: relative;
     }
 
-    /* ============================================================
-       NEON FLICKER & OVERLOAD PADA PRAYER BOXES (KARTU JADWAL)
-    ============================================================ */
     .prayer-box {
       background: var(--card-gradient);
       padding: 35px 20px;
@@ -303,18 +310,6 @@
 
     .prayer-box:hover .time {
       animation: textFlicker 0.2s steps(3) 3 alternate;
-    }
-
-    .prayer-box:hover::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0,242,255,0.3), transparent 70%);
-      pointer-events: none;
-      animation: sparkFade 0.3s ease-out forwards;
     }
 
     .prayer-box.active {
@@ -376,11 +371,6 @@
       100% { opacity: 0.8; text-shadow: 0 0 15px var(--cyan-shadow); }
     }
 
-    @keyframes sparkFade {
-      0% { opacity: 0.8; }
-      100% { opacity: 0; }
-    }
-
     .prayer-box .name {
       font-size: 0.8rem;
       text-transform: uppercase;
@@ -435,7 +425,96 @@
       color: var(--primary-cyan);
     }
 
-    /* SURAH & ASMA LIST */
+    /* AYAT SECTION - EXTREME ANIMATION */
+    .ayat-section {
+      background: linear-gradient(145deg, rgba(0, 242, 255, 0.1), rgba(0, 242, 255, 0.02));
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      text-align: center;
+      margin: 1.5rem;
+      border: 1px solid rgba(0, 242, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+      animation: ayatPulse 2s ease-in-out infinite alternate, borderGlow 3s ease-in-out infinite alternate;
+    }
+
+    .ayat-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(0,242,255,0.15) 45%, rgba(0,242,255,0.3) 50%, rgba(0,242,255,0.15) 55%, transparent 100%);
+      transform: translateX(-100%);
+      animation: scanlineFast 3s linear infinite;
+      pointer-events: none;
+    }
+
+    .ayat-section::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0,242,255,0.1) 0%, transparent 70%);
+      animation: rotateGlow 8s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes ayatPulse {
+      0% { transform: scale(1); box-shadow: 0 0 20px rgba(0,242,255,0.2), inset 0 0 20px rgba(0,242,255,0.05); }
+      100% { transform: scale(1.01); box-shadow: 0 0 40px rgba(0,242,255,0.5), inset 0 0 30px rgba(0,242,255,0.15); }
+    }
+
+    @keyframes borderGlow {
+      0% { border-color: rgba(0, 242, 255, 0.3); }
+      100% { border-color: rgba(0, 242, 255, 0.8); }
+    }
+
+    @keyframes scanlineFast {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes rotateGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .arabic-ayat {
+      font-family: 'Amiri', serif;
+      font-size: 1.8rem;
+      line-height: 2;
+      margin-bottom: 12px;
+      color: #fff;
+      text-shadow: 0 0 15px rgba(0,242,255,0.8), 0 0 30px rgba(0,242,255,0.4);
+      position: relative;
+      z-index: 2;
+      animation: textGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes textGlow {
+      0% { text-shadow: 0 0 10px rgba(0,242,255,0.5); }
+      100% { text-shadow: 0 0 25px rgba(0,242,255,1); }
+    }
+
+    .terjemahan-ayat {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      font-style: italic;
+      position: relative;
+      z-index: 2;
+      color: var(--primary-cyan);
+    }
+
+    .sumber-ayat {
+      font-size: 0.75rem;
+      margin-top: 10px;
+      opacity: 0.7;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 2;
+    }
+
     .surah-list, .asma-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -481,7 +560,6 @@
     .asma-name-latin { font-size: 0.85rem; font-weight: 500; color: var(--primary-cyan); }
     .asma-meaning { font-size: 0.75rem; opacity: 0.8; margin-top: 5px; padding-top: 5px; border-top: 1px dashed var(--border-color); }
 
-    /* SELECTED ASMA CARD */
     .selected-asma-card {
       position: relative;
       overflow: hidden;
@@ -575,7 +653,6 @@
     .random-asma-arabic { font-family: 'Amiri', serif; font-size: 1.8rem; margin-bottom: 8px; }
     .random-asma-latin { font-size: 1rem; font-weight: 600; margin: 5px 0; color: var(--primary-cyan); }
 
-    /* VIDEO GRID */
     .video-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -620,7 +697,6 @@
     .video-title { font-size: 0.85rem; font-weight: 600; line-height: 1.3; }
     .video-date { font-size: 0.7rem; opacity: 0.6; margin-top: 5px; }
 
-    /* AYAT VIEWER */
     .ayat-viewer {
       padding: 1rem;
       max-height: 500px;
@@ -647,7 +723,6 @@
       100% { transform: perspective(600px) rotateX(0deg); opacity: 1; filter: blur(0); }
     }
     
-    /* BISMILLAH CARD */
     .bismillah-card {
       position: relative;
       overflow: hidden;
@@ -693,15 +768,25 @@
       font-size: 1.5rem;
       line-height: 2;
       text-align: right;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.5rem;
       color: #fff;
     }
+    
+    .ayat-transliteration {
+      font-size: 0.85rem;
+      color: var(--primary-cyan);
+      margin: 0.3rem 0;
+      font-style: italic;
+      letter-spacing: 0.5px;
+    }
+    
     .ayat-translation {
       font-size: 0.85rem;
       opacity: 0.85;
       border-top: 1px dashed var(--border-color);
       padding-top: 0.5rem;
     }
+    
     .surah-info {
       text-align: center;
       padding: 1.5rem;
@@ -742,7 +827,6 @@
       box-shadow: 0 0 10px var(--cyan-shadow);
     }
 
-    /* TYPING EFFECT */
     .typing-effect {
       display: inline-block;
       overflow: hidden;
@@ -760,7 +844,6 @@
       50% { border-color: var(--primary-cyan); }
     }
 
-    /* IQAMAH ALERT */
     .iqamah-alert {
       background: linear-gradient(95deg, #e09d32, #bd7a1c);
       border-radius: 2rem;
@@ -783,7 +866,6 @@
     
     .iqamah-hidden { display: none; }
 
-    /* COMPASS 3D */
     .compass { 
       text-align: center; 
       padding: 2.5rem; 
@@ -809,7 +891,6 @@
       opacity: 0.5;
     }
 
-    /* ANIMATIONS */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -825,7 +906,6 @@
       to { opacity: 1; transform: skewY(-1.5deg) translateY(0); }
     }
 
-    /* RESPONSIVE */
     @media (max-width: 900px) {
       .prayer-container { grid-template-columns: repeat(2, 1fr); transform: none; padding: 20px; animation: fadeInUp 0.6s ease-out; }
       .prayer-box { transform: none; }
@@ -837,6 +917,7 @@
       .surah-list, .asma-list { grid-template-columns: 1fr; }
       .bismillah-arabic { font-size: 1.3rem; }
       .selected-asma-arabic { font-size: 1.8rem; }
+      .arabic-ayat { font-size: 1.3rem; }
     }
   </style>
 </head>
@@ -933,6 +1014,13 @@
       <div id="qiblaDirection" class="qibla-degree" style="margin-top: 1rem;">Memuat arah kiblat...</div>
       <p style="font-size: 0.7rem; margin-top: 10px;">*Gerakkan mouse di area ini untuk sensasi taktil 3D</p>
     </div>
+  </div>
+
+  <!-- AYAT SECTION - DENGAN ANIMASI EXTREME -->
+  <div class="ayat-section">
+    <div class="arabic-ayat">اِنَّ الصَّلٰوةَ كَانَتْ عَلَى الْمُؤْمِنِيْنَ كِتٰبًا مَّوْقُوْتًا</div>
+    <div class="terjemahan-ayat">Artinya: "Sungguh, sholat itu adalah kewajiban yang ditentukan waktunya atas orang-orang yang beriman."</div>
+    <div class="sumber-ayat">— QS. An Nisa: 103</div>
   </div>
 
   <footer>
@@ -1111,6 +1199,25 @@
       return "WIT";
     }
     
+    // Update warna status badge berdasarkan sisa waktu
+    function updateStatusBadgeColor(remainingSeconds) {
+      const badge = document.getElementById("statusBadge");
+      if (!badge) return;
+      
+      // Hapus class yang ada
+      badge.classList.remove("green", "yellow", "red");
+      
+      if (remainingSeconds > 3600) { // > 1 jam
+        badge.classList.add("green");
+      } else if (remainingSeconds > 900) { // > 15 menit (900 detik)
+        badge.classList.add("green");
+      } else if (remainingSeconds > 180) { // > 3 menit (180 detik)
+        badge.classList.add("yellow");
+      } else {
+        badge.classList.add("red");
+      }
+    }
+    
     function renderPrayerSchedule() {
       const sholatKeys = ["Subuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
       const labels = { Subuh: "Subuh", Dzuhur: isFridayToday() ? "Jum'atan" : "Dzuhur", Ashar: "Ashar", Maghrib: "Maghrib", Isya: "Isya" };
@@ -1135,19 +1242,42 @@
     function updateAllCountdownsAndNext() {
       const now = new Date();
       let minDiff = Infinity, nextPrayer = null, nextTimeDate = null;
+      
+      // Cari sholat berikutnya (belum lewat waktunya)
       for (let p of currentPrayerList) {
         const pDate = timeStringToDate(prayerTimes[p.key]);
         const diff = pDate - now;
-        if (diff > 0 && diff < minDiff) { minDiff = diff; nextPrayer = p; nextTimeDate = pDate; }
+        if (diff > 0 && diff < minDiff) { 
+          minDiff = diff; 
+          nextPrayer = p; 
+          nextTimeDate = pDate; 
+        }
       }
-      if (nextPrayer) {
+      
+      // Jika tidak ada sholat hari ini (semua sudah lewat), cari Subuh besok
+      if (!nextPrayer) {
+        const tomorrowSubuh = findTomorrowSubuh();
+        if (tomorrowSubuh) {
+          const remainingSec = Math.floor((tomorrowSubuh - now) / 1000);
+          updateStatusBadgeColor(remainingSec);
+          document.getElementById("nextPrayerHero").innerText = "Subuh";
+          document.getElementById("nextPrayerNameHero").innerText = "Subuh (Besok)";
+          document.getElementById("nextPrayerCountdownHero").innerText = formatCountdown(tomorrowSubuh - now);
+          document.getElementById("statusBadge").innerHTML = `<i class="fas fa-hourglass-start"></i> Menuju Subuh (Besok)`;
+        }
+      } else if (nextPrayer) {
         let displayName = (nextPrayer.key === "Dzuhur" && isFridayToday()) ? "Jum'atan" : nextPrayer.label;
+        const remainingMs = nextTimeDate - now;
+        const remainingSec = Math.floor(remainingMs / 1000);
+        updateStatusBadgeColor(remainingSec);
+        
         document.getElementById("nextPrayerHero").innerText = displayName;
         document.getElementById("nextPrayerNameHero").innerText = displayName;
-        const remainingMs = nextTimeDate - now;
         document.getElementById("nextPrayerCountdownHero").innerText = formatCountdown(remainingMs);
         document.getElementById("statusBadge").innerHTML = `<i class="fas fa-hourglass-start"></i> Menuju ${displayName}`;
       }
+      
+      // Update countdown di setiap kartu
       document.querySelectorAll('.prayer-box').forEach(card => {
         const prayerKey = card.getAttribute('data-prayer');
         if (prayerKey && prayerTimes[prayerKey]) {
@@ -1156,11 +1286,23 @@
           if (cs) cs.innerText = diffMs > 0 ? `⌛ ${formatCountdown(diffMs)}` : `✅ Selesai`;
         }
       });
+      
+      // Highlight kartu active
       document.querySelectorAll('.prayer-box').forEach(card => card.classList.remove('active'));
       if (nextPrayer) {
         const target = document.querySelector(`.prayer-box[data-prayer="${nextPrayer.key}"]`);
         if (target) target.classList.add('active');
       }
+    }
+    
+    function findTomorrowSubuh() {
+      if (!prayerTimes.Subuh) return null;
+      const now = new Date();
+      const [hours, minutes] = prayerTimes.Subuh.split(":").map(Number);
+      const tomorrow = new Date(now);
+      tomorrow.setDate(now.getDate() + 1);
+      tomorrow.setHours(hours, minutes, 0, 0);
+      return tomorrow;
     }
     
     window.showSelectedAsma = function(asma) {
@@ -1232,15 +1374,22 @@
         
         const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/editions/ar.alafasy,id.indonesian`);
         const data = await res.json();
+        
         if (data.code === 200 && data.data?.length >= 2) {
           const arab = data.data[0];
           const indo = data.data[1];
+          
+          const translitRes = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/editions/en.transliteration`);
+          const translitData = await translitRes.json();
+          const translitAyats = translitData.code === 200 && translitData.data?.length > 0 ? translitData.data[0].ayahs : [];
+          
           let ayatHtml = `
             <div class="surah-info">
               <h2>${arab.name} (${indo.englishName})</h2>
               <p>${indo.englishNameTranslation} • ${arab.ayahs?.length} Ayat</p>
             </div>
           `;
+          
           const shouldAddBismillah = (surahNumber !== 9 && surahNumber !== 1);
           if (shouldAddBismillah) {
             ayatHtml += `
@@ -1251,23 +1400,32 @@
               </div>
             `;
           }
+          
           for (let i = 0; i < arab.ayahs.length; i++) {
             let arabText = arab.ayahs[i]?.text || "";
+            let indonesianText = indo.ayahs[i]?.text || "";
+            let translitText = translitAyats[i]?.text || "";
+            
             if (i === 0 && shouldAddBismillah) {
               const bismillahPatterns = ["بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "بسم الله الرحمن الرحيم"];
-              bismillahPatterns.forEach(pattern => { if (arabText.startsWith(pattern)) arabText = arabText.replace(pattern, "").trim(); });
+              bismillahPatterns.forEach(pattern => { 
+                if (arabText.startsWith(pattern)) arabText = arabText.replace(pattern, "").trim(); 
+              });
             }
+            
             let delayCalculation = Math.min(0.08 + (i * 0.04), 1.2);
             ayatHtml += `
               <div class="ayat-card" style="animation-delay: ${delayCalculation}s;">
                 <div class="ayat-arabic">${arabText}</div>
-                <div class="ayat-translation"><strong>${i + 1}. </strong>${indo.ayahs[i]?.text || ""}</div>
+                ${translitText ? `<div class="ayat-transliteration"><i class="fas fa-language"></i> ${translitText}</div>` : ''}
+                <div class="ayat-translation"><strong>${i + 1}. </strong>${indonesianText}</div>
               </div>
             `;
           }
           document.getElementById("ayatContent").innerHTML = ayatHtml;
         }
       } catch(e) {
+        console.error("Error loading surah:", e);
         document.getElementById("ayatContent").innerHTML = '<div class="loading">Gagal memuat surah</div>';
       }
     };
@@ -1326,7 +1484,6 @@
       }
     }
     
-    // ==================== 3D COMPASS TILT ====================
     const compassZone = document.getElementById('compassContainer');
     if(compassZone) {
       compassZone.addEventListener('mousemove', (e) => {
@@ -1343,7 +1500,6 @@
       });
     }
 
-    // ==================== NAVIGATION ====================
     document.querySelectorAll('.nav-item[data-section]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.nav-item[data-section]').forEach(b => b.classList.remove('active'));
@@ -1481,7 +1637,6 @@
       }
     }
     
-    // ==================== INIT ====================
     renderPrayerSchedule();
     initLocation();
     fetchWeather();
