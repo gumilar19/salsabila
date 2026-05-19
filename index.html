@@ -41,9 +41,64 @@
       transition: all 0.3s ease;
     }
 
-    body::before {
-      content: "PRAYER";
+    /* IDE 1: EFEK SCANLINE MONITOR CRT */
+    body::after {
+      content: " ";
+      display: block;
       position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+      z-index: 9999;
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none;
+    }
+
+    /* IDE 1: LASER SCANNER HORIZONTAL */
+    .cyber-scanner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to bottom, transparent, var(--primary-cyan), transparent);
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: 1000;
+      animation: scanVertically 8s linear infinite;
+    }
+
+    @keyframes scanVertically {
+      0% { transform: translateY(-100vh); }
+      100% { transform: translateY(100vh); }
+    }
+
+    /* IDE 2: FLOATING PARTICLES CONTAINER */
+    .particles-container {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -2;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      background: var(--primary-cyan);
+      border-radius: 50%;
+      opacity: 0;
+      filter: blur(1px);
+      box-shadow: 0 0 8px var(--primary-cyan);
+      animation: floatUp 12s linear infinite;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(105vh) translateX(0); opacity: 0; }
+      10% { opacity: 0.3; }
+      90% { opacity: 0.3; }
+      100% { transform: translateY(-5vh) translateX(50px); opacity: 0; }
+    }
+
+    body::before {
+      content: "SALSABILA";
+	  position: fixed;
       top: 10%;
       left: -5%;
       font-size: 20vw;
@@ -52,6 +107,13 @@
       z-index: -1;
       font-style: italic;
       pointer-events: none;
+      animation: floatBackground 20s linear infinite;
+    }
+
+    @keyframes floatBackground {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(20px) rotate(1deg); }
+      100% { transform: translateY(0) rotate(0deg); }
     }
 
     .nav-dynamic {
@@ -70,6 +132,13 @@
       color: var(--primary-cyan);
       text-transform: uppercase;
       letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+      animation: pulseGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { text-shadow: 0 0 8px rgba(0, 242, 255, 0.2); }
+      to { text-shadow: 0 0 18px rgba(0, 242, 255, 0.6); }
     }
 
     .nav-menu {
@@ -80,29 +149,52 @@
 
     .nav-item {
       background: rgba(0,0,0,0.4);
-      border: none;
+      border: 1px solid transparent;
       color: white;
       padding: 0.4rem 1.2rem;
       border-radius: 2rem;
       cursor: pointer;
       font-size: 0.85rem;
       font-weight: 600;
-      transition: all 0.2s;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       font-family: 'Barlow', sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120%;
+      height: 0;
+      background: rgba(0, 242, 255, 0.2);
+      transform: translate(-50%, -50%) rotate(45deg);
+      transition: all 0.3s ease;
+      z-index: 1;
+    }
+
+    .nav-item:hover::after {
+      height: 300%;
     }
 
     .nav-item:hover, .nav-item.active {
       background: var(--primary-cyan);
       color: #000;
+      border-color: var(--primary-cyan);
+      box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+      transform: translateY(-2px);
     }
 
     .hero-section {
       display: flex;
       padding: 0 50px;
-      min-height: 60vh;
+      min-height: 40vh;
       align-items: center;
       gap: 50px;
       flex-wrap: wrap;
+      animation: fadeInUp 0.8s ease-out;
     }
 
     .hero-content {
@@ -124,6 +216,12 @@
       font-weight: 900;
       margin-bottom: 20px;
       filter: drop-shadow(0 0 15px rgba(0, 242, 255, 0.3));
+      animation: clockGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes clockGlow {
+      0% { filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.3)); }
+      100% { filter: drop-shadow(0 0 25px rgba(0, 242, 255, 0.6)); }
     }
 
     .status-badge {
@@ -134,6 +232,13 @@
       font-style: italic;
       text-transform: uppercase;
       transform: skewX(-15deg);
+      box-shadow: 0 5px 15px rgba(255, 0, 60, 0.3);
+      animation: pulseAlert 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseAlert {
+      from { box-shadow: 0 5px 10px rgba(255, 0, 60, 0.3); opacity: 0.9; }
+      to { box-shadow: 0 5px 20px rgba(255, 0, 60, 0.6); opacity: 1; }
     }
 
     .next-prayer-detail {
@@ -153,26 +258,48 @@
       padding: 50px;
       background: rgba(255,255,255,0.02);
       transform: skewY(-2deg);
+      animation: skewIn 0.8s ease-out;
     }
 
     .prayer-box {
       background: var(--card-gradient);
       padding: 30px 20px;
       border-left: 4px solid #333;
-      transition: 0.3s;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
       transform: skewY(2deg);
       text-align: center;
+      position: relative;
+    }
+
+    .prayer-box::before {
+      content: '';
+      position: absolute;
+      top:0; left:0; width:100%; height:100%;
+      background: linear-gradient(to bottom, rgba(0,242,255,0.05), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .prayer-box:hover::before {
+      opacity: 1;
     }
 
     .prayer-box:hover {
       border-left-color: var(--primary-cyan);
       background: #1c2128;
-      transform: skewY(2deg) scale(1.02);
+      transform: skewY(2deg) translateY(-8px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 242, 255, 0.1);
     }
 
     .prayer-box.active {
       border-left-color: var(--primary-cyan);
-      box-shadow: -10px 0 30px rgba(0, 242, 255, 0.1);
+      box-shadow: -10px 0 30px rgba(0, 242, 255, 0.15), inset 0 0 15px rgba(0, 242, 255, 0.05);
+      animation: activeBoxGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes activeBoxGlow {
+      0% { border-left-color: rgba(0, 242, 255, 0.6); }
+      100% { border-left-color: var(--primary-cyan); }
     }
 
     .prayer-box .name {
@@ -188,6 +315,11 @@
       font-size: 1.8rem;
       font-weight: 700;
       margin-top: 10px;
+      transition: color 0.3s;
+    }
+    
+    .prayer-box:hover .time {
+      color: var(--primary-cyan);
     }
 
     .prayer-box .countdown {
@@ -203,6 +335,7 @@
       border: 1px solid var(--border-color);
       margin: 1.5rem;
       padding: 1.5rem;
+      animation: pageTransition 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     }
 
     .panel-header {
@@ -232,20 +365,26 @@
       background: rgba(0,0,0,0.3);
       border-radius: 1rem;
       padding: 0.6rem 1rem;
-      transition: all 0.2s;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       border: 1px solid var(--border-color);
+      cursor: pointer;
     }
 
-    .surah-item { cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-    .surah-item:hover, .asma-item:hover { background: rgba(0, 242, 255, 0.2); border-color: var(--primary-cyan); }
+    .surah-item:hover, .asma-item:hover {
+      background: rgba(0, 242, 255, 0.15);
+      border-color: var(--primary-cyan);
+      transform: translateX(5px);
+      box-shadow: -5px 0 10px rgba(0, 242, 255, 0.2);
+    }
+
     .surah-number { color: var(--primary-cyan); font-weight: bold; margin-right: 10px; }
     .surah-name { flex: 1; }
     .surah-name-ar { font-family: 'Amiri', serif; font-size: 1.1rem; }
-    .surah-ayah { font-size: 0.7rem; opacity: 0.7; }
 
     .asma-item {
       display: block;
       padding: 0.8rem;
+      cursor: pointer;
     }
     .asma-header {
       display: flex;
@@ -259,6 +398,81 @@
     .asma-name-latin { font-size: 0.85rem; font-weight: 500; color: var(--primary-cyan); }
     .asma-meaning { font-size: 0.75rem; opacity: 0.8; margin-top: 5px; padding-top: 5px; border-top: 1px dashed var(--border-color); }
 
+    .selected-asma-card {
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      background: linear-gradient(145deg, rgba(0, 242, 255, 0.12), rgba(0, 242, 255, 0.03));
+      border: 1px solid rgba(0, 242, 255, 0.35);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      animation: cyberGlow 3s ease-in-out infinite alternate, fadeInUp 0.4s ease-out;
+    }
+
+    .selected-asma-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(0,242,255,0.08) 45%, rgba(0,242,255,0.18) 50%, rgba(0,242,255,0.08) 55%, transparent 100%);
+      transform: translateX(-100%);
+      animation: scanline 5s linear infinite;
+      border-radius: 1.5rem;
+      pointer-events: none;
+    }
+
+    .selected-asma-number {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      color: var(--primary-cyan);
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .selected-asma-arabic {
+      font-family: 'Amiri', serif;
+      font-size: 2.5rem;
+      line-height: 1.4;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0,242,255,0.6), 0 0 20px rgba(0,242,255,0.4);
+      margin-bottom: 10px;
+    }
+
+    .selected-asma-latin {
+      font-size: 1.1rem;
+      letter-spacing: 3px;
+      color: var(--primary-cyan);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .selected-asma-meaning {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      font-style: italic;
+    }
+
+    .selected-asma-badge {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 4px 12px;
+      background: rgba(0, 242, 255, 0.15);
+      border-radius: 20px;
+      font-size: 0.7rem;
+      color: var(--primary-cyan);
+    }
+
+    @keyframes cyberGlow {
+      from { box-shadow: 0 0 10px rgba(0,242,255,0.15), 0 0 20px rgba(0,242,255,0.08); }
+      to { box-shadow: 0 0 20px rgba(0,242,255,0.35), 0 0 40px rgba(0,242,255,0.15); }
+    }
+
+    @keyframes scanline {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
     .random-asma {
       background: rgba(0,0,0,0.3);
       border-radius: 1rem;
@@ -266,10 +480,14 @@
       margin-bottom: 1rem;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s;
       border: 1px solid var(--border-color);
     }
-    .random-asma:hover { background: rgba(0, 242, 255, 0.1); border-color: var(--primary-cyan); }
+    .random-asma:hover { 
+      background: rgba(0, 242, 255, 0.1); 
+      border-color: var(--primary-cyan);
+      transform: scale(1.02);
+    }
     .random-asma-arabic { font-family: 'Amiri', serif; font-size: 1.8rem; margin-bottom: 8px; }
     .random-asma-latin { font-size: 1rem; font-weight: 600; margin: 5px 0; color: var(--primary-cyan); }
 
@@ -282,18 +500,20 @@
       background: rgba(0,0,0,0.3);
       border-radius: 1rem;
       overflow: hidden;
-      transition: all 0.2s;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       border: 1px solid var(--border-color);
       cursor: pointer;
     }
-    .video-card:hover { transform: translateY(-3px); border-color: var(--primary-cyan); }
-    .video-thumbnail { position: relative; }
-    .video-thumbnail img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+    .video-card:hover { transform: translateY(-6px) scale(1.02); border-color: var(--primary-cyan); box-shadow: 0 10px 20px rgba(0,242,255,0.1); }
+    .video-thumbnail { position: relative; overflow: hidden; }
+    .video-thumbnail img { width: 100%; aspect-ratio: 16/9; object-fit: cover; transition: transform 0.5s ease; }
+    .video-card:hover .video-thumbnail img { transform: scale(1.08); }
+    
     .play-overlay {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(0.8);
       background: rgba(0,0,0,0.7);
       width: 50px;
       height: 50px;
@@ -301,9 +521,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.3s ease;
+      opacity: 0.8;
     }
-    .video-thumbnail:hover .play-overlay { background: var(--primary-cyan); }
-    .play-overlay i { font-size: 1.5rem; color: white; }
+    .video-card:hover .play-overlay { background: var(--primary-cyan); transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    .play-overlay i { font-size: 1.5rem; color: white; transition: color 0.3s; }
+    .video-card:hover .play-overlay i { color: #000; }
     .video-info { padding: 0.8rem; }
     .video-title { font-size: 0.85rem; font-weight: 600; line-height: 1.3; }
     .video-date { font-size: 0.7rem; opacity: 0.6; margin-top: 5px; }
@@ -313,44 +536,50 @@
       max-height: 500px;
       overflow-y: auto;
     }
+
+    /* IDE 3: ANIMASI MEMBUKA HALAMAN AL-QURAN 3D FLIP */
     .ayat-card {
       background: rgba(0,0,0,0.2);
       border-radius: 1rem;
-      padding: 1rem;
+      padding: 1.5rem;
       margin-bottom: 0.8rem;
       border-right: 3px solid var(--primary-cyan);
+      transition: all 0.3s;
+      transform-origin: top center;
+      animation: flipAyat 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1) both;
+    }
+    .ayat-card:hover {
+      background: rgba(0,242,255,0.03);
+      border-right-width: 6px;
+    }
+
+    @keyframes flipAyat {
+      0% {
+        transform: perspective(600px) rotateX(-25deg);
+        opacity: 0;
+        filter: blur(2px);
+      }
+      100% {
+        transform: perspective(600px) rotateX(0deg);
+        opacity: 1;
+        filter: blur(0);
+      }
     }
     
-    /* ==================== BISMILLAH CARD STYLE BARU ==================== */
     .bismillah-card {
       position: relative;
       overflow: hidden;
       text-align: center;
-      background: linear-gradient(
-        145deg,
-        rgba(0, 242, 255, 0.12),
-        rgba(0, 242, 255, 0.03)
-      );
+      background: linear-gradient(145deg, rgba(0, 242, 255, 0.12), rgba(0, 242, 255, 0.03));
       border: 1px solid rgba(0, 242, 255, 0.35);
-      box-shadow:
-        0 0 15px rgba(0, 242, 255, 0.15),
-        inset 0 0 25px rgba(0, 242, 255, 0.05);
-      animation: cyberGlow 3s ease-in-out infinite alternate;
+      box-shadow: 0 0 15px rgba(0,242,255,0.15), inset 0 0 25px rgba(0,242,255,0.05);
     }
 
     .bismillah-card::before {
       content: "";
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(
-          120deg,
-          transparent 0%,
-          rgba(0,242,255,0.08) 45%,
-          rgba(0,242,255,0.18) 50%,
-          rgba(0,242,255,0.08) 55%,
-          transparent 100%
-        );
+      background: linear-gradient(120deg, transparent 0%, rgba(0,242,255,0.08) 45%, rgba(0,242,255,0.18) 50%, rgba(0,242,255,0.08) 55%, transparent 100%);
       transform: translateX(-100%);
       animation: scanline 5s linear infinite;
     }
@@ -360,11 +589,7 @@
       font-size: 2rem;
       line-height: 2;
       color: #fff;
-      text-shadow:
-        0 0 10px rgba(0,242,255,0.6),
-        0 0 20px rgba(0,242,255,0.4);
-      position: relative;
-      z-index: 2;
+      text-shadow: 0 0 10px rgba(0,242,255,0.6), 0 0 20px rgba(0,242,255,0.4);
     }
 
     .bismillah-latin {
@@ -373,46 +598,21 @@
       letter-spacing: 2px;
       color: var(--primary-cyan);
       text-transform: uppercase;
-      position: relative;
-      z-index: 2;
     }
 
     .bismillah-translation {
       margin-top: 8px;
       font-size: 0.8rem;
       opacity: 0.8;
-      position: relative;
-      z-index: 2;
-    }
-
-    @keyframes cyberGlow {
-      from {
-        box-shadow:
-          0 0 10px rgba(0,242,255,0.15),
-          0 0 20px rgba(0,242,255,0.08);
-      }
-      to {
-        box-shadow:
-          0 0 20px rgba(0,242,255,0.35),
-          0 0 40px rgba(0,242,255,0.15);
-      }
-    }
-
-    @keyframes scanline {
-      0% {
-        transform: translateX(-100%);
-      }
-      100% {
-        transform: translateX(100%);
-      }
     }
     
     .ayat-arabic {
       font-family: 'Amiri', serif;
-      font-size: 1.2rem;
-      line-height: 1.8;
+      font-size: 1.5rem;
+      line-height: 2;
       text-align: right;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.8rem;
+      color: #fff;
     }
     .ayat-translation {
       font-size: 0.85rem;
@@ -422,29 +622,60 @@
     }
     .surah-info {
       text-align: center;
-      padding: 1rem;
+      padding: 1.5rem;
       background: rgba(0,0,0,0.3);
       border-radius: 1rem;
       margin-bottom: 1rem;
+      border: 1px solid var(--border-color);
     }
     .back-btn {
       background: rgba(0,0,0,0.4);
-      border: none;
+      border: 1px solid var(--border-color);
       color: white;
       padding: 0.4rem 1rem;
       border-radius: 2rem;
       cursor: pointer;
       margin-bottom: 1rem;
+      transition: all 0.3s;
+    }
+    .back-btn:hover {
+      background: var(--primary-cyan);
+      color: #000;
+      box-shadow: 0 0 10px rgba(0,242,255,0.3);
     }
     .search-input {
       width: 100%;
       padding: 0.6rem 1rem;
       margin: 0.5rem 0;
       border-radius: 2rem;
-      border: none;
+      border: 1px solid var(--border-color);
       background: rgba(0,0,0,0.4);
       color: white;
       font-family: 'Barlow', sans-serif;
+      transition: all 0.3s;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary-cyan);
+      box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+    }
+
+    /* IDE 4: TYPING EFFECT FOR TERMINAL COMPUTER VIBES */
+    .typing-effect {
+      display: inline-block;
+      overflow: hidden;
+      border-right: 2px solid var(--primary-cyan);
+      white-space: nowrap;
+      animation: typing 1s steps(20, end), blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: var(--primary-cyan); }
     }
 
     .iqamah-alert {
@@ -458,13 +689,32 @@
       flex-wrap: wrap;
       gap: 15px;
       font-weight: bold;
+      box-shadow: 0 0 20px rgba(224, 157, 50, 0.4);
+      animation: pulseWarning 2s infinite alternate;
     }
+    
+    @keyframes pulseWarning {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.01); box-shadow: 0 0 30px rgba(224, 157, 50, 0.6); }
+    }
+    
     .iqamah-hidden { display: none; }
 
-    .compass { text-align: center; padding: 2rem; }
-    .compass-needle { font-size: 4rem; display: inline-block; transition: transform 0.3s ease; }
+    /* IDE 5: 3D COMPASS ZONE INTERACTIVE TILT */
+    .compass { 
+      text-align: center; 
+      padding: 2.5rem; 
+      perspective: 1000px;
+    }
+    .compass-needle { 
+      font-size: 5.5rem; 
+      display: inline-block; 
+      transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+      filter: drop-shadow(0 0 15px rgba(0,242,255,0.5));
+      transform-style: preserve-3d;
+    }
 
-    .hidden { display: none; }
+    .hidden { display: none !important; }
     .loading { text-align: center; padding: 2rem; opacity: 0.7; }
 
     footer {
@@ -476,24 +726,45 @@
       opacity: 0.5;
     }
 
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pageTransition {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); filter: blur(4px); }
+      to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+    }
+
+    @keyframes skewIn {
+      from { opacity: 0; transform: skewY(-2deg) translateY(30px); }
+      to { opacity: 1; transform: skewY(-2deg) translateY(0); }
+    }
+
     @media (max-width: 900px) {
-      .prayer-container { grid-template-columns: repeat(2, 1fr); transform: none; padding: 20px; }
+      .prayer-container { grid-template-columns: repeat(2, 1fr); transform: none; padding: 20px; animation: fadeInUp 0.6s ease-out; }
       .prayer-box { transform: none; }
+      .prayer-box:hover { transform: translateY(-5px); }
       .hero-section { flex-direction: column; text-align: center; padding: 20px; }
-      .clock-giant { font-size: 3rem; }
+      .clock-giant { font-size: 3.5rem; }
       .nav-dynamic { padding: 20px; flex-direction: column; }
       .nav-menu { justify-content: center; }
       .surah-list, .asma-list { grid-template-columns: 1fr; }
       .bismillah-arabic { font-size: 1.3rem; }
+      .selected-asma-arabic { font-size: 1.8rem; }
     }
   </style>
 </head>
 <body>
 
+  <div class="cyber-scanner"></div>
+  
+  <div class="particles-container" id="particles"></div>
+
   <nav class="nav-dynamic">
     <div class="brand">SALSABILA | سَلْسَبِيلًا</div>
     <div class="nav-menu">
-      <button class="nav-item" data-section="jadwal"><i class="fas fa-clock"></i> Jadwal</button>
+      <button class="nav-item active" data-section="jadwal"><i class="fas fa-clock"></i> Jadwal</button>
       <button class="nav-item" data-section="quran"><i class="fas fa-quran"></i> Qur'an</button>
       <button class="nav-item" data-section="asma"><i class="fas fa-praying-hands"></i> Asma</button>
       <button class="nav-item" data-section="video"><i class="fas fa-video"></i> Video</button>
@@ -503,7 +774,6 @@
     </div>
   </nav>
 
-  <!-- JADWAL SECTION (Home) -->
   <div id="jadwalSection">
     <section class="hero-section">
       <div class="hero-content">
@@ -516,7 +786,7 @@
       </div>
       <div style="flex: 1; text-align: right;">
         <p style="font-size: 1rem; opacity: 0.7" id="locationInfo">Bandung, West Java</p>
-        <p style="font-size: 0.8rem; opacity: 0.5" id="dateInfo">13.05.2026</p>
+        <p style="font-size: 0.8rem; opacity: 0.5" id="dateInfo">--.--.----</p>
         <div class="cuaca-badge" style="margin-top: 10px;">
           <i class="fas fa-cloud-sun"></i> <span id="weatherDesc">Memuat cuaca...</span> <span id="weatherTemp">--°C</span>
         </div>
@@ -531,7 +801,6 @@
     </div>
   </div>
 
-  <!-- QURAN SECTION -->
   <div id="quranSection" class="glass-panel hidden">
     <div class="panel-header"><i class="fas fa-quran" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📖 Al-Qur'an & Terjemahan</h3></div>
     <div id="surahListView">
@@ -544,9 +813,11 @@
     </div>
   </div>
 
-  <!-- ASMAUL HUSNA SECTION -->
   <div id="asmaSection" class="glass-panel hidden">
     <div class="panel-header"><i class="fas fa-praying-hands" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📿 Asmaul Husna (99 Nama Allah)</h3></div>
+    
+    <div id="selectedAsmaContainer" class="hidden"></div>
+    
     <div id="randomAsma" class="random-asma">
       <div class="random-asma-arabic" id="randomAsmaArabic">الرحمن</div>
       <div class="random-asma-latin" id="randomAsmaLatin">Ar-Rahman</div>
@@ -557,7 +828,6 @@
     <div id="asmaList" class="asma-list"><div class="loading">Memuat Asmaul Husna...</div></div>
   </div>
 
-  <!-- VIDEO SECTION -->
   <div id="videoSection" class="glass-panel hidden">
     <div class="panel-header"><i class="fas fa-video" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>🎥 Video Kajian Terkini</h3></div>
     <div class="channel-tabs" style="display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap;">
@@ -569,13 +839,12 @@
     <div style="text-align: center; padding: 1rem; font-size: 0.7rem; opacity: 0.7;"><i class="fab fa-youtube"></i> Klik pada video untuk menonton di YouTube</div>
   </div>
 
-  <!-- QIBLA SECTION -->
   <div id="qiblaSection" class="glass-panel hidden">
     <div class="panel-header"><i class="fas fa-compass" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>🕋 Arah Kiblat</h3></div>
-    <div class="compass">
+    <div class="compass" id="compassContainer">
       <div class="compass-needle" id="compassNeedle">🧭</div>
       <div id="qiblaDirection" class="qibla-degree" style="margin-top: 1rem;">Memuat arah kiblat...</div>
-      <p style="font-size: 0.7rem; margin-top: 10px;">*Aktifkan sensor untuk akurasi maksimal</p>
+      <p style="font-size: 0.7rem; margin-top: 10px;">*Gerakkan mouse di area ini untuk sensasi taktil 3D</p>
     </div>
   </div>
 
@@ -611,7 +880,7 @@
       { number: 19, name: "العليم", transliteration: "Al-Alim", translation: "Yang Maha Mengetahui" },
       { number: 20, name: "القابض", transliteration: "Al-Qabid", translation: "Yang Maha Menyempitkan" },
       { number: 21, name: "الباسط", transliteration: "Al-Basit", translation: "Yang Maha Melapangkan" },
-      { number: 22, name: "الخافض", transliteration: "Al-Khafid", translation: "Yang Maha Merendahkan" },
+      { number: 22, name: "الخافdf", transliteration: "Al-Khafid", translation: "Yang Maha Merendahkan" },
       { number: 23, name: "الرافع", transliteration: "Ar-Rafi", translation: "Yang Maha Meninggikan" },
       { number: 24, name: "المعز", transliteration: "Al-Mu'izz", translation: "Yang Maha Memuliakan" },
       { number: 25, name: "المذل", transliteration: "Al-Mudhill", translation: "Yang Maha Menghinakan" },
@@ -687,11 +956,10 @@
       { number: 95, name: "البديع", transliteration: "Al-Badi'", translation: "Yang Maha Pencipta" },
       { number: 96, name: "الباقي", transliteration: "Al-Baqi", translation: "Yang Maha Kekal" },
       { number: 97, name: "الوارث", transliteration: "Al-Warits", translation: "Yang Maha Pewaris" },
-      { number: 98, name: "الرشيد", transliteration: "Ar-Rasyid", translation: "Yang Maha Pandai" },
+      { number: 98, name: "الرشid", transliteration: "Ar-Rasyid", translation: "Yang Maha Pandai" },
       { number: 99, name: "الصبور", transliteration: "As-Sabur", translation: "Yang Maha Sabar" }
     ];
 
-    // ==================== DATA FALLBACK JADWAL ====================
     const DEFAULT_PRAYER_TIMES = {
       Subuh: "04:33", Dzuhur: "11:50", Ashar: "15:10", Maghrib: "17:48", Isya: "18:56",
       Imsak: "04:23", Terbit: "05:44"
@@ -703,7 +971,6 @@
       abdulsomad: { name: "Abdul Somad", channelId: "UC9pPDYbW1otFmG8gILhKljQ", handle: "@ustadzabdulsomadofficial" }
     };
     
-    // ==================== GLOBAL VARIABLES ====================
     let currentLat = -6.8906, currentLon = 107.6135;
     let currentCityOnly = "Bandung", currentTimezone = "WIB";
     let prayerTimes = { ...DEFAULT_PRAYER_TIMES };
@@ -711,12 +978,30 @@
     let currentPrayerList = [], surahList = [], asmaList = [];
     let adzanEnabled = localStorage.getItem('adzanEnabled') === 'true';
     let playedAdzanPrayers = {};
+    let qiblaBaseAngle = 295; // Default Bandung ke Mekah
     const adzanAudio = document.getElementById('adzanAudio');
     
     const sections = ['jadwalSection', 'quranSection', 'asmaSection', 'videoSection', 'qiblaSection'];
     const prayerGrid = document.getElementById('prayerGrid');
     
-    // ==================== HELPER FUNCTIONS ====================
+    // ==================== IDE 2: GENERATE PARTIKEL MELAYANG ====================
+    function createParticles() {
+      const container = document.getElementById('particles');
+      if(!container) return;
+      container.innerHTML = ''; // Reset
+      for (let i = 0; i < 25; i++) {
+        let p = document.createElement('div');
+        p.className = 'particle';
+        let size = Math.random() * 4 + 2;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.left = `${Math.random() * 100}vw`;
+        p.style.animationDelay = `${Math.random() * 10}s`;
+        p.style.animationDuration = `${Math.random() * 6 + 7}s`;
+        container.appendChild(p);
+      }
+    }
+
     function timeStringToDate(timeStr) {
       const now = new Date();
       const [hours, minutes] = timeStr.split(":").map(Number);
@@ -739,20 +1024,21 @@
       return "WIT";
     }
     
-    // ==================== RENDER JADWAL ====================
     function renderPrayerSchedule() {
       const sholatKeys = ["Subuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
       const labels = { Subuh: "Subuh", Dzuhur: isFridayToday() ? "Jum'atan" : "Dzuhur", Ashar: "Ashar", Maghrib: "Maghrib", Isya: "Isya" };
       let html = '';
       currentPrayerList = [];
+      let delay = 0.1;
       for (let key of sholatKeys) {
         if (prayerTimes[key]) {
           currentPrayerList.push({ key, label: labels[key] });
-          html += `<div class="prayer-box" data-prayer="${key}">
+          html += `<div class="prayer-box" data-prayer="${key}" style="animation: skewIn 0.5s ease-out ${delay}s both;">
             <div class="name">${labels[key]}</div>
             <div class="time">${prayerTimes[key]}</div>
             <div class="countdown">⌛ --:--:--</div>
           </div>`;
+          delay += 0.08;
         }
       }
       prayerGrid.innerHTML = html;
@@ -790,30 +1076,54 @@
       }
     }
     
-    // ==================== ASMAUL HUSNA ====================
+    function showSelectedAsma(asma) {
+      const container = document.getElementById("selectedAsmaContainer");
+      container.innerHTML = `
+        <div class="selected-asma-card">
+          <div class="selected-asma-number">${asma.number} • ASMAUL HUSNA</div>
+          <div class="selected-asma-arabic">${asma.name}</div>
+          <div class="selected-asma-latin">${asma.transliteration.toUpperCase()}</div>
+          <div class="selected-asma-meaning"><i class="fas fa-heart" style="color: var(--primary-cyan);"></i> Artinya: ${asma.translation}</div>
+          <div class="selected-asma-badge"><i class="fas fa-praying-hands"></i> 99 Nama Allah</div>
+        </div>
+      `;
+      container.classList.remove("hidden");
+      container.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    
     function updateRandomAsma() {
       if (!asmaList.length) return;
       const random = asmaList[Math.floor(Math.random() * asmaList.length)];
-      document.getElementById("randomAsmaArabic").innerText = random.name;
-      document.getElementById("randomAsmaLatin").innerText = random.transliteration;
-      document.getElementById("randomAsmaMeaning").innerHTML = `<i class="fas fa-heart" style="color: var(--primary-cyan);"></i> Artinya: ${random.translation}`;
+      const box = document.getElementById("randomAsma");
+      box.style.opacity = 0.3;
+      setTimeout(() => {
+        document.getElementById("randomAsmaArabic").innerText = random.name;
+        document.getElementById("randomAsmaLatin").innerText = random.transliteration;
+        document.getElementById("randomAsmaMeaning").innerHTML = `<i class="fas fa-heart" style="color: var(--primary-cyan);"></i> Artinya: ${random.translation}`;
+        box.style.opacity = 1;
+      }, 150);
     }
     
     function renderAsmaList(list) {
       let html = '';
       for (const item of list) {
-        html += `<div class="asma-item"><div class="asma-header"><span class="asma-number">${item.number}.</span><span class="asma-name-ar">${item.name}</span><span class="asma-name-latin">(${item.transliteration})</span></div><div class="asma-meaning">${item.translation}</div></div>`;
+        html += `<div class="asma-item" onclick="showSelectedAsma(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+          <div class="asma-header">
+            <span class="asma-number">${item.number}.</span>
+            <span class="asma-name-ar">${item.name}</span>
+            <span class="asma-name-latin">(${item.transliteration})</span>
+          </div>
+          <div class="asma-meaning">${item.translation}</div>
+        </div>`;
       }
       document.getElementById("asmaList").innerHTML = html;
     }
     
-    // ==================== AL-QUR'AN ====================
     async function fetchSurahList() {
       try {
         const res = await fetch('https://api.alquran.cloud/v1/surah');
         const data = await res.json();
         if (data.code === 200) { surahList = data.data; renderSurahList(surahList); }
-        else throw new Error();
       } catch(e) { document.getElementById("surahList").innerHTML = '<div class="loading">Gagal memuat daftar surah</div>'; }
     }
     
@@ -825,12 +1135,13 @@
       document.getElementById("surahList").innerHTML = html;
     }
     
-    // ==================== LOAD SURAH DENGAN BISMILLAH CARD BARU ====================
     window.loadSurah = async function(surahNumber) {
       try {
-        const res = await fetch(
-          `https://api.alquran.cloud/v1/surah/${surahNumber}/editions/ar.alafasy,id.indonesian`
-        );
+        document.getElementById("ayatContent").innerHTML = '<div class="loading">Memuat ayat...</div>';
+        document.getElementById("surahListView").classList.add("hidden");
+        document.getElementById("ayatView").classList.remove("hidden");
+        
+        const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/editions/ar.alafasy,id.indonesian`);
         const data = await res.json();
         if (data.code === 200 && data.data?.length >= 2) {
           const arab = data.data[0];
@@ -838,68 +1149,43 @@
           let ayatHtml = `
             <div class="surah-info">
               <h2>${arab.name} (${indo.englishName})</h2>
-              <p>
-                ${indo.englishNameTranslation}
-                •
-                ${arab.ayahs?.length} Ayat
-              </p>
+              <p>${indo.englishNameTranslation} • ${arab.ayahs?.length} Ayat</p>
             </div>
           `;
-          // tampilkan bismillah untuk semua surah kecuali At-Taubah & Al-Fatihah
           const shouldAddBismillah = (surahNumber !== 9 && surahNumber !== 1);
           if (shouldAddBismillah) {
+            // IDE 3: Ditambahkan Staggered Delay Pada Lembaran Card
             ayatHtml += `
-              <div class="ayat-card bismillah-card">
-                <div class="bismillah-arabic">
-                  بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
-                </div>
-                <div class="bismillah-latin">
-                  BISMILLAHIRRAHMANIRRAHIM
-                </div>
-                <div class="bismillah-translation">
-                  Dengan menyebut nama Allah Yang Maha Pengasih lagi Maha Penyayang
-                </div>
+              <div class="ayat-card bismillah-card" style="animation-delay: 0.05s">
+                <div class="bismillah-arabic">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+                <div class="bismillah-latin">BISMILLAHIRRAHMANIRRAHIM</div>
+                <div class="bismillah-translation">Dengan menyebut nama Allah Yang Maha Pengasih lagi Maha Penyayang</div>
               </div>
             `;
           }
           for (let i = 0; i < arab.ayahs.length; i++) {
             let arabText = arab.ayahs[i]?.text || "";
-            // hapus bismillah di ayat pertama
             if (i === 0 && shouldAddBismillah) {
-              const bismillahPatterns = [
-                "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
-                "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
-                "بسم الله الرحمن الرحيم"
-              ];
-              bismillahPatterns.forEach(pattern => {
-                if (arabText.startsWith(pattern)) {
-                  arabText = arabText.replace(pattern, "").trim();
-                }
-              });
+              const bismillahPatterns = ["بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "بسم الله الرحمن الرحيم"];
+              bismillahPatterns.forEach(pattern => { if (arabText.startsWith(pattern)) arabText = arabText.replace(pattern, "").trim(); });
             }
+            
+            // IDE 3: Staggered Delay Kalkulasi Efek Flip 3D Bertahap
+            let delayCalculation = Math.min(0.08 + (i * 0.04), 1.2);
             ayatHtml += `
-              <div class="ayat-card">
-                <div class="ayat-arabic">
-                  ${arabText}
-                </div>
-                <div class="ayat-translation">
-                  <strong>${i + 1}. </strong>
-                  ${indo.ayahs[i]?.text || ""}
-                </div>
+              <div class="ayat-card" style="animation-delay: ${delayCalculation}s;">
+                <div class="ayat-arabic">${arabText}</div>
+                <div class="ayat-translation"><strong>${i + 1}. </strong>${indo.ayahs[i]?.text || ""}</div>
               </div>
             `;
           }
           document.getElementById("ayatContent").innerHTML = ayatHtml;
-          document.getElementById("surahListView").classList.add("hidden");
-          document.getElementById("ayatView").classList.remove("hidden");
         }
       } catch(e) {
-        alert("Gagal memuat surah");
-        console.error(e);
+        document.getElementById("ayatContent").innerHTML = '<div class="loading">Gagal memuat surah</div>';
       }
     };
     
-    // ==================== VIDEO ====================
     async function loadChannelVideos(channelId, channelName, channelHandle) {
       const container = document.getElementById("videoContainer");
       container.innerHTML = '<div class="loading">Memuat video...</div>';
@@ -909,12 +1195,14 @@
         const data = await res.json();
         if (data.status === 'ok' && data.items?.length) {
           let html = '<div class="video-grid">';
+          let delay = 0.05;
           for (let item of data.items.slice(0, 9)) {
             let vidId = item.link.split('v=')[1]?.split('&')[0];
-            html += `<div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=${vidId}', '_blank')">
+            html += `<div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=${vidId}', '_blank')" style="animation: fadeInUp 0.5s ease-out ${delay}s both;">
               <div class="video-thumbnail"><img src="${item.thumbnail}" loading="lazy"><div class="play-overlay"><i class="fab fa-youtube"></i></div></div>
               <div class="video-info"><div class="video-title">${escapeHtml(item.title)}</div><div class="video-date">${new Date(item.pubDate).toLocaleDateString('id-ID')}</div></div>
             </div>`;
+            delay += 0.05;
           }
           html += '</div>';
           container.innerHTML = html;
@@ -924,7 +1212,6 @@
     
     function escapeHtml(text) { return text?.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}) || ''; }
     
-    // ==================== QIBLA ====================
     function updateQiblaDirection() {
       const kaabaLat = 21.4225, kaabaLon = 39.8262;
       const phi1 = currentLat * Math.PI/180, phi2 = kaabaLat * Math.PI/180;
@@ -932,18 +1219,48 @@
       const x = Math.sin(deltaLambda) * Math.cos(phi2);
       const y = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(deltaLambda);
       let angle = Math.atan2(x, y) * 180 / Math.PI;
-      angle = (angle + 360) % 360;
-      document.getElementById("qiblaDirection").innerHTML = `Arah Kiblat: ${Math.round(angle)}° dari Utara`;
+      qiblaBaseAngle = (angle + 360) % 360;
+      
+      // IDE 4: Menerapkan Typing Effect saat teks kompas dimuat
+      const descContainer = document.getElementById("qiblaDirection");
+      descContainer.classList.remove("typing-effect");
+      void descContainer.offsetWidth; // Trigger Reflow
+      descContainer.innerHTML = `Arah Kiblat: ${Math.round(qiblaBaseAngle)}° dari Utara`;
+      descContainer.classList.add("typing-effect");
+
+      document.getElementById("compassNeedle").style.transform = `rotate(${qiblaBaseAngle}deg)`;
+      
       if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', (e) => {
-          if (e.alpha !== null) document.getElementById("compassNeedle").style.transform = `rotate(${(angle - e.alpha + 360) % 360}deg)`;
+          if (e.alpha !== null) {
+            document.getElementById("compassNeedle").style.transform = `rotate(${(qiblaBaseAngle - e.alpha + 360) % 360}deg)`;
+          }
         });
       }
     }
     
-    // ==================== NAVIGASI ====================
+    // ==================== IDE 5: LOGIKA 3D COMPASS TILT COMPASS PARALLAX ====================
+    const compassZone = document.getElementById('compassContainer');
+    if(compassZone) {
+      compassZone.addEventListener('mousemove', (e) => {
+        const needle = document.getElementById("compassNeedle");
+        const rect = compassZone.getBoundingClientRect();
+        const x = e.clientX - rect.left - (rect.width/2);
+        const y = e.clientY - rect.top - (rect.height/2);
+        
+        needle.style.transform = `rotate(${qiblaBaseAngle}deg) rotateX(${-y * 0.25}deg) rotateY(${x * 0.25}deg) translateZ(20px)`;
+      });
+      compassZone.addEventListener('mouseleave', () => {
+        const needle = document.getElementById("compassNeedle");
+        needle.style.transform = `rotate(${qiblaBaseAngle}deg) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+      });
+    }
+
     document.querySelectorAll('.nav-item[data-section]').forEach(btn => {
       btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item[data-section]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
         const section = btn.dataset.section + 'Section';
         sections.forEach(s => document.getElementById(s)?.classList.add('hidden'));
         document.getElementById(section).classList.remove('hidden');
@@ -970,7 +1287,6 @@
       }
     });
     
-    // ==================== ADZAN ====================
     function updateAdzanUI() {
       const btn = document.getElementById("adzanToggle");
       if (adzanEnabled) { btn.innerHTML = '<i class="fas fa-volume-up"></i> Adzan ON'; btn.style.background = "var(--primary-cyan)"; btn.style.color = "#000"; }
@@ -991,7 +1307,6 @@
       setTimeout(() => { delete playedAdzanPrayers[prayer]; }, 60000);
     }
     
-    // ==================== THEME ====================
     let currentTheme = localStorage.getItem('theme') || 'dark';
     function setTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
@@ -1001,7 +1316,6 @@
     document.getElementById("themeToggle").addEventListener("click", () => setTheme(currentTheme === 'dark' ? 'light' : 'dark'));
     setTheme(currentTheme);
     
-    // ==================== CLOCK & WEATHER & LOCATION ====================
     function updateClock() {
       const now = new Date();
       document.getElementById("liveClockHero").innerHTML = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
@@ -1013,8 +1327,17 @@
         const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${currentLat}&longitude=${currentLon}&current_weather=true&timezone=auto`);
         const data = await res.json();
         if (data.current_weather) {
-          document.getElementById("weatherDesc").innerHTML = data.current_weather.weathercode <= 3 ? "Cerah" : "Berawan";
-          document.getElementById("weatherTemp").innerHTML = `${Math.round(data.current_weather.temperature)}°C`;
+          const condition = data.current_weather.weathercode <= 3 ? "Cerah" : "Berawan";
+          const temp = `${Math.round(data.current_weather.temperature)}°C`;
+          
+          // IDE 4: Menerapkan Typing Effect pada data cuaca
+          const descEl = document.getElementById("weatherDesc");
+          descEl.classList.remove("typing-effect");
+          void descEl.offsetWidth; 
+          descEl.innerHTML = condition;
+          descEl.classList.add("typing-effect");
+          
+          document.getElementById("weatherTemp").innerHTML = temp;
         }
       } catch(e) {}
     }
@@ -1031,6 +1354,7 @@
             currentCityOnly = data.address?.city || data.address?.town || "Bandung";
           } catch(e) { currentCityOnly = "Bandung"; }
           document.getElementById("locationInfo").innerHTML = `${currentCityOnly}, ${currentTimezone}`;
+          updateQiblaDirection();
         }, () => { document.getElementById("locationInfo").innerHTML = `Bandung, WIB`; });
       }
     }
@@ -1056,11 +1380,12 @@
       }
     }
     
-    // ==================== INTERVAL & INIT ====================
+    // ==================== INIT EXECUTIONS ====================
     renderPrayerSchedule();
     initLocation();
     fetchWeather();
     fetchSurahList();
+    createParticles(); // Inisialisasi Partikel Ide 2
     asmaList = fullAsmaulHusna;
     renderAsmaList(asmaList);
     updateRandomAsma();
@@ -1081,7 +1406,6 @@
     
     setInterval(fetchWeather, 600000);
     
-    // Channel Tabs
     document.querySelectorAll('.channel-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.channel-tab').forEach(t => t.classList.remove('active'));
