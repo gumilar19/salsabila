@@ -544,6 +544,147 @@
       color: var(--primary-cyan);
     }
 
+    /* ==========================================================================
+       DZIKIR COUNTER STYLES - TAB BARU
+    ========================================================================== */
+    .dzikir-section {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .counter-container {
+      background: rgba(0,0,0,0.3);
+      border-radius: 2rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    .counter-number {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 8rem;
+      font-weight: 900;
+      color: var(--primary-cyan);
+      text-shadow: 0 0 20px var(--cyan-shadow);
+      letter-spacing: 10px;
+      margin: 1rem 0;
+      animation: counterPulse 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes counterPulse {
+      0% { text-shadow: 0 0 10px var(--cyan-shadow); }
+      100% { text-shadow: 0 0 30px var(--primary-cyan); }
+    }
+
+    /* Tombol Dzikir Bulat Besar */
+    .dzikir-button {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--card-gradient));
+      border: 3px solid var(--primary-cyan);
+      color: var(--primary-cyan);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 1rem auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.1s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 20px var(--cyan-shadow);
+      animation: buttonGlow 2s ease-in-out infinite alternate;
+    }
+
+    .dzikir-button i {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .dzikir-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px var(--primary-cyan);
+      animation: buttonClick 0.1s ease-in-out 3 alternate;
+    }
+
+    .dzikir-button:active {
+      transform: scale(0.95);
+    }
+
+    @keyframes buttonGlow {
+      0% { box-shadow: 0 0 20px var(--cyan-shadow); border-color: var(--primary-cyan); }
+      100% { box-shadow: 0 0 50px var(--primary-cyan); border-color: #fff; }
+    }
+
+    @keyframes buttonClick {
+      0% { transform: scale(1); }
+      100% { transform: scale(0.98); filter: brightness(1.5); }
+    }
+
+    /* Efek percikan saat tombol diklik */
+    .click-ripple {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: var(--primary-cyan);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: ripple 0.5s ease-out forwards;
+      z-index: 9999;
+    }
+
+    @keyframes ripple {
+      0% { transform: scale(0); opacity: 1; }
+      100% { transform: scale(15); opacity: 0; }
+    }
+
+    /* Tombol Reset */
+    .reset-button {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--alert-red);
+      color: var(--alert-red);
+      padding: 0.8rem 2rem;
+      border-radius: 3rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+
+    .reset-button:hover {
+      background: var(--alert-red);
+      color: #000;
+      box-shadow: 0 0 20px var(--alert-shadow);
+      transform: translateY(-2px);
+    }
+
+    /* Dzikir Counter Info */
+    .counter-info {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(0,0,0,0.2);
+      border-radius: 1rem;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .counter-info i {
+      color: var(--primary-cyan);
+      margin: 0 5px;
+    }
+
     /* AYAT SECTION - EXTREME ANIMATION */
     .ayat-section {
       background: linear-gradient(145deg, rgba(0, 242, 255, 0.1), rgba(0, 242, 255, 0.02));
@@ -1194,6 +1335,9 @@ footer {
       .bismillah-arabic { font-size: 1.3rem; }
       .selected-asma-arabic { font-size: 1.8rem; }
       .arabic-ayat { font-size: 1.3rem; }
+      .counter-number { font-size: 4rem; letter-spacing: 5px; }
+      .dzikir-button { width: 150px; height: 150px; font-size: 1rem; }
+      .dzikir-button i { font-size: 2rem; }
     }
 	
 	/* 2. KETERANGAN NEXT SHIFT: Efek Glitch Teks Tajam Akibat Overload */
@@ -1214,25 +1358,21 @@ footer {
     opacity: 1;
   }
   88% {
-    /* Sentakan listrik pertama */
     text-shadow: -2px 0 red, 2px 0 blue, 0 0 15px var(--cyan-shadow);
     transform: skew(10deg);
     opacity: 0.8;
   }
   90% {
-    /* Lonjakan daya ekstrem sekilas */
     text-shadow: 4px 0 red, -4px 0 blue, 0 0 25px #fff;
     transform: skew(-15deg);
     filter: blur(0.5px);
     opacity: 1;
   }
   93% {
-    /* Kembali normal sebelum entakan akhir */
     text-shadow: 0 0 8px var(--cyan-shadow);
     transform: skew(0deg);
   }
   95% {
-    /* Mati lampu mikro (drop tegangan) */
     text-shadow: none;
     opacity: 0.3;
   }
@@ -1252,6 +1392,7 @@ footer {
       <button class="nav-item" data-section="quran"><i class="fas fa-quran"></i> Qur'an</button>
       <button class="nav-item" data-section="asma"><i class="fas fa-praying-hands"></i> Asma</button>
       <button class="nav-item" data-section="video"><i class="fas fa-video"></i> Video</button>
+      <button class="nav-item" data-section="dzikir"><i class="fas fa-pray"></i> Dzikir</button>
       <button class="nav-item" data-section="qibla"><i class="fas fa-compass"></i> Kiblat</button>
       <button class="nav-item" id="adzanToggle"><i class="fas fa-volume-up"></i> Adzan ON</button>
       <button class="nav-item" id="themeToggle"><i class="fas fa-moon"></i> Tema</button>
@@ -1334,6 +1475,28 @@ footer {
     <div style="text-align: center; padding: 1rem; font-size: 0.7rem; opacity: 0.7;"><i class="fab fa-youtube"></i> Klik pada video untuk menonton di YouTube</div>
   </div>
 
+  <!-- DZIKIR COUNTER SECTION - TAB BARU -->
+  <div id="dzikirSection" class="glass-panel hidden">
+    <div class="panel-header"><i class="fas fa-pray" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📿 Dzikir Counter</h3></div>
+    <div class="dzikir-section">
+      <div class="counter-container">
+        <div class="counter-number" id="counterValue">0</div>
+        <button class="dzikir-button" id="dzikirButton">
+          <i class="fas fa-hand-peace"></i>
+          <span>DZIKIR</span>
+          <small style="font-size: 0.7rem; opacity: 0.7;">الذكر</small>
+        </button>
+        <button class="reset-button" id="resetButton">
+          <i class="fas fa-sync-alt"></i> Reset Hitungan
+        </button>
+      </div>
+      <div class="counter-info">
+        <i class="fas fa-info-circle"></i> Klik tombol bulat untuk menambah hitungan dzikir<br>
+        <i class="fas fa-trash-alt"></i> Tombol reset untuk mengembalikan hitungan ke 0
+      </div>
+    </div>
+  </div>
+
   <!-- QIBLA SECTION -->
   <div id="qiblaSection" class="glass-panel hidden">
     <div class="panel-header"><i class="fas fa-compass" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>🕋 Arah Kiblat</h3></div>
@@ -1360,7 +1523,7 @@ footer {
       <div class="footer-brand-title">SALSABILA DASHBOARD</div>
       <p class="footer-brand-desc">
         Dashboard Islami Digital dengan jadwal sholat real-time, Al-Qur'an 30 Juz, Asmaul Husna, 
-        video kajian terbaru, dan kompas kiblat berbasis lokasi.
+        video kajian terbaru, dzikir counter, dan kompas kiblat berbasis lokasi.
       </p>
       <div class="footer-status-panel">
         <div class="status-node"><span class="blink-dot"></span> SISTEM: <span class="text-alert">AKTIF</span></div>
@@ -1375,7 +1538,8 @@ footer {
         <li><a href="#" data-section="jadwal"><i class="fas fa-angle-right"></i> Jadwal Sholat Real-time</a></li>
         <li><a href="#" data-section="quran"><i class="fas fa-angle-right"></i> Al-Qur'an 30 Juz</a></li>
         <li><a href="#" data-section="asma"><i class="fas fa-angle-right"></i> Asmaul Husna 99</a></li>
-        <li><a href="#" data-section="video"><i class="fas fa-angle-right"></i> Video Kajian (Aa Gym, Adi Hidayat, Abdul Somad)</a></li>
+        <li><a href="#" data-section="video"><i class="fas fa-angle-right"></i> Video Kajian</a></li>
+        <li><a href="#" data-section="dzikir"><i class="fas fa-angle-right"></i> Dzikir Counter</a></li>
         <li><a href="#" data-section="qibla"><i class="fas fa-angle-right"></i> Kompas Kiblat 3D</a></li>
       </ul>
     </div>
@@ -1425,6 +1589,60 @@ footer {
   </audio>
 
   <script>
+    // ==================== DZIKIR COUNTER LOGIC ====================
+    let dzikirCount = localStorage.getItem('dzikirCount') ? parseInt(localStorage.getItem('dzikirCount')) : 0;
+    const counterValueEl = document.getElementById('counterValue');
+    const dzikirButton = document.getElementById('dzikirButton');
+    const resetButton = document.getElementById('resetButton');
+
+    function updateCounterDisplay() {
+      counterValueEl.textContent = dzikirCount;
+      localStorage.setItem('dzikirCount', dzikirCount);
+    }
+
+    function addDzikir() {
+      dzikirCount++;
+      updateCounterDisplay();
+      
+      // Efek ripple saat tombol diklik
+      createRippleEffect(event);
+      
+      // Efek getar pada angka
+      counterValueEl.style.transform = 'scale(1.1)';
+      setTimeout(() => {
+        counterValueEl.style.transform = 'scale(1)';
+      }, 150);
+    }
+
+    function resetDzikir() {
+      dzikirCount = 0;
+      updateCounterDisplay();
+      
+      // Efek reset dengan animasi
+      counterValueEl.style.opacity = '0.5';
+      setTimeout(() => {
+        counterValueEl.style.opacity = '1';
+      }, 200);
+    }
+
+    function createRippleEffect(event) {
+      const ripple = document.createElement('div');
+      ripple.className = 'click-ripple';
+      ripple.style.left = event.clientX + 'px';
+      ripple.style.top = event.clientY + 'px';
+      document.body.appendChild(ripple);
+      
+      setTimeout(() => {
+        ripple.remove();
+      }, 500);
+    }
+
+    dzikirButton.addEventListener('click', addDzikir);
+    resetButton.addEventListener('click', resetDzikir);
+    
+    // Inisialisasi tampilan counter
+    updateCounterDisplay();
+
     // ==================== DATA ASMAUL HUSNA LENGKAP 99 ====================
     const fullAsmaulHusna = [
       { number: 1, name: "الرحمن", transliteration: "Ar-Rahman", translation: "Yang Maha Pengasih" },
@@ -1549,7 +1767,7 @@ footer {
     let qiblaBaseAngle = 295;
     const adzanAudio = document.getElementById('adzanAudio');
     
-    const sections = ['jadwalSection', 'quranSection', 'asmaSection', 'videoSection', 'qiblaSection'];
+    const sections = ['jadwalSection', 'quranSection', 'asmaSection', 'videoSection', 'dzikirSection', 'qiblaSection'];
     const prayerGrid = document.getElementById('prayerGrid');
     
     // ==================== PARTICLES ====================
@@ -1950,7 +2168,7 @@ footer {
         adzanAudio.currentTime = 0;
         adzanAudio.play().catch(e=>console.log);
       }
-      startAdzanAlertMode(); // Aktifkan mode alert untuk visualizer
+      startAdzanAlertMode();
       setTimeout(() => { delete playedAdzanPrayers[prayer]; }, 60000);
     }
     
