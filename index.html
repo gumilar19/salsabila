@@ -219,6 +219,91 @@
       color: var(--primary-cyan);
       margin-bottom: 10px;
       text-shadow: 0 0 5px var(--cyan-shadow);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    /* ==========================================================================
+       DEKORASI AUDIO VISUALIZER BERGERAK ACAK (CYBERPUNK HUD)
+    ========================================================================== */
+
+    /* Wadah utama visualizer agar baris sejajar di bagian bawah */
+    .cyber-visualizer {
+      display: inline-flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 3px;
+      width: 25px;
+      height: 18px;
+      vertical-align: middle;
+    }
+
+    /* Properti dasar untuk setiap batang audio (Bar) */
+    .cyber-visualizer span {
+      display: inline-block;
+      width: 3px;
+      height: 100%;
+      background-color: var(--primary-cyan);
+      box-shadow: 0 0 8px var(--cyan-shadow);
+      transform-origin: bottom;
+      border-radius: 1px 1px 0 0;
+    }
+
+    /* Mengatur animasi dan visualisasi acak per batang menggunakan n-th child */
+    .cyber-visualizer span:nth-child(1) {
+      animation: audioPulse1 0.5s ease-in-out infinite alternate;
+    }
+
+    .cyber-visualizer span:nth-child(2) {
+      background-color: #ffffff;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+      animation: audioPulse2 0.4s ease-in-out infinite alternate;
+      animation-delay: 0.15s;
+    }
+
+    .cyber-visualizer span:nth-child(3) {
+      animation: audioPulse3 0.6s ease-in-out infinite alternate;
+      animation-delay: 0.05s;
+    }
+
+    .cyber-visualizer span:nth-child(4) {
+      background-color: var(--alert-red);
+      box-shadow: 0 0 8px var(--alert-shadow);
+      animation: audioPulse1 0.35s ease-in-out infinite alternate;
+      animation-delay: 0.25s;
+    }
+
+    .cyber-visualizer span:nth-child(5) {
+      animation: audioPulse2 0.55s ease-in-out infinite alternate;
+      animation-delay: 0.1s;
+    }
+
+    /* Variasi Keyframes Animasi untuk Menghasilkan Efek Gerakan Acak */
+    @keyframes audioPulse1 {
+      0%   { transform: scaleY(0.2); opacity: 0.6; }
+      50%  { transform: scaleY(0.8); opacity: 1; }
+      100% { transform: scaleY(0.4); opacity: 0.8; }
+    }
+
+    @keyframes audioPulse2 {
+      0%   { transform: scaleY(0.3); }
+      40%  { transform: scaleY(1.1); filter: brightness(1.3); }
+      100% { transform: scaleY(0.1); }
+    }
+
+    @keyframes audioPulse3 {
+      0%   { transform: scaleY(0.1); }
+      60%  { transform: scaleY(0.6); }
+      100% { transform: scaleY(0.9); }
+    }
+
+    /* Otomatis berubah warna merah total saat Adzan Alert Mode aktif */
+    body.adzan-alert-mode .cyber-visualizer span {
+      background-color: var(--alert-red) !important;
+      box-shadow: 0 0 8px var(--alert-shadow) !important;
+      animation-duration: 0.2s !important;
     }
 
     .clock-giant {
@@ -229,6 +314,40 @@
       margin-bottom: 20px;
       filter: drop-shadow(0 0 15px var(--cyan-shadow));
       animation: clockGlow 4s ease-in-out infinite alternate;
+      position: relative;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 3px 0 0 rgba(255, 0, 60, 0.6), -3px 0 0 rgba(0, 242, 255, 0.6), 0 0 15px var(--cyan-shadow) !important;
+      animation: holoVibrate 2.5s infinite linear alternate-reverse !important;
+    }
+
+    @keyframes holoVibrate {
+      0% { 
+        text-shadow: 3px 0 0 rgba(255,0,60,0.6), -3px 0 0 rgba(0,242,255,0.6), 0 0 15px var(--cyan-shadow);
+        transform: translate(0, 0) skewX(0deg);
+      }
+      20% { 
+        text-shadow: 2px -1px 0 rgba(255,0,60,0.5), -2px 1px 0 rgba(0,242,255,0.7), 0 0 20px var(--cyan-shadow);
+        transform: translate(-1px, 1px) skewX(0deg);
+      }
+      38% {
+        text-shadow: 5px 0 0 rgba(255,0,60,0.9), -5px 0 0 rgba(0,242,255,0.9), 0 0 30px var(--primary-cyan);
+        transform: translate(2px, -1px) skewX(-4deg);
+        filter: brightness(1.5);
+      }
+      40% {
+        text-shadow: 1px 2px 0 rgba(255,0,60,0.3), -1px -2px 0 rgba(0,242,255,0.5);
+        transform: translate(0, 0) skewX(0deg);
+        filter: brightness(1);
+      }
+      70% {
+        text-shadow: -3px 0 0 rgba(255,0,60,0.6), 3px 0 0 rgba(0,242,255,0.6), 0 0 15px var(--cyan-shadow);
+        transform: translate(1px, 1px) skewX(0deg);
+      }
+      100% { 
+        text-shadow: 3px 0 0 rgba(255,0,60,0.6), -3px 0 0 rgba(0,242,255,0.6), 0 0 15px var(--cyan-shadow);
+        transform: translate(0, 0) skewX(0deg);
+      }
     }
 
     @keyframes clockGlow {
@@ -889,7 +1008,7 @@ footer {
   background: linear-gradient(to top, #06080b 80%, rgba(22, 27, 34, 0.5) 100%);
   padding: 60px 50px 20px 50px;
   position: relative;
-  font-family: 'Barlow', sans-serif; /* Menggunakan Barlow agar teks detail corporate mudah dibaca */
+  font-family: 'Barlow', sans-serif;
   color: #a0aec0;
   border-top: 1px solid rgba(0, 242, 255, 0.05);
   margin-top: 80px;
@@ -901,7 +1020,7 @@ footer {
   top: 0; left: 0; width: 100%; height: 2px;
   background: var(--primary-cyan);
   box-shadow: 0 0 15px var(--primary-cyan);
-  animation: neonKorsleting 0.25s linear infinite alternate; /* Menggunakan keyframe neonKorsleting Anda */
+  animation: neonKorsleting 0.25s linear infinite alternate;
 }
 
 /* Grid Utama Multi Kolom Standar Industri */
@@ -1076,6 +1195,49 @@ footer {
       .selected-asma-arabic { font-size: 1.8rem; }
       .arabic-ayat { font-size: 1.3rem; }
     }
+	
+	/* 2. KETERANGAN NEXT SHIFT: Efek Glitch Teks Tajam Akibat Overload */
+#nextPrayerHero,
+.cyber-glitch-text {
+  position: relative;
+  color: var(--primary-cyan) !important;
+  font-weight: 900;
+  text-shadow: 0 0 8px var(--cyan-shadow);
+  animation: textGlitchOverload 1.8s infinite steps(2);
+}
+
+@keyframes textGlitchOverload {
+  0%, 85%, 100% {
+    text-shadow: 0 0 8px var(--cyan-shadow);
+    transform: skew(0deg);
+    filter: blur(0);
+    opacity: 1;
+  }
+  88% {
+    /* Sentakan listrik pertama */
+    text-shadow: -2px 0 red, 2px 0 blue, 0 0 15px var(--cyan-shadow);
+    transform: skew(10deg);
+    opacity: 0.8;
+  }
+  90% {
+    /* Lonjakan daya ekstrem sekilas */
+    text-shadow: 4px 0 red, -4px 0 blue, 0 0 25px #fff;
+    transform: skew(-15deg);
+    filter: blur(0.5px);
+    opacity: 1;
+  }
+  93% {
+    /* Kembali normal sebelum entakan akhir */
+    text-shadow: 0 0 8px var(--cyan-shadow);
+    transform: skew(0deg);
+  }
+  95% {
+    /* Mati lampu mikro (drop tegangan) */
+    text-shadow: none;
+    opacity: 0.3;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -1100,7 +1262,16 @@ footer {
   <div id="jadwalSection">
     <section class="hero-section">
       <div class="hero-content">
-        <h2>Next Shift: <span id="nextPrayerHero">ISYA</span></h2>
+        <h2>
+          NEXT SHIFT: <span id="nextPrayerHero" class="cyber-glitch-text">ISYA</span>
+          <div class="cyber-visualizer">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </h2>
         <div class="clock-giant" id="liveClockHero">--:--</div>
         <div class="status-badge" id="statusBadge">Standby for Adzan</div>
         <div class="next-prayer-detail">
@@ -1426,14 +1597,13 @@ footer {
       const badge = document.getElementById("statusBadge");
       if (!badge) return;
       
-      // Hapus class yang ada
       badge.classList.remove("green", "yellow", "red");
       
-      if (remainingSeconds > 3600) { // > 1 jam
+      if (remainingSeconds > 3600) {
         badge.classList.add("green");
-      } else if (remainingSeconds > 900) { // > 15 menit (900 detik)
+      } else if (remainingSeconds > 900) {
         badge.classList.add("green");
-      } else if (remainingSeconds > 180) { // > 3 menit (180 detik)
+      } else if (remainingSeconds > 180) {
         badge.classList.add("yellow");
       } else {
         badge.classList.add("red");
@@ -1465,7 +1635,6 @@ footer {
       const now = new Date();
       let minDiff = Infinity, nextPrayer = null, nextTimeDate = null;
       
-      // Cari sholat berikutnya (belum lewat waktunya)
       for (let p of currentPrayerList) {
         const pDate = timeStringToDate(prayerTimes[p.key]);
         const diff = pDate - now;
@@ -1476,7 +1645,6 @@ footer {
         }
       }
       
-      // Jika tidak ada sholat hari ini (semua sudah lewat), cari Subuh besok
       if (!nextPrayer) {
         const tomorrowSubuh = findTomorrowSubuh();
         if (tomorrowSubuh) {
@@ -1499,7 +1667,6 @@ footer {
         document.getElementById("statusBadge").innerHTML = `<i class="fas fa-hourglass-start"></i> Menuju ${displayName}`;
       }
       
-      // Update countdown di setiap kartu
       document.querySelectorAll('.prayer-box').forEach(card => {
         const prayerKey = card.getAttribute('data-prayer');
         if (prayerKey && prayerTimes[prayerKey]) {
@@ -1509,7 +1676,6 @@ footer {
         }
       });
       
-      // Highlight kartu active
       document.querySelectorAll('.prayer-box').forEach(card => card.classList.remove('active'));
       if (nextPrayer) {
         const target = document.querySelector(`.prayer-box[data-prayer="${nextPrayer.key}"]`);
@@ -1586,6 +1752,14 @@ footer {
         html += `<div class="surah-item" onclick="loadSurah(${s.number})"><div class="surah-number">${s.number}</div><div class="surah-name"><div class="surah-name-ar">${s.name}</div><div>${s.englishName}</div></div><div class="surah-ayah">${s.numberOfAyahs} ayat</div></div>`;
       }
       document.getElementById("surahList").innerHTML = html;
+    }
+    
+    // Fungsi untuk menambahkan class adzan-alert-mode saat adzan diputar
+    function startAdzanAlertMode() {
+      document.body.classList.add('adzan-alert-mode');
+      setTimeout(() => {
+        document.body.classList.remove('adzan-alert-mode');
+      }, 60000);
     }
     
     window.loadSurah = async function(surahNumber) {
@@ -1776,6 +1950,7 @@ footer {
         adzanAudio.currentTime = 0;
         adzanAudio.play().catch(e=>console.log);
       }
+      startAdzanAlertMode(); // Aktifkan mode alert untuk visualizer
       setTimeout(() => { delete playedAdzanPrayers[prayer]; }, 60000);
     }
     
@@ -1898,8 +2073,8 @@ footer {
         loadChannelVideos(channels[ch].channelId, channels[ch].name, channels[ch].handle);
       });
     });
-	
-	document.getElementById('currentYear').innerText = new Date().getFullYear();
+    
+    document.getElementById('currentYear').innerText = new Date().getFullYear();
   </script>
 </body>
 </html>
