@@ -882,14 +882,171 @@
     .hidden { display: none !important; }
     .loading { text-align: center; padding: 2rem; opacity: 0.7; }
 
-    footer {
-      border-top: 1px solid var(--border-color);
-      padding: 40px;
-      text-align: center;
-      font-size: 0.8rem;
-      letter-spacing: 3px;
-      opacity: 0.5;
-    }
+    /* ==========================================================================
+   INDUSTRIAL STANDARD FOOTER WITH EXTREME CYBERPUNK THEME
+   ========================================================================== */
+footer {
+  background: linear-gradient(to top, #06080b 80%, rgba(22, 27, 34, 0.5) 100%);
+  padding: 60px 50px 20px 50px;
+  position: relative;
+  font-family: 'Barlow', sans-serif; /* Menggunakan Barlow agar teks detail corporate mudah dibaca */
+  color: #a0aec0;
+  border-top: 1px solid rgba(0, 242, 255, 0.05);
+  margin-top: 80px;
+}
+
+/* Garis Laser Pembatas Atas (Korsleting Efek) */
+.footer-laser-line {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 2px;
+  background: var(--primary-cyan);
+  box-shadow: 0 0 15px var(--primary-cyan);
+  animation: neonKorsleting 0.25s linear infinite alternate; /* Menggunakan keyframe neonKorsleting Anda */
+}
+
+/* Grid Utama Multi Kolom Standar Industri */
+.footer-industrial-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px dashed rgba(0, 242, 255, 0.1);
+}
+
+/* Kolom Kiri Utama (Brand & Status) */
+.footer-column-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.footer-brand-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  color: #fff;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(255,255,255,0.2);
+}
+.footer-brand-desc {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+/* Style Kolom Link Standar Apple/Samsung */
+.footer-column h4 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1.5px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.footer-column ul {
+  list-style: none;
+}
+.footer-column ul li {
+  margin-bottom: 12px;
+}
+.footer-column ul li a {
+  color: #a0aec0;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+/* Efek Hover Link Korsleting Halus */
+.footer-column ul li a:hover {
+  color: var(--primary-cyan);
+  text-shadow: 0 0 8px var(--cyan-shadow);
+  transform: translateX(5px);
+}
+
+.footer-info-text {
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Icon Sosial */
+.footer-socials {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+.footer-socials a {
+  color: #fff;
+  font-size: 1.1rem;
+  width: 35px;
+  height: 35px;
+  background: rgba(22, 27, 34, 0.8);
+  border: 1px solid rgba(0, 242, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.footer-socials a:hover {
+  background: var(--primary-cyan);
+  color: #000;
+  box-shadow: 0 0 15px var(--cyan-shadow);
+  animation: neonKorsleting 0.25s linear infinite alternate;
+}
+
+/* Panel Status Cyberpunk */
+.footer-status-panel {
+  display: flex;
+  gap: 20px;
+  font-family: monospace;
+  font-size: 0.75rem;
+  margin-top: 10px;
+}
+.status-node { display: flex; align-items: center; gap: 6px; }
+.blink-dot {
+  width: 6px; height: 6px; background-color: #ff003c; border-radius: 50%;
+  box-shadow: 0 0 8px #ff003c; animation: pulseAlert 0.5s ease-in-out infinite alternate;
+}
+.text-alert { color: #ff003c; font-weight: bold; text-shadow: 0 0 5px rgba(255, 0, 60, 0.5); }
+
+/* Bagian Catatan Hukum Korporat (Legal & Disclaimer) */
+.footer-legal-notice {
+  padding-top: 25px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  opacity: 0.5;
+  text-align: justify;
+}
+
+/* Hak Cipta Paling Bawah */
+.footer-copyright {
+  text-align: center;
+  padding-top: 25px;
+  font-size: 0.7rem;
+  font-family: monospace;
+  opacity: 0.4;
+  letter-spacing: 0.5px;
+}
+
+/* Responsif untuk Smartphone & Tablet */
+@media (max-width: 1024px) {
+  .footer-industrial-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+}
+@media (max-width: 600px) {
+  footer { padding: 40px 20px 20px 20px; }
+  .footer-industrial-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+}
 
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
@@ -1024,8 +1181,73 @@
   </div>
 
   <footer>
-    SALSABILA by Gumilar Utamas &copy; 2026 - JADWAL SHOLAT | AL-QUR'AN | ASMAUL HUSNA
-  </footer>
+  <div class="footer-laser-line"></div>
+  
+  <div class="footer-industrial-grid">
+    <!-- Kolom Brand -->
+    <div class="footer-column-brand">
+      <div class="footer-brand-title">SALSABILA DASHBOARD</div>
+      <p class="footer-brand-desc">
+        Dashboard Islami Digital dengan jadwal sholat real-time, Al-Qur'an 30 Juz, Asmaul Husna, 
+        video kajian terbaru, dan kompas kiblat berbasis lokasi.
+      </p>
+      <div class="footer-status-panel">
+        <div class="status-node"><span class="blink-dot"></span> SISTEM: <span class="text-alert">AKTIF</span></div>
+        <div class="status-node"><i class="fas fa-check-circle"></i> SINKRONISASI API</div>
+      </div>
+    </div>
+
+    <!-- Modul Layanan -->
+    <div class="footer-column">
+      <h4>LAYANAN</h4>
+      <ul>
+        <li><a href="#" data-section="jadwal"><i class="fas fa-angle-right"></i> Jadwal Sholat Real-time</a></li>
+        <li><a href="#" data-section="quran"><i class="fas fa-angle-right"></i> Al-Qur'an 30 Juz</a></li>
+        <li><a href="#" data-section="asma"><i class="fas fa-angle-right"></i> Asmaul Husna 99</a></li>
+        <li><a href="#" data-section="video"><i class="fas fa-angle-right"></i> Video Kajian (Aa Gym, Adi Hidayat, Abdul Somad)</a></li>
+        <li><a href="#" data-section="qibla"><i class="fas fa-angle-right"></i> Kompas Kiblat 3D</a></li>
+      </ul>
+    </div>
+
+    <!-- Informasi Teknis -->
+    <div class="footer-column">
+      <h4>TEKNIS</h4>
+      <ul>
+        <li><a href="#"><i class="fas fa-book"></i> API: Al-Quran Cloud, YouTube RSS</a></li>
+        <li><a href="#"><i class="fas fa-bug"></i> Laporkan Masalah</a></li>
+        <li><a href="#"><i class="fas fa-wrench"></i> Riwayat Pembaruan</a></li>
+        <li><a href="#"><i class="fas fa-server"></i> Status Server: <span style="color: var(--primary-cyan)">ONLINE</span></a></li>
+      </ul>
+    </div>
+
+    <!-- Kontak & Sosial -->
+    <div class="footer-column">
+      <h4>PENGEMBANG</h4>
+      <p class="footer-info-text"><i class="fas fa-map-marker-alt"></i> Gumitama, Padalarang, Jawa Barat, Indonesia</p>
+      <p class="footer-info-text"><i class="fas fa-envelope"></i> gumitamaa@gmail.com</p>
+      <div class="footer-socials">
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disclaimer Korporat -->
+  <div class="footer-legal-notice">
+    <p><strong>DISKLAIMER:</strong> 
+    Jadwal sholat menggunakan algoritma dan data dari API eksternal (Aladhan/Al-Quran Cloud). 
+    Akurasi kompas kiblat bergantung pada sensor magnetik perangkat keras pengguna. 
+    Adzan diambil dari file MP3 eksternal dan hanya aktif jika pengguna mengaktifkan fitur "Adzan ON". 
+    Video kajian diambil dari feed RSS YouTube resmi masing-masing channel.
+    </p>
+  </div>
+
+  <!-- Hak Cipta -->
+  <div class="footer-copyright">
+    © <span id="currentYear"></span> SALSABILA ISLAMIC DASHBOARD by Gumilar Utamas. 
+  </div>
+</footer>
 
   <audio id="adzanAudio" preload="auto">
     <source src="https://raw.githubusercontent.com/agusnurwanto/adzan/master/adzan.mp3" type="audio/mpeg">
@@ -1676,6 +1898,8 @@
         loadChannelVideos(channels[ch].channelId, channels[ch].name, channels[ch].handle);
       });
     });
+	
+	document.getElementById('currentYear').innerText = new Date().getFullYear();
   </script>
 </body>
 </html>
