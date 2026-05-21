@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#0a0c10">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/gumilar19/salsabila/main/icon-192.png">
   <title>SALSABILA | Islamic Dashboard</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Barlow:ital,wght@0,400;0,700;1,800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
@@ -913,49 +915,220 @@
     .random-asma-arabic { font-family: 'Amiri', serif; font-size: 1.8rem; margin-bottom: 8px; }
     .random-asma-latin { font-size: 1rem; font-weight: 600; margin: 5px 0; color: var(--primary-cyan); }
 
-    .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
+    /* ==================== ALADHAN KALENDER STYLES ==================== */
+    .calendar-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
     }
-    .video-card {
+
+    .calendar-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: rgba(0,0,0,0.3);
+      border-radius: 2rem;
+      padding: 1rem 1.5rem;
+    }
+
+    .calendar-nav-buttons {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .calendar-nav-btn, .today-btn {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--border-color);
+      border-radius: 2rem;
+      padding: 0.5rem 1.2rem;
+      cursor: pointer;
+      color: white;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .calendar-nav-btn:hover, .today-btn:hover {
+      background: var(--primary-cyan);
+      color: #000;
+      box-shadow: 0 0 15px var(--cyan-shadow);
+    }
+
+    .calendar-settings {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .calendar-select {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--border-color);
+      border-radius: 2rem;
+      padding: 0.5rem 1rem;
+      color: white;
+      cursor: pointer;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    .calendar-select option { background: #0a0c10; }
+
+    .month-year-display {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--primary-cyan);
+      text-shadow: 0 0 8px var(--cyan-shadow);
+    }
+
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .weekday-cell {
+      text-align: center;
+      padding: 10px 5px;
+      font-weight: bold;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      background: rgba(0,242,255,0.08);
+      border-radius: 1rem;
+      color: var(--primary-cyan);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 1.5rem;
+      padding: 1rem;
+    }
+
+    .calendar-day {
       background: rgba(0,0,0,0.3);
       border-radius: 1rem;
-      overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      padding: 12px 8px;
+      min-height: 85px;
       border: 1px solid var(--border-color);
-      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .video-card:hover { 
-      transform: translateY(-6px) scale(1.02); 
-      border-color: var(--primary-cyan); 
-      box-shadow: 0 10px 20px var(--cyan-shadow);
+
+    .calendar-day:hover {
+      background: rgba(0,242,255,0.1);
+      transform: translateY(-2px);
+      border-color: var(--primary-cyan);
     }
-    .video-thumbnail { position: relative; overflow: hidden; }
-    .video-thumbnail img { width: 100%; aspect-ratio: 16/9; object-fit: cover; transition: transform 0.5s ease; }
-    .video-card:hover .video-thumbnail img { transform: scale(1.08); }
-    
-    .play-overlay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      background: rgba(0,0,0,0.7);
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
+
+    .calendar-day.today {
+      background: rgba(0,242,255,0.2);
+      border-color: var(--primary-cyan);
+      box-shadow: 0 0 10px var(--cyan-shadow);
+    }
+
+    .calendar-day.other-month {
+      opacity: 0.5;
+    }
+
+    .day-number {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .hijri-date {
+      font-size: 0.65rem;
+      opacity: 0.8;
+      font-family: 'Amiri', serif;
+      line-height: 1.3;
+    }
+
+    .hijri-month-name {
+      font-size: 0.6rem;
+      opacity: 0.6;
+    }
+
+    .calendar-loading {
+      text-align: center;
+      padding: 2rem;
+      color: var(--primary-cyan);
+    }
+
+    /* Converter */
+    .calendar-converter {
+      background: rgba(0,0,0,0.3);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .converter-title {
+      font-size: 0.9rem;
+      color: var(--primary-cyan);
+      margin-bottom: 1rem;
       display: flex;
       align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      opacity: 0.8;
+      gap: 8px;
     }
-    .video-card:hover .play-overlay { background: var(--primary-cyan); transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-    .play-overlay i { font-size: 1.5rem; color: white; transition: color 0.3s; }
-    .video-card:hover .play-overlay i { color: #000; }
-    .video-info { padding: 0.8rem; }
-    .video-title { font-size: 0.85rem; font-weight: 600; line-height: 1.3; }
-    .video-date { font-size: 0.7rem; opacity: 0.6; margin-top: 5px; }
+
+    .converter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+
+    .converter-group {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .converter-group label {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .converter-input {
+      width: 100%;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 0.6rem 1rem;
+      color: white;
+    }
+
+    .converter-btn {
+      background: var(--primary-cyan);
+      border: none;
+      border-radius: 2rem;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .converter-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 15px var(--cyan-shadow);
+    }
+
+    .converter-result {
+      margin-top: 1rem;
+      padding: 0.8rem;
+      border-radius: 1rem;
+      text-align: center;
+      background: rgba(0,242,255,0.1);
+    }
+
+    .converter-result.error {
+      background: rgba(255,0,60,0.2);
+    }
 
     .ayat-viewer {
       padding: 1rem;
@@ -1338,6 +1511,13 @@ footer {
       .counter-number { font-size: 4rem; letter-spacing: 5px; }
       .dzikir-button { width: 150px; height: 150px; font-size: 1rem; }
       .dzikir-button i { font-size: 2rem; }
+      .calendar-grid { gap: 4px; padding: 8px; }
+      .calendar-day { padding: 6px 4px; min-height: 65px; }
+      .day-number { font-size: 0.9rem; }
+      .hijri-date { font-size: 0.55rem; }
+      .converter-row { flex-direction: column; }
+      .converter-group { width: 100%; }
+      .calendar-weekdays .weekday-cell { font-size: 0.65rem; padding: 6px 2px; }
     }
 	
 	/* 2. KETERANGAN NEXT SHIFT: Efek Glitch Teks Tajam Akibat Overload */
@@ -1378,6 +1558,44 @@ footer {
   }
 }
 
+    /* PWA & Notification Banners - TIDAK MENGUBAH DESAIN ASLI */
+    .pwa-banner, .notif-banner {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, rgba(0,242,255,0.95), rgba(0,160,170,0.95));
+      backdrop-filter: blur(10px);
+      border-radius: 2rem;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      z-index: 10000;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #000;
+      box-shadow: 0 0 30px rgba(0,242,255,0.5);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .pwa-banner button, .notif-banner button {
+      background: #000;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 2rem;
+      cursor: pointer;
+      font-weight: bold;
+      color: var(--primary-cyan);
+    }
+    .pwa-banner button:hover, .notif-banner button:hover {
+      background: #fff;
+      transform: scale(1.02);
+    }
+    .hidden-banner {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -1385,17 +1603,32 @@ footer {
   <div class="cyber-scanner"></div>
   <div class="particles-container" id="particles"></div>
 
+  <!-- PWA INSTALL BANNER -->
+  <div id="pwaBanner" class="pwa-banner hidden-banner">
+    <span><i class="fas fa-mobile-alt"></i> Install SALSABILA di homescreen!</span>
+    <button id="confirmInstall">Install Sekarang</button>
+    <button id="dismissPWA" style="background:transparent; color:#000;">Tutup</button>
+  </div>
+
+  <!-- NOTIFICATION PERMISSION BANNER -->
+  <div id="notifBanner" class="notif-banner hidden-banner">
+    <span><i class="fas fa-bell"></i> Aktifkan notifikasi untuk pengingat sholat!</span>
+    <button id="enableNotif">Aktifkan</button>
+    <button id="dismissNotif" style="background:transparent; color:#000;">Nanti</button>
+  </div>
+
   <nav class="nav-dynamic">
     <div class="brand">SALSABILA | سَلْسَبِيلًا</div>
     <div class="nav-menu">
       <button class="nav-item active" data-section="jadwal"><i class="fas fa-clock"></i> Jadwal</button>
       <button class="nav-item" data-section="quran"><i class="fas fa-quran"></i> Qur'an</button>
       <button class="nav-item" data-section="asma"><i class="fas fa-praying-hands"></i> Asma</button>
-      <button class="nav-item" data-section="video"><i class="fas fa-video"></i> Video</button>
+      <button class="nav-item" data-section="kalender"><i class="fas fa-calendar-alt"></i> Kalender</button>
       <button class="nav-item" data-section="dzikir"><i class="fas fa-pray"></i> Dzikir</button>
       <button class="nav-item" data-section="qibla"><i class="fas fa-compass"></i> Kiblat</button>
       <button class="nav-item" id="adzanToggle"><i class="fas fa-volume-up"></i> Adzan ON</button>
       <button class="nav-item" id="themeToggle"><i class="fas fa-moon"></i> Tema</button>
+      <button class="nav-item" id="installPWA"><i class="fas fa-download"></i> Install App</button>
     </div>
   </nav>
 
@@ -1463,19 +1696,50 @@ footer {
     <div id="asmaList" class="asma-list"><div class="loading">Memuat Asmaul Husna...</div></div>
   </div>
 
-  <!-- VIDEO SECTION -->
-  <div id="videoSection" class="glass-panel hidden">
-    <div class="panel-header"><i class="fas fa-video" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>🎥 Video Kajian Terkini</h3></div>
-    <div class="channel-tabs" style="display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap;">
-      <button class="nav-item channel-tab active" data-channel="aagym"><i class="fas fa-mosque"></i> Aa Gym</button>
-      <button class="nav-item channel-tab" data-channel="adihidayat"><i class="fas fa-chalkboard-teacher"></i> Adi Hidayat</button>
-      <button class="nav-item channel-tab" data-channel="abdulsomad"><i class="fas fa-microphone-alt"></i> Abdul Somad</button>
+  <!-- KALENDER SECTION -->
+  <div id="kalenderSection" class="glass-panel hidden">
+    <div class="panel-header"><i class="fas fa-calendar-alt" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📅 Kalender Hijriah & Masehi</h3></div>
+    
+    <div class="calendar-container">
+      <div class="calendar-controls">
+        <div class="calendar-nav-buttons">
+          <button class="calendar-nav-btn" id="calPrev"><i class="fas fa-chevron-left"></i> Bulan Lalu</button>
+          <button class="today-btn" id="calToday"><i class="fas fa-calendar-day"></i> Hari Ini</button>
+          <button class="calendar-nav-btn" id="calNext">Bulan Depan <i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="month-year-display" id="monthYearDisplay">-</div>
+        <div class="calendar-settings">
+          <select id="calMethod" class="calendar-select">
+            <option value="HJCoSA">HJCoSA (Saudi Arabia)</option>
+            <option value="UAQ" selected>Ummul Qura</option>
+            <option value="DIYANET">Diyanet (Turkey)</option>
+            <option value="MATHEMATICAL">Mathematical</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="calendar-weekdays" id="weekdaysHeader"></div>
+      <div id="calendarGrid" class="calendar-grid"><div class="calendar-loading"><i class="fas fa-spinner fa-pulse"></i> Memuat kalender...</div></div>
+
+      <div class="calendar-converter">
+        <div class="converter-title"><i class="fas fa-exchange-alt"></i> Konversi Tanggal</div>
+        <div class="converter-row">
+          <div class="converter-group">
+            <label>Masehi → Hijriah</label>
+            <input type="date" id="ceToHijri" class="converter-input">
+          </div>
+          <div class="converter-group">
+            <label>Hijriah → Masehi</label>
+            <input type="text" id="hijriToCe" class="converter-input" placeholder="DD-MM-YYYY (contoh: 01-01-1447)">
+          </div>
+          <button class="converter-btn" id="convertDateBtn">Konversi</button>
+        </div>
+        <div id="convertResult" class="converter-result hidden"></div>
+      </div>
     </div>
-    <div id="videoContainer"><div class="loading">Memuat video...</div></div>
-    <div style="text-align: center; padding: 1rem; font-size: 0.7rem; opacity: 0.7;"><i class="fab fa-youtube"></i> Klik pada video untuk menonton di YouTube</div>
   </div>
 
-  <!-- DZIKIR COUNTER SECTION - TAB BARU -->
+  <!-- DZIKIR COUNTER SECTION -->
   <div id="dzikirSection" class="glass-panel hidden">
     <div class="panel-header"><i class="fas fa-pray" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📿 Dzikir Counter</h3></div>
     <div class="dzikir-section">
@@ -1507,7 +1771,7 @@ footer {
     </div>
   </div>
 
-  <!-- AYAT SECTION - DENGAN ANIMASI EXTREME -->
+  <!-- AYAT SECTION -->
   <div class="ayat-section">
     <div class="arabic-ayat">اِنَّ الصَّلٰوةَ كَانَتْ عَلَى الْمُؤْمِنِيْنَ كِتٰبًا مَّوْقُوْتًا</div>
     <div class="terjemahan-ayat">Artinya: "Sungguh, sholat itu adalah kewajiban yang ditentukan waktunya atas orang-orang yang beriman."</div>
@@ -1518,12 +1782,11 @@ footer {
   <div class="footer-laser-line"></div>
   
   <div class="footer-industrial-grid">
-    <!-- Kolom Brand -->
     <div class="footer-column-brand">
       <div class="footer-brand-title">SALSABILA DASHBOARD</div>
       <p class="footer-brand-desc">
         Dashboard Islami Digital dengan jadwal sholat real-time, Al-Qur'an 30 Juz, Asmaul Husna, 
-        video kajian terbaru, dzikir counter, dan kompas kiblat berbasis lokasi.
+        kalender Hijriah & Masehi (AlAdhan API), dzikir counter, dan kompas kiblat berbasis lokasi.
       </p>
       <div class="footer-status-panel">
         <div class="status-node"><span class="blink-dot"></span> SISTEM: <span class="text-alert">AKTIF</span></div>
@@ -1531,31 +1794,28 @@ footer {
       </div>
     </div>
 
-    <!-- Modul Layanan -->
     <div class="footer-column">
       <h4>LAYANAN</h4>
       <ul>
         <li><a href="#" data-section="jadwal"><i class="fas fa-angle-right"></i> Jadwal Sholat Real-time</a></li>
         <li><a href="#" data-section="quran"><i class="fas fa-angle-right"></i> Al-Qur'an 30 Juz</a></li>
         <li><a href="#" data-section="asma"><i class="fas fa-angle-right"></i> Asmaul Husna 99</a></li>
-        <li><a href="#" data-section="video"><i class="fas fa-angle-right"></i> Video Kajian</a></li>
+        <li><a href="#" data-section="kalender"><i class="fas fa-angle-right"></i> Kalender Hijriah & Masehi</a></li>
         <li><a href="#" data-section="dzikir"><i class="fas fa-angle-right"></i> Dzikir Counter</a></li>
         <li><a href="#" data-section="qibla"><i class="fas fa-angle-right"></i> Kompas Kiblat 3D</a></li>
       </ul>
     </div>
 
-    <!-- Informasi Teknis -->
     <div class="footer-column">
       <h4>TEKNIS</h4>
       <ul>
-        <li><a href="#"><i class="fas fa-book"></i> API: Al-Quran Cloud, YouTube RSS</a></li>
+        <li><a href="#"><i class="fas fa-book"></i> API: Al-Quran Cloud, AlAdhan</a></li>
         <li><a href="#"><i class="fas fa-bug"></i> Laporkan Masalah</a></li>
         <li><a href="#"><i class="fas fa-wrench"></i> Riwayat Pembaruan</a></li>
         <li><a href="#"><i class="fas fa-server"></i> Status Server: <span style="color: var(--primary-cyan)">ONLINE</span></a></li>
       </ul>
     </div>
 
-    <!-- Kontak & Sosial -->
     <div class="footer-column">
       <h4>PENGEMBANG</h4>
       <p class="footer-info-text"><i class="fas fa-map-marker-alt"></i> Gumitama, Padalarang, Jawa Barat, Indonesia</p>
@@ -1568,17 +1828,15 @@ footer {
     </div>
   </div>
 
-  <!-- Disclaimer Korporat -->
   <div class="footer-legal-notice">
     <p><strong>DISKLAIMER:</strong> 
     Jadwal sholat menggunakan algoritma dan data dari API eksternal (Aladhan/Al-Quran Cloud). 
     Akurasi kompas kiblat bergantung pada sensor magnetik perangkat keras pengguna. 
     Adzan diambil dari file MP3 eksternal dan hanya aktif jika pengguna mengaktifkan fitur "Adzan ON". 
-    Video kajian diambil dari feed RSS YouTube resmi masing-masing channel.
+    Kalender Hijriah menggunakan API AlAdhan dengan berbagai metode perhitungan.
     </p>
   </div>
 
-  <!-- Hak Cipta -->
   <div class="footer-copyright">
     © <span id="currentYear"></span> SALSABILA ISLAMIC DASHBOARD by Gumilar Utamas. 
   </div>
@@ -1589,7 +1847,7 @@ footer {
   </audio>
 
   <script>
-    // ==================== DZIKIR COUNTER LOGIC ====================
+    // ==================== DZIKIR COUNTER LOGIC (DENGAN VIBRATION) ====================
     let dzikirCount = localStorage.getItem('dzikirCount') ? parseInt(localStorage.getItem('dzikirCount')) : 0;
     const counterValueEl = document.getElementById('counterValue');
     const dzikirButton = document.getElementById('dzikirButton');
@@ -1600,14 +1858,43 @@ footer {
       localStorage.setItem('dzikirCount', dzikirCount);
     }
 
+    // VIBRATION FUNCTIONS
+    function vibrateShort() {
+      if ('vibrate' in navigator) navigator.vibrate(50);
+    }
+
+    function vibrateLong() {
+      if ('vibrate' in navigator) navigator.vibrate([200, 100, 200, 100, 300]);
+    }
+
+    // NOTIFICATION SENDER
+    let notifPermission = localStorage.getItem('notifPermission') === 'granted';
+    
+    function sendNotification(title, body, tag = null) {
+      if (notifPermission && 'Notification' in window && Notification.permission === 'granted') {
+        const options = { body: body, icon: '/favicon.ico', badge: '/favicon.ico', vibrate: [200, 100, 200] };
+        if (tag) options.tag = tag;
+        navigator.serviceWorker.ready.then(registration => {
+          registration.showNotification(title, options);
+        });
+      }
+    }
+
+    // MODIFIED addDzikir DENGAN VIBRATION
     function addDzikir() {
       dzikirCount++;
       updateCounterDisplay();
-      
-      // Efek ripple saat tombol diklik
       createRippleEffect(event);
       
-      // Efek getar pada angka
+      // VIBRASI PENDEK setiap dzikir
+      vibrateShort();
+      
+      // VIBRASI PANJANG saat mencapai angka tertentu
+      if (dzikirCount === 33 || dzikirCount === 100 || dzikirCount === 333 || dzikirCount === 500 || dzikirCount === 1000) {
+        vibrateLong();
+        sendNotification('✨ Pencapaian Dzikir ✨', `Mabruk! Anda telah mencapai ${dzikirCount} x dzikir.`);
+      }
+      
       counterValueEl.style.transform = 'scale(1.1)';
       setTimeout(() => {
         counterValueEl.style.transform = 'scale(1)';
@@ -1617,8 +1904,6 @@ footer {
     function resetDzikir() {
       dzikirCount = 0;
       updateCounterDisplay();
-      
-      // Efek reset dengan animasi
       counterValueEl.style.opacity = '0.5';
       setTimeout(() => {
         counterValueEl.style.opacity = '1';
@@ -1631,16 +1916,11 @@ footer {
       ripple.style.left = event.clientX + 'px';
       ripple.style.top = event.clientY + 'px';
       document.body.appendChild(ripple);
-      
-      setTimeout(() => {
-        ripple.remove();
-      }, 500);
+      setTimeout(() => ripple.remove(), 500);
     }
 
     dzikirButton.addEventListener('click', addDzikir);
     resetButton.addEventListener('click', resetDzikir);
-    
-    // Inisialisasi tampilan counter
     updateCounterDisplay();
 
     // ==================== DATA ASMAUL HUSNA LENGKAP 99 ====================
@@ -1751,12 +2031,6 @@ footer {
       Imsak: "04:23", Terbit: "05:44"
     };
     
-    const channels = {
-      aagym: { name: "Aa Gym", channelId: "UCSUp5kWQDhlnI10JHZ9dFow", handle: "@aagym" },
-      adihidayat: { name: "Adi Hidayat", channelId: "UCeFNvG2pFofx2FsuD9Rgh9A", handle: "@AdiHidayatOfficial" },
-      abdulsomad: { name: "Abdul Somad", channelId: "UC9pPDYbW1otFmG8gILhKljQ", handle: "@ustadzabdulsomadofficial" }
-    };
-    
     let currentLat = -6.8906, currentLon = 107.6135;
     let currentCityOnly = "Bandung", currentTimezone = "WIB";
     let prayerTimes = { ...DEFAULT_PRAYER_TIMES };
@@ -1764,10 +2038,11 @@ footer {
     let currentPrayerList = [], surahList = [], asmaList = [];
     let adzanEnabled = localStorage.getItem('adzanEnabled') === 'true';
     let playedAdzanPrayers = {};
+    let sentNotificationPrayers = {};
     let qiblaBaseAngle = 295;
     const adzanAudio = document.getElementById('adzanAudio');
     
-    const sections = ['jadwalSection', 'quranSection', 'asmaSection', 'videoSection', 'dzikirSection', 'qiblaSection'];
+    const sections = ['jadwalSection', 'quranSection', 'asmaSection', 'kalenderSection', 'dzikirSection', 'qiblaSection'];
     const prayerGrid = document.getElementById('prayerGrid');
     
     // ==================== PARTICLES ====================
@@ -1810,13 +2085,10 @@ footer {
       return "WIT";
     }
     
-    // Update warna status badge berdasarkan sisa waktu
     function updateStatusBadgeColor(remainingSeconds) {
       const badge = document.getElementById("statusBadge");
       if (!badge) return;
-      
       badge.classList.remove("green", "yellow", "red");
-      
       if (remainingSeconds > 3600) {
         badge.classList.add("green");
       } else if (remainingSeconds > 900) {
@@ -1883,6 +2155,14 @@ footer {
         document.getElementById("nextPrayerNameHero").innerText = displayName;
         document.getElementById("nextPrayerCountdownHero").innerText = formatCountdown(remainingMs);
         document.getElementById("statusBadge").innerHTML = `<i class="fas fa-hourglass-start"></i> Menuju ${displayName}`;
+        
+        // NOTIFICATION 10 MENIT SEBELUM SHOLAT
+        const remainingMinutes = Math.floor(remainingMs / 60000);
+        if (remainingMinutes === 10 && !sentNotificationPrayers[nextPrayer.key]) {
+          sentNotificationPrayers[nextPrayer.key] = true;
+          sendNotification('🕌 Pengingat Sholat', `⏰ ${displayName} akan masuk dalam 10 menit. Segera persiapkan diri!`);
+          setTimeout(() => delete sentNotificationPrayers[nextPrayer.key], 600000);
+        }
       }
       
       document.querySelectorAll('.prayer-box').forEach(card => {
@@ -1972,7 +2252,6 @@ footer {
       document.getElementById("surahList").innerHTML = html;
     }
     
-    // Fungsi untuk menambahkan class adzan-alert-mode saat adzan diputar
     function startAdzanAlertMode() {
       document.body.classList.add('adzan-alert-mode');
       setTimeout(() => {
@@ -2044,30 +2323,6 @@ footer {
       }
     };
     
-    async function loadChannelVideos(channelId, channelName, channelHandle) {
-      const container = document.getElementById("videoContainer");
-      container.innerHTML = '<div class="loading">Memuat video...</div>';
-      try {
-        const rssUrl = `https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-        const res = await fetch(rssUrl);
-        const data = await res.json();
-        if (data.status === 'ok' && data.items?.length) {
-          let html = '<div class="video-grid">';
-          let delay = 0.05;
-          for (let item of data.items.slice(0, 9)) {
-            let vidId = item.link.split('v=')[1]?.split('&')[0];
-            html += `<div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=${vidId}', '_blank')" style="animation: fadeInUp 0.5s ease-out ${delay}s both;">
-              <div class="video-thumbnail"><img src="${item.thumbnail}" loading="lazy"><div class="play-overlay"><i class="fab fa-youtube"></i></div></div>
-              <div class="video-info"><div class="video-title">${escapeHtml(item.title)}</div><div class="video-date">${new Date(item.pubDate).toLocaleDateString('id-ID')}</div></div>
-            </div>`;
-            delay += 0.05;
-          }
-          html += '</div>';
-          container.innerHTML = html;
-        } else throw new Error();
-      } catch(e) { container.innerHTML = `<div class="loading">Gagal memuat video. <a href="https://www.youtube.com/${channelHandle}" target="_blank" style="color:var(--primary-cyan);">Kunjungi Channel</a></div>`; }
-    }
-    
     function escapeHtml(text) { return text?.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}) || ''; }
     
     function updateQiblaDirection() {
@@ -2127,7 +2382,7 @@ footer {
         if(targetEl) targetEl.classList.remove('hidden');
         if (section === 'quranSection' && !surahList.length) fetchSurahList();
         if (section === 'asmaSection' && !asmaList.length) { asmaList = fullAsmaulHusna; renderAsmaList(asmaList); updateRandomAsma(); }
-        if (section === 'videoSection') loadChannelVideos(channels.aagym.channelId, "Aa Gym", "@aagym");
+        if (section === 'kalenderSection') renderKalender();
         if (section === 'qiblaSection') updateQiblaDirection();
       });
     });
@@ -2169,6 +2424,7 @@ footer {
         adzanAudio.play().catch(e=>console.log);
       }
       startAdzanAlertMode();
+      sendNotification('🕌 Waktu Sholat', `📢 Waktu ${prayer} telah masuk. Segera tunaikan sholat!`);
       setTimeout(() => { delete playedAdzanPrayers[prayer]; }, 60000);
     }
     
@@ -2251,6 +2507,252 @@ footer {
         if(iqamahZone) iqamahZone.classList.add("iqamah-hidden");
       }
     }
+
+    // ==================== ALADHAN KALENDER LOGIC ====================
+    let kalenderDate = new Date();
+    let kalenderMethod = 'UAQ';
+    let kalenderCache = {};
+
+    async function fetchAlAdhanCalendar(year, month, method) {
+      const cacheKey = `${year}_${month}_${method}`;
+      if (kalenderCache[cacheKey]) return kalenderCache[cacheKey];
+      
+      try {
+        const url = `https://api.aladhan.com/v1/gToHCalendar/${month}/${year}?calendarMethod=${method}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.code === 200 && data.data) {
+          kalenderCache[cacheKey] = data.data;
+          return data.data;
+        }
+        return null;
+      } catch(e) {
+        console.error('AlAdhan Calendar fetch error:', e);
+        return null;
+      }
+    }
+
+    async function renderKalender() {
+      const grid = document.getElementById('calendarGrid');
+      if (!grid) return;
+      
+      grid.innerHTML = '<div class="calendar-loading"><i class="fas fa-spinner fa-pulse"></i> Memuat kalender...</div>';
+      
+      const year = kalenderDate.getFullYear();
+      const month = kalenderDate.getMonth() + 1;
+      const firstDayOfMonth = new Date(year, kalenderDate.getMonth(), 1);
+      const startDayOfWeek = firstDayOfMonth.getDay();
+      
+      const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      document.getElementById('monthYearDisplay').innerHTML = `${monthNames[kalenderDate.getMonth()]} ${year}`;
+      
+      const weekdays = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+      const weekdayContainer = document.getElementById('weekdaysHeader');
+      if (weekdayContainer) {
+        weekdayContainer.innerHTML = weekdays.map(day => `<div class="weekday-cell">${day}</div>`).join('');
+      }
+      
+      const calendarData = await fetchAlAdhanCalendar(year, month, kalenderMethod);
+      
+      if (!calendarData) {
+        grid.innerHTML = '<div class="calendar-loading">Gagal memuat data kalender. Silakan coba lagi.</div>';
+        return;
+      }
+      
+      const daysInMonth = new Date(year, kalenderDate.getMonth() + 1, 0).getDate();
+      const prevMonthDays = new Date(year, kalenderDate.getMonth(), 0).getDate();
+      
+      const today = new Date();
+      const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+      
+      let html = '';
+      
+      for (let i = startDayOfWeek - 1; i >= 0; i--) {
+        const prevDay = prevMonthDays - i;
+        html += `
+          <div class="calendar-day other-month">
+            <div class="day-number">${prevDay}</div>
+            <div class="hijri-date">-</div>
+          </div>
+        `;
+      }
+      
+      for (let day = 1; day <= daysInMonth; day++) {
+        const gregorianDate = `${String(day).padStart(2,'0')}-${String(month).padStart(2,'0')}-${year}`;
+        const dayData = calendarData.find(d => d.gregorian.date === gregorianDate);
+        
+        const isToday = `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}` === todayStr;
+        
+        let hijriText = '';
+        if (dayData && dayData.hijri) {
+          hijriText = `${dayData.hijri.day} ${dayData.hijri.month.en}`;
+        } else {
+          hijriText = '-';
+        }
+        
+        let classes = 'calendar-day';
+        if (isToday) classes += ' today';
+        
+        html += `
+          <div class="${classes}">
+            <div class="day-number">${day}</div>
+            <div class="hijri-date">${hijriText}</div>
+          </div>
+        `;
+      }
+      
+      const totalCells = Math.ceil((startDayOfWeek + daysInMonth) / 7) * 7;
+      const remainingCells = totalCells - (startDayOfWeek + daysInMonth);
+      for (let i = 1; i <= remainingCells; i++) {
+        html += `
+          <div class="calendar-day other-month">
+            <div class="day-number">${i}</div>
+            <div class="hijri-date">-</div>
+          </div>
+        `;
+      }
+      
+      grid.innerHTML = html;
+    }
+
+    async function convertCEtoHijri() {
+      const inputDate = document.getElementById('ceToHijri').value;
+      if (!inputDate) { showConvertResult('Masukkan tanggal Masehi', true); return; }
+      
+      const [year, month, day] = inputDate.split('-');
+      const url = `https://api.aladhan.com/v1/gToH/${day}-${month}-${year}?calendarMethod=${kalenderMethod}`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.code === 200 && data.data) {
+          const hijri = data.data.hijri;
+          showConvertResult(`${inputDate} (M) = ${hijri.day} ${hijri.month.en} ${hijri.year} H (${hijri.weekday.en})`, false);
+        } else throw new Error();
+      } catch(e) { showConvertResult('Gagal konversi', true); }
+    }
+
+    async function convertHijriToCE() {
+      let hijriDate = document.getElementById('hijriToCe').value.trim();
+      if (!hijriDate) { showConvertResult('Masukkan tanggal Hijriah (DD-MM-YYYY)', true); return; }
+      if (!/^\d{2}-\d{2}-\d{4}$/.test(hijriDate)) { showConvertResult('Format harus DD-MM-YYYY (contoh: 01-01-1447)', true); return; }
+      
+      const url = `https://api.aladhan.com/v1/hToG/${hijriDate}?calendarMethod=${kalenderMethod}`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.code === 200 && data.data) {
+          const gregorian = data.data.gregorian;
+          showConvertResult(`${hijriDate} (H) = ${gregorian.day} ${gregorian.month.en} ${gregorian.year} M (${gregorian.weekday.en})`, false);
+        } else throw new Error();
+      } catch(e) { showConvertResult('Gagal konversi', true); }
+    }
+
+    function showConvertResult(msg, isError) {
+      const resultDiv = document.getElementById('convertResult');
+      resultDiv.textContent = msg;
+      resultDiv.classList.remove('hidden');
+      resultDiv.className = 'converter-result' + (isError ? ' error' : '');
+      setTimeout(() => resultDiv.classList.add('hidden'), 4000);
+    }
+
+    if (document.getElementById('calPrev')) {
+      document.getElementById('calPrev').addEventListener('click', () => { 
+        kalenderDate.setMonth(kalenderDate.getMonth() - 1); 
+        renderKalender(); 
+      });
+      document.getElementById('calNext').addEventListener('click', () => { 
+        kalenderDate.setMonth(kalenderDate.getMonth() + 1); 
+        renderKalender(); 
+      });
+      document.getElementById('calToday').addEventListener('click', () => { 
+        kalenderDate = new Date(); 
+        renderKalender(); 
+      });
+      document.getElementById('calMethod').addEventListener('change', (e) => { 
+        kalenderMethod = e.target.value; 
+        kalenderCache = {}; 
+        renderKalender(); 
+      });
+      document.getElementById('convertDateBtn').addEventListener('click', () => {
+        if (document.getElementById('ceToHijri').value) convertCEtoHijri();
+        else if (document.getElementById('hijriToCe').value) convertHijriToCE();
+        else showConvertResult('Pilih salah satu tanggal', true);
+      });
+    }
+
+    // ==================== PWA INSTALL PROMPT ====================
+    let deferredPrompt = null;
+    let isPWAInstalled = false;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('pwaBanner').classList.remove('hidden-banner');
+    });
+
+    window.addEventListener('appinstalled', () => {
+      isPWAInstalled = true;
+      deferredPrompt = null;
+      document.getElementById('pwaBanner').classList.add('hidden-banner');
+    });
+
+    document.getElementById('confirmInstall')?.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') isPWAInstalled = true;
+        deferredPrompt = null;
+        document.getElementById('pwaBanner').classList.add('hidden-banner');
+      }
+    });
+
+    document.getElementById('dismissPWA')?.addEventListener('click', () => {
+      document.getElementById('pwaBanner').classList.add('hidden-banner');
+    });
+
+    document.getElementById('installPWA')?.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') isPWAInstalled = true;
+        deferredPrompt = null;
+      } else if (!isPWAInstalled) {
+        alert('Klik menu browser (3 titik) → Install App / Install SALSABILA');
+      }
+    });
+
+    // ==================== NOTIFICATION PERMISSION ====================
+    
+    async function requestNotificationPermission() {
+      if ('Notification' in window) {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          notifPermission = true;
+          localStorage.setItem('notifPermission', 'granted');
+          document.getElementById('notifBanner').classList.add('hidden-banner');
+          sendNotification('SALSABILA', '✅ Notifikasi diaktifkan! Pengingat sholat aktif.');
+        }
+      }
+    }
+
+    document.getElementById('enableNotif')?.addEventListener('click', requestNotificationPermission);
+    document.getElementById('dismissNotif')?.addEventListener('click', () => {
+      document.getElementById('notifBanner').classList.add('hidden-banner');
+    });
+
+    if ('Notification' in window && Notification.permission === 'default' && !localStorage.getItem('notifPermission')) {
+      setTimeout(() => document.getElementById('notifBanner').classList.remove('hidden-banner'), 3000);
+    }
+    if ('Notification' in window && Notification.permission === 'granted') {
+      notifPermission = true;
+    }
+
+    // ==================== SERVICE WORKER REGISTRATION ====================
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        console.log('Service Worker registered');
+      }).catch(err => console.log('SW registration failed:', err));
+    }
     
     renderPrayerSchedule();
     initLocation();
@@ -2262,6 +2764,7 @@ footer {
     updateRandomAsma();
     updateAdzanUI();
     updateClock();
+    renderKalender();
     
     setInterval(() => {
       const now = new Date();
@@ -2282,15 +2785,6 @@ footer {
     }, 1000);
     
     setInterval(fetchWeather, 600000);
-    
-    document.querySelectorAll('.channel-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.channel-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const ch = tab.dataset.channel;
-        loadChannelVideos(channels[ch].channelId, channels[ch].name, channels[ch].handle);
-      });
-    });
     
     document.getElementById('currentYear').innerText = new Date().getFullYear();
   </script>
