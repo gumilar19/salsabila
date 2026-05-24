@@ -118,10 +118,7 @@ salsabila/
 | **Email** | [gumitamaa@gmail.com](mailto:gumitamaa@gmail.com) |
 | **Lokasi** | Gumitama, Padalarang, Jawa Barat, Indonesia |
 | **GitHub** | [@gumilar19](https://github.com/gumilar19) |
-| **LinkedIn** | [Gumilar Utamas](https://linkedin.com/in/gumilar-utamas) |
-| **Instagram** | [@gumilar_utamas](https://instagram.com/gumilar_utamas) |
-| **Website** | [gumilarutamas.my.id](https://gumilarutamas.my.id) |
-| **Telegram** | [@gumitama](https://t.me/gumitama) |
+| **Telegram** | [@gumitama](https://t.me/GumilarUtamas) |
 
 </div>
 
@@ -187,7 +184,7 @@ Jika Anda merasa terbantu dengan **SALSABILA**, dukung proyek ini dengan cara:
 | 🐛 **Laporkan Issue** | [Buka Issue Baru](https://github.com/gumilar19/salsabila/issues) |
 | 💡 **Kirim Saran** | Pull Request atau diskusi di Issues |
 | 📢 **Share ke Teman** | Bagikan ke keluarga dan teman |
-| 💖 **Donasi** | [Trakteer](https://trakteer.id/gumitama) atau [Saweria](https://saweria.co/gumitama) |
+
 
 </div>
 
@@ -209,11 +206,9 @@ Ada pertanyaan, saran, atau ingin berkolaborasi? Hubungi saya:
 | Platform | Akta | Link |
 |----------|------|------|
 | 📧 **Email** | gumitamaa@gmail.com | [Kirim Email](mailto:gumitamaa@gmail.com) |
-| 💬 **Telegram** | @gumitama | [Chat di Telegram](https://t.me/gumitama) |
+| 💬 **Telegram** | @gumitama | [Chat di Telegram](https://t.me/GumilarUtamas) |
 | 🐙 **GitHub** | @gumilar19 | [GitHub Profile](https://github.com/gumilar19) |
-| 📱 **Instagram** | @gumilar_utamas | [Follow Instagram](https://instagram.com/gumilar_utamas) |
-| 💼 **LinkedIn** | Gumilar Utamas | [LinkedIn Profile](https://linkedin.com/in/gumilar-utamas) |
-| 🌐 **Website** | gumilarutamas.my.id | [Kunjungi Website](https://gumilarutamas.my.id) |
+
 
 </div>
 
@@ -221,7 +216,7 @@ Ada pertanyaan, saran, atau ingin berkolaborasi? Hubungi saya:
 
 Saya biasanya online pada jam:
 
-- 🕐 **Senin - Jumat**: 19:00 - 22:00 WIB
+- 🕐 **Senin - Jumat**: 09:00 - 17:00 WIB
 - 🕐 **Sabtu - Minggu**: 09:00 - 22:00 WIB
 
 > ⚡ **Respons Cepat**: Untuk pertanyaan teknis atau bug report, lebih baik buka **Issue** di GitHub agar terdokumentasi dengan baik.
