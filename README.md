@@ -1,4 +1,50 @@
 <div align="center">
+<svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00f2ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00ff88;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff003c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff8800;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="300" height="200" rx="20" fill="#0a0c10" stroke="url(#cyanGrad)" stroke-width="1.5"/>
+  
+  <!-- Bintang segi delapan besar -->
+  <polygon points="150,30 170,75 215,90 170,105 150,150 130,105 85,90 130,75" 
+           fill="none" stroke="url(#cyanGrad)" stroke-width="2" filter="url(#glow)" opacity="0.8"/>
+  
+  <!-- Lingkaran konsentris -->
+  <circle cx="150" cy="90" r="40" fill="none" stroke="url(#redGrad)" stroke-width="1" opacity="0.6" filter="url(#glow)"/>
+  <circle cx="150" cy="90" r="25" fill="none" stroke="url(#cyanGrad)" stroke-width="1.5" opacity="0.8" filter="url(#glow)"/>
+  
+  <!-- Kaligrafi stylized -->
+  <text x="150" y="100" text-anchor="middle" font-family="Amiri, serif" 
+        font-size="28" fill="#00f2ff" filter="url(#glow)" opacity="0.9">سَلْسَبِيلًا</text>
+  
+  <!-- Teks SALSABILA -->
+  <text x="150" y="140" text-anchor="middle" font-family="Orbitron, sans-serif" 
+        font-size="14" fill="#00f2ff" font-weight="bold" letter-spacing="3" filter="url(#glow)">SALSABILA</text>
+  
+  <!-- Subtitle -->
+  <text x="150" y="160" text-anchor="middle" font-family="Barlow, sans-serif" 
+        font-size="8" fill="#00ff88" letter-spacing="2" opacity="0.7">CYBER ISLAMIC DASHBOARD</text>
+  
+  <!-- Garis dekorasi -->
+  <line x1="60" y1="175" x2="240" y2="175" stroke="url(#cyanGrad)" stroke-width="0.5" opacity="0.5"/>
+  <line x1="100" y1="180" x2="200" y2="180" stroke="url(#redGrad)" stroke-width="0.5" opacity="0.3"/>
+</svg>
 
 <img src="https://raw.githubusercontent.com/gumilar19/salsabila/main/icon-192.png" width="120" alt="SALSABILA Logo">
 
