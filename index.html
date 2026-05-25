@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#0a0c10">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/gumilar19/salsabila/main/icon-192.png">
+  <title>SALSABILA | Islamic Dashboard</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Barlow:ital,wght@0,400;0,700;1,800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    /* ==================== LOADER APP STYLES ==================== */
+    #appLoader {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(0,242,255,.08), transparent 30%),
+                  radial-gradient(circle at bottom right, rgba(255,0,60,.08), transparent 30%),
+                  #05070b;
+      z-index: 999999;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .loader-bg-grid {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(0,242,255,.06) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(0,242,255,.06) 1px, transparent 1px);
+      background-size: 50px 50px;
+      transform: perspective(900px) rotateX(75deg);
+      animation: gridMoveLoader 12s linear infinite;
+      opacity: .25;
+    }
+
+    @keyframes gridMoveLoader {
+      from { transform: perspective(900px) rotateX(75deg) translateY(0); }
+      to { transform: perspective(900px) rotateX(75deg) translateY(50px); }
+    }
+
+    .loader-core {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: min(90%, 520px);
+      text-align: center;
+    }
+
+    .loader-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(0,242,255,.15);
+    }
+
+    .ring-1 {
+      width: 280px;
+      height: 280px;
+      animation: rotateRingLoader 12s linear infinite;
+    }
+
+    .ring-2 {
+      width: 360px;
+      height: 360px;
+      border-style: dashed;
+      animation: rotateRingReverseLoader 18s linear infinite;
+    }
+
+    @keyframes rotateRingLoader {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes rotateRingReverseLoader {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    .loader-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      line-height: 1;
+      font-weight: 900;
+      margin-bottom: 25px;
+      filter: drop-shadow(0 0 15px var(--cyan-shadow, rgba(0,242,255,0.6)));
+      position: relative;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 3px 0 0 rgba(255, 0, 60, 0.6), -3px 0 0 rgba(0, 242, 255, 0.6), 0 0 15px rgba(0,242,255,0.6);
+      animation: holoVibrateLoader 2.5s infinite linear alternate-reverse !important;
+      letter-spacing: 8px;
+    }
+
+    @keyframes holoVibrateLoader {
+      0% { 
+        text-shadow: 3px 0 0 rgba(255,0,60,0.6), -3px 0 0 rgba(0,242,255,0.6), 0 0 15px rgba(0,242,255,0.6);
+        transform: translate(0, 0) skewX(0deg);
+      }
+      20% { 
+        text-shadow: 2px -1px 0 rgba(255,0,60,0.5), -2px 1px 0 rgba(0,242,255,0.7), 0 0 20px rgba(0,242,255,0.6);
+        transform: translate(-1px, 1px) skewX(0deg);
+      }
+      38% {
+        text-shadow: 5px 0 0 rgba(255,0,60,0.9), -5px 0 0 rgba(0,242,255,0.9), 0 0 30px #00f2ff;
+        transform: translate(2px, -1px) skewX(-4deg);
+        filter: brightness(1.5);
+      }
+      40% {
+        text-shadow: 1px 2px 0 rgba(255,0,60,0.3), -1px -2px 0 rgba(0,242,255,0.5);
+        transform: translate(0, 0) skewX(0deg);
+        filter: brightness(1);
+      }
+      70% {
+        text-shadow: -3px 0 0 rgba(255,0,60,0.6), 3px 0 0 rgba(0,242,255,0.6), 0 0 15px rgba(0,242,255,0.6);
+        transform: translate(1px, 1px) skewX(0deg);
+      }
+      100% { 
+        text-shadow: 3px 0 0 rgba(255,0,60,0.6), -3px 0 0 rgba(0,242,255,0.6), 0 0 15px rgba(0,242,255,0.6);
+        transform: translate(0, 0) skewX(0deg);
+      }
+    }
+
+    .loader-arabic {
+      font-family: 'Amiri', serif;
+      font-size: 1.5rem;
+      color: #00f2ff;
+      margin-bottom: 14px;
+      text-shadow: 0 0 20px rgba(0,242,255,.35);
+    }
+
+    .loader-subtitle {
+      font-family: monospace;
+      font-size: .9rem;
+      letter-spacing: 3px;
+      color: #9ed8ff;
+      margin-bottom: 35px;
+      opacity: .8;
+    }
+
+    .loader-bar {
+      width: 100%;
+      max-width: 420px;
+      height: 6px;
+      background: #111827;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(0,242,255,.1);
+      margin-bottom: 18px;
+    }
+
+    .loader-progress {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #00f2ff, #00ff88, #00f2ff);
+      box-shadow: 0 0 15px #00f2ff, 0 0 40px rgba(0,242,255,.35);
+      animation: loadingLoader 3s ease forwards;
+    }
+
+    @keyframes loadingLoader {
+      to { width: 100%; }
+    }
+
+    .loader-bar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+      animation: scanLoader 1.5s linear infinite;
+    }
+
+    @keyframes scanLoader {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(100%); }
+    }
+
+    .loader-percent {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      color: #00ff88;
+      margin-bottom: 28px;
+      text-shadow: 0 0 15px rgba(0,255,136,.45);
+    }
+
+    .loader-terminal {
+      width: 100%;
+      max-width: 460px;
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(0,242,255,.08);
+      padding: 18px;
+      text-align: left;
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 0 30px rgba(0,242,255,.04), 0 0 30px rgba(0,0,0,.3);
+    }
+
+    .terminal-line {
+      font-family: monospace;
+      font-size: .82rem;
+      color: #00ff88;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: terminalRevealLoader .4s forwards;
+    }
+
+    .terminal-line:nth-child(1) { animation-delay: .3s; }
+    .terminal-line:nth-child(2) { animation-delay: .8s; }
+    .terminal-line:nth-child(3) { animation-delay: 1.2s; }
+    .terminal-line:nth-child(4) { animation-delay: 1.6s; }
+    .terminal-line:nth-child(5) { animation-delay: 2s; }
+    .terminal-line:nth-child(6) { animation-delay: 2.3s; }
+    .terminal-line:nth-child(7) { animation-delay: 2.6s; }
+
+    @keyframes terminalRevealLoader {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .loader-crt {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(255,255,255,.02) 50%, rgba(0,0,0,.08) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      opacity: .15;
+    }
+
+    @media(max-width:700px){
+      .loader-logo { letter-spacing: 4px; font-size: clamp(2rem, 6vw, 3.5rem); }
+      .loader-arabic { font-size: 1.2rem; }
+      .loader-terminal { padding: 14px; }
+      .terminal-line { font-size: .7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== APP LOADER ==================== -->
+  <div id="appLoader">
+    <div class="loader-bg-grid"></div>
+    <div class="loader-crt"></div>
+    <div class="loader-core">
+      <div class="loader-ring ring-1"></div>
+      <div class="loader-ring ring-2"></div>
+      <div class="loader-logo">SALSABILA</div>
+      <div class="loader-arabic">سَلْسَبِيلًا</div>
+      <div class="loader-subtitle">INITIALIZING SPIRITUAL CORE...</div>
+      <div class="loader-bar"><div class="loader-progress"></div></div>
+      <div class="loader-percent" id="loaderPercent">0%</div>
+      <div class="loader-terminal">
+        <div class="terminal-line">> BOOT_SEQUENCE : OK</div>
+        <div class="terminal-line">> QURAN_ENGINE : LOADING</div>
+        <div class="terminal-line">> PRAYER_API : CONNECTING</div>
+        <div class="terminal-line">> GPS_MODULE : SEARCHING</div>
+        <div class="terminal-line">> PWA_CACHE : SYNCING</div>
+        <div class="terminal-line">> NOTIFICATION_SERVICE : REGISTERED</div>
+        <div class="terminal-line">> SYSTEM_STATUS : READY</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cyber-scanner"></div>
+  <div class="particles-container" id="particles"></div>
+
+  <!-- PWA INSTALL BANNER -->
+  <div id="pwaBanner" class="pwa-banner hidden-banner">
+    <span><i class="fas fa-mobile-alt"></i> Install SALSABILA di homescreen!</span>
+    <button id="confirmInstall">Install Sekarang</button>
+    <button id="dismissPWA" style="background:transparent; color:#000;">Tutup</button>
+  </div>
+
+  <!-- NOTIFICATION PERMISSION BANNER -->
+  <div id="notifBanner" class="notif-banner hidden-banner">
+    <span><i class="fas fa-bell"></i> Aktifkan notifikasi untuk pengingat sholat!</span>
+    <button id="enableNotif">Aktifkan</button>
+    <button id="dismissNotif" style="background:transparent; color:#000;">Nanti</button>
+  </div>
+
+  <nav class="nav-dynamic">
+    <div class="brand">SALSABILA | سَلْسَبِيلًا</div>
+    <div class="nav-menu">
+      <button class="nav-item active" data-section="jadwal"><i class="fas fa-clock"></i> Jadwal</button>
+      <button class="nav-item" data-section="quran"><i class="fas fa-quran"></i> Qur'an</button>
+      <button class="nav-item" data-section="asma"><i class="fas fa-praying-hands"></i> Asma</button>
+      <button class="nav-item" data-section="kalender"><i class="fas fa-calendar-alt"></i> Kalender</button>
+      <button class="nav-item" data-section="dzikir"><i class="fas fa-pray"></i> Dzikir</button>
+      <button class="nav-item" data-section="qibla"><i class="fas fa-compass"></i> Kiblat</button>
+	  <button class="nav-item" data-section="doa"><i class="fas fa-hands-praying"></i> Do'a</button>
+      <button class="nav-item" id="adzanToggle"><i class="fas fa-volume-up"></i> Adzan ON</button>
+      <button class="nav-item" id="themeToggle"><i class="fas fa-moon"></i> Tema</button>
+      <button class="nav-item" id="installPWA"><i class="fas fa-download"></i> Install App</button>
+    </div>
+  </nav>
+
+  <!-- JADWAL SECTION -->
+  <div id="jadwalSection">
+    <section class="hero-section">
+      <div class="hero-content">
+        <h2>NEXT SHIFT: <span id="nextPrayerHero" class="cyber-glitch-text">ISYA</span>
+          <div class="cyber-visualizer"><span></span><span></span><span></span><span></span><span></span></div>
+        </h2>
+        <div class="clock-giant" id="liveClockHero">--:--</div>
+        <div class="status-badge" id="statusBadge">Standby for Adzan</div>
+        <div class="next-prayer-detail"><i class="fas fa-hourglass-half"></i> Menuju <span id="nextPrayerNameHero">--</span>: <span id="nextPrayerCountdownHero">--:--:--</span></div>
+      </div>
+      <div style="flex:1; text-align:right">
+        <p id="locationInfo">Bandung, West Java</p>
+        <p id="dateInfo">--.--.----</p>
+        <div><i class="fas fa-cloud-sun"></i> <span id="weatherDesc">Memuat cuaca...</span> <span id="weatherTemp">--°C</span></div>
+      </div>
+    </section>
+
+    <div class="prayer-selector">
+      <div class="location-bar">
+        <div class="geo-status"><i class="fas fa-map-marker-alt"></i><span id="geoMessage">📍 Klik deteksi lokasi</span></div>
+        <button class="geo-btn" id="detectLocationBtn"><i class="fas fa-location-dot"></i> Gunakan Lokasi Saya</button>
+        <div id="nearbyInfo" class="nearby-info" style="display: none;"></div>
+      </div>
+      <input type="text" id="citySearch" class="city-search" placeholder="Cari kota atau kabupaten...">
+      <select id="citySelect" class="city-select" size="6"><option>Memuat daftar kota...</option></select>
+    </div>
+
+    <div class="info-panel"><h2 id="locationDisplay">Memuat lokasi...</h2><p id="dateDisplay">Mengambil tanggal...</p></div>
+
+    <div class="prayer-container" id="prayerGrid"></div>
+
+    <div id="iqamahZone" class="iqamah-alert iqamah-hidden glass-panel" style="margin:0 50px 20px;">
+      <div><i class="fas fa-bell-ring"></i> <span id="iqamahPrayerName">Sholat</span> — Iqamah dimulai!</div>
+      <div id="iqamahTimerDisplay" style="font-family:monospace; font-size:1.5rem;">03:00</div>
+    </div>
+  </div>
+
+  <!-- QURAN SECTION - UPDATED WITH EQURAN.ID API -->
+  <div id="quranSection" class="glass-panel hidden">
+    <div class="panel-header"><i class="fas fa-quran" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📖 Al-Qur'an & Terjemahan</h3></div>
+    
+    <!-- Controls -->
+    <div class="quran-controls">
+      <select id="quran-surah-select" class="quran-select">
+        <option>Memuat surat...</option>
+      </select>
+      
+      <div class="qari-selector">
+        <label>🎙️ Qari</label>
+        <select id="quran-qari-select" class="quran-select">
+          <option value="01" selected>Misyari Al-Afasy</option>
+          <option value="02">Abdul Muhsin Al-Qasim</option>
+          <option value="03">Abdurrahman As-Sudais</option>
+          <option value="04">Ibrahim Al-Dossari</option>
+          <option value="05">Abdullah Al-Juhany</option>
+        </select>
+      </div>
+      
+      <button id="quran-refresh-btn" class="quran-btn">🔄 Refresh</button>
+    </div>
+    
+    <!-- Resume Reading Card -->
+    <div id="quran-resume-card" class="quran-resume-card" style="display: none;">
+      <div class="resume-title">📌 Bacaan Terakhir</div>
+      <div id="quran-resume-info" class="resume-info"></div>
+      <button id="quran-resume-btn" class="quran-btn resume-btn">▶ Lanjutkan Membaca</button>
+    </div>
+    
+    <!-- Font Settings -->
+    <div class="quran-font-panel">
+      <h3>🔤 Pengaturan Ukuran Teks</h3>
+      <div class="slider-group">
+        <label>Arab</label>
+        <input type="range" id="quran-arab-slider" min="1.2" max="3" step="0.1" value="2">
+      </div>
+      <div class="slider-group">
+        <label>Terjemahan</label>
+        <input type="range" id="quran-translation-slider" min="0.7" max="1.5" step="0.1" value="1">
+      </div>
+      <div class="slider-group">
+        <label>Tafsir</label>
+        <input type="range" id="quran-tafsir-slider" min="0.7" max="1.5" step="0.1" value="0.9">
+      </div>
+    </div>
+    
+    <!-- Surah Info -->
+    <div id="quran-surah-info-container"></div>
+    
+    <!-- Audio Player for Full Surah -->
+    <div id="quran-audio-container" class="quran-audio-player" style="display: none;">
+      <h3>🎧 Dengarkan Murottal Surat Lengkap</h3>
+      <audio id="quran-surah-audio-player" controls>
+        <source id="quran-surah-audio-source" src="" type="audio/mpeg">
+      </audio>
+    </div>
+    
+    <!-- Audio Player for Single Ayat (hidden) -->
+    <audio id="quran-ayat-audio-player" style="display: none;"></audio>
+    
+    <!-- Ayat Container -->
+    <div id="quran-ayat-container" class="quran-ayat-container">
+      <div class="loading-spinner">⏳ Memuat surat...</div>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div class="quran-nav-buttons">
+      <button id="quran-prev-btn" class="quran-btn">◀ Sebelumnya</button>
+      <button id="quran-next-btn" class="quran-btn">Berikutnya ▶</button>
+    </div>
+  </div>
+
+  <!-- ASMAUL HUSNA SECTION -->
+  <div id="asmaSection" class="glass-panel hidden">
+    <div class="panel-header"><i class="fas fa-praying-hands" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📿 Asmaul Husna (99 Nama Allah)</h3></div>
+    <div id="selectedAsmaContainer" class="hidden"></div>
+    <div id="randomAsma" class="random-asma">
+      <div class="random-asma-arabic" id="randomAsmaArabic">الرحمن</div>
+      <div class="random-asma-latin" id="randomAsmaLatin">Ar-Rahman</div>
+      <div class="asma-meaning" id="randomAsmaMeaning">Yang Maha Pengasih</div>
+      <div class="refresh-asma" style="font-size: 0.7rem; margin-top: 5px;"><i class="fas fa-sync-alt"></i> Klik untuk refresh</div>
+    </div>
+    <input type="text" id="searchAsma" class="search-input" placeholder="🔍 Cari Asmaul Husna (Arab, Latin, atau Artinya)...">
+    <div id="asmaList" class="asma-list"><div class="loading">Memuat Asmaul Husna...</div></div>
+  </div>
+
+  <!-- KALENDER SECTION -->
+  <div id="kalenderSection" class="glass-panel hidden">
+    <div class="panel-header"><i class="fas fa-calendar-alt" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📅 Kalender Hijriah & Masehi</h3></div>
+    <div class="calendar-container">
+      <div class="calendar-controls">
+        <div class="calendar-nav-buttons"><button class="calendar-nav-btn" id="calPrev"><i class="fas fa-chevron-left"></i> Bulan Lalu</button><button class="today-btn" id="calToday"><i class="fas fa-calendar-day"></i> Hari Ini</button><button class="calendar-nav-btn" id="calNext">Bulan Depan <i class="fas fa-chevron-right"></i></button></div>
+        <div class="month-year-display" id="monthYearDisplay">-</div>
+        <div class="calendar-settings"><select id="calMethod" class="calendar-select"><option value="HJCoSA">HJCoSA (Saudi Arabia)</option><option value="UAQ" selected>Ummul Qura</option><option value="DIYANET">Diyanet (Turkey)</option><option value="MATHEMATICAL">Mathematical</option></select></div>
+      </div>
+      <div class="calendar-weekdays" id="weekdaysHeader"></div>
+      <div id="calendarGrid" class="calendar-grid"><div class="calendar-loading"><i class="fas fa-spinner fa-pulse"></i> Memuat kalender...</div></div>
+      <div class="calendar-converter">
+        <div class="converter-title"><i class="fas fa-exchange-alt"></i> Konversi Tanggal</div>
+        <div class="converter-row">
+          <div class="converter-group"><label>Masehi → Hijriah</label><input type="date" id="ceToHijri" class="converter-input"></div>
+          <div class="converter-group"><label>Hijriah → Masehi</label><input type="text" id="hijriToCe" class="converter-input" placeholder="DD-MM-YYYY (contoh: 01-01-1447)"></div>
+          <button class="converter-btn" id="convertDateBtn">Konversi</button>
+        </div>
+        <div id="convertResult" class="converter-result hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DZIKIR COUNTER SECTION -->
+  <div id="dzikirSection" class="glass-panel hidden">
+    <div class="panel-header"><i class="fas fa-pray" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📿 Dzikir Counter</h3></div>
+    <div class="counter-container"><div class="counter-number" id="counterValue">0</div><button class="dzikir-button" id="dzikirButton"><i class="fas fa-hand-peace"></i><span>DZIKIR</span></button><button class="reset-button" id="resetButton"><i class="fas fa-sync-alt"></i> Reset Hitungan</button></div>
+  </div>
+
+  <!-- QIBLA SECTION -->
+  <div id="qiblaSection" class="glass-panel hidden">
+    <div class="panel-header"><i class="fas fa-compass" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>🕋 Arah Kiblat</h3></div>
+    <div class="compass" id="compassContainer"><div class="compass-needle" id="compassNeedle">🧭</div><div id="qiblaDirection">Memuat arah kiblat...</div></div>
+  </div>
+  <!-- DO'A SECTION -->
+  <div id="doaSection" class="glass-panel hidden">
+    <div class="panel-header"><i class="fas fa-hands-praying" style="font-size: 1.5rem; color: var(--primary-cyan);"></i><h3>📖 Kumpulan Do'a Shahih</h3></div>
+    
+    <!-- Controls -->
+    <div class="doa-controls">
+      <input type="text" id="doaSearch" class="doa-search" placeholder="🔍 Cari doa (makan, tidur, wudhu, sakit, dll)...">
+    </div>
+    
+    <!-- Loading -->
+    <div id="doaLoading" class="doa-loading">
+      <div class="doa-spinner"></div>
+      <p>Memuat 227+ doa shahih...</p>
+    </div>
+    
+    <!-- Empty State -->
+    <div id="doaEmpty" class="doa-empty" style="display: none;">
+      <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+      <p>Doa tidak ditemukan</p>
+    </div>
+    
+    <!-- Do'a Grid -->
+    <div id="doaGrid" class="doa-grid" style="display: none;"></div>
+  </div>
+  
+  <!-- DO'A MODAL -->
+  <div id="doaModal" class="doa-modal">
+    <div class="doa-modal-content">
+      <div class="doa-modal-header">
+        <h2 class="doa-modal-title" id="doaModalTitle">-</h2>
+        <button class="doa-modal-close" id="doaModalClose">✕</button>
+      </div>
+      <div class="doa-modal-body">
+        <div class="doa-modal-section">
+          <div class="doa-modal-section-title">📜 TEKS ARAB</div>
+          <div class="doa-modal-arabic" id="doaModalArabic" dir="rtl">-</div>
+        </div>
+        <div class="doa-modal-section">
+          <div class="doa-modal-section-title">🔤 TRANSLITERASI</div>
+          <div class="doa-modal-latin" id="doaModalLatin">-</div>
+        </div>
+        <div class="doa-modal-section">
+          <div class="doa-modal-section-title">🌟 ARTINYA</div>
+          <div class="doa-modal-translation" id="doaModalTranslation">-</div>
+        </div>
+        <div class="doa-modal-section">
+          <div class="doa-modal-section-title">📖 KETERANGAN & DALIL</div>
+          <div class="doa-modal-description" id="doaModalDescription">-</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- AYAT SECTION -->
+  <div class="ayat-section">
+    <div class="arabic-ayat">اِنَّ الصَّلٰوةَ كَانَتْ عَلَى الْمُؤْمِنِيْنَ كِتٰبًا مَّوْقُوْتًا</div>
+    <div class="terjemahan-ayat">Artinya: "Sungguh, sholat itu adalah kewajiban yang ditentukan waktunya atas orang-orang yang beriman."</div>
+    <div class="sumber-ayat">— QS. An Nisa: 103</div>
+  </div>
+
+  <footer>
+    <div class="footer-laser-line"></div>
+    <div class="footer-industrial-grid">
+      <div class="footer-column-brand">
+        <div class="footer-brand-title">SALSABILA DASHBOARD</div>
+        <p class="footer-brand-desc">Dashboard Islami Digital dengan jadwal sholat real-time, Al-Qur'an 30 Juz, Asmaul Husna, kalender Hijriah & Masehi (AlAdhan API), dzikir counter, dan kompas kiblat berbasis lokasi.</p>
+        <div class="footer-status-panel"><div class="status-node"><span class="blink-dot"></span> SISTEM: <span class="text-alert">AKTIF</span></div><div class="status-node"><i class="fas fa-check-circle"></i> SINKRONISASI API</div></div>
+      </div>
+      <div class="footer-column"><h4>LAYANAN</h4><ul><li><a href="#" data-section="jadwal">Jadwal Sholat Real-time</a></li><li><a href="#" data-section="quran">Al-Qur'an 30 Juz</a></li><li><a href="#" data-section="asma">Asmaul Husna 99</a></li><li><a href="#" data-section="kalender">Kalender Hijriah & Masehi</a></li><li><a href="#" data-section="dzikir">Dzikir Counter</a></li><li><a href="#" data-section="qibla">Kompas Kiblat 3D</a></li></ul></div>
+      <div class="footer-column"><h4>TEKNIS</h4><ul><li><a href="#"><i class="fas fa-book"></i> API: Al-Quran Cloud, AlAdhan</a></li><li><a href="#"><i class="fas fa-bug"></i> Laporkan Masalah</a></li><li><a href="#"><i class="fas fa-server"></i> Status Server: <span style="color: var(--primary-cyan)">ONLINE</span></a></li></ul></div>
+      <div class="footer-column"><h4>PENGEMBANG</h4><p class="footer-info-text"><i class="fas fa-map-marker-alt"></i> Gumitama, Padalarang, Jawa Barat, Indonesia</p><p class="footer-info-text"><i class="fas fa-envelope"></i> gumitamaa@gmail.com</p><div class="footer-socials"><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-linkedin"></i></a><a href="#"><i class="fab fa-instagram"></i></a></div></div>
+    </div>
+    <div class="footer-legal-notice"><p><strong>DISKLAIMER:</strong> Jadwal sholat menggunakan algoritma dan data dari API eksternal (Aladhan/Al-Quran Cloud). Akurasi kompas kiblat bergantung pada sensor magnetik perangkat keras pengguna. Adzan diambil dari file MP3 eksternal dan hanya aktif jika pengguna mengaktifkan fitur "Adzan ON". Kalender Hijriah menggunakan API AlAdhan dengan berbagai metode perhitungan.</p></div>
+    <div class="footer-copyright">© <span id="currentYear"></span> SALSABILA ISLAMIC DASHBOARD by Gumilar Utamas.</div>
+  </footer>
+
+  <audio id="adzanAudio" preload="auto"><source src="https://cdn.aladhan.com/audio/adhans/a7.mp3" type="audio/mpeg" type="audio/mpeg"></audio>
+
+  <!-- LOAD SEMUA MODUL JAVASCRIPT DENGAN URUTAN YANG BENAR -->
+  <script src="js/dzikir.js"></script>
+  <script src="js/prayer.js"></script>
+  <script src="js/quran.js"></script>
+  <script src="js/asma.js"></script>
+  <script src="js/kalender.js"></script>
+  <script src="js/qibla.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/pwa.js"></script>
+  <script src="js/doa.js"></script>
+  <script src="js/main.js"></script>
+  
+   
+  <script>
+    // ==================== APP LOADER LOGIC ====================
+    (function() {
+      if (sessionStorage.getItem('loaderShown')) {
+        const loader = document.getElementById('appLoader');
+        if (loader) loader.style.display = 'none';
+        return;
+      }
+      
+      const loader = document.getElementById('appLoader');
+      const percentText = document.getElementById('loaderPercent');
+      const terminalLines = document.querySelectorAll('#appLoader .terminal-line');
+      
+      const updateTerminalText = (index, text) => {
+        if (terminalLines[index]) terminalLines[index].innerHTML = text;
+      };
+      
+      let progress = 0;
+      let step = 0;
+      
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 3) + 1;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+        }
+        if (percentText) percentText.innerHTML = `${progress}%`;
+        
+        if (progress >= 15 && step < 1) {
+          updateTerminalText(1, '> QURAN_ENGINE : ONLINE ✅');
+          step = 1;
+        }
+        if (progress >= 35 && step < 2) {
+          updateTerminalText(2, '> PRAYER_API : CONNECTED ✅');
+          step = 2;
+        }
+        if (progress >= 55 && step < 3) {
+          updateTerminalText(3, '> GPS_MODULE : LOCKED ✅');
+          step = 3;
+        }
+        if (progress >= 75 && step < 4) {
+          updateTerminalText(4, '> PWA_CACHE : READY ✅');
+          step = 4;
+        }
+        if (progress >= 85 && step < 5) {
+          updateTerminalText(5, '> NOTIFICATION_SERVICE : ACTIVE ✅');
+          step = 5;
+        }
+        if (progress >= 95 && step < 6) {
+          updateTerminalText(6, '> SYSTEM_STATUS : ONLINE ✅');
+          step = 6;
+        }
+      }, 35);
+      
+      setTimeout(() => {
+        if (loader) {
+          loader.style.opacity = '0';
+          loader.style.transform = 'scale(1.05)';
+          setTimeout(() => {
+            loader.style.display = 'none';
+            sessionStorage.setItem('loaderShown', 'true');
+          }, 800);
+        }
+      }, 3800);
+    })();
+  </script>
+</body>
+</html>
