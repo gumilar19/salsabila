@@ -1,52 +1,12 @@
 <div align="center">
-<svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#00f2ff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#00ff88;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#ff003c;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#ff8800;stop-opacity:1" />
-    </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
-  
-  <!-- Background -->
-  <rect width="300" height="200" rx="20" fill="#0a0c10" stroke="url(#cyanGrad)" stroke-width="1.5"/>
-  
-  <!-- Bintang segi delapan besar -->
-  <polygon points="150,30 170,75 215,90 170,105 150,150 130,105 85,90 130,75" 
-           fill="none" stroke="url(#cyanGrad)" stroke-width="2" filter="url(#glow)" opacity="0.8"/>
-  
-  <!-- Lingkaran konsentris -->
-  <circle cx="150" cy="90" r="40" fill="none" stroke="url(#redGrad)" stroke-width="1" opacity="0.6" filter="url(#glow)"/>
-  <circle cx="150" cy="90" r="25" fill="none" stroke="url(#cyanGrad)" stroke-width="1.5" opacity="0.8" filter="url(#glow)"/>
-  
-  <!-- Kaligrafi stylized -->
-  <text x="150" y="100" text-anchor="middle" font-family="Amiri, serif" 
-        font-size="28" fill="#00f2ff" filter="url(#glow)" opacity="0.9">سَلْسَبِيلًا</text>
-  
-  <!-- Teks SALSABILA -->
-  <text x="150" y="140" text-anchor="middle" font-family="Orbitron, sans-serif" 
-        font-size="14" fill="#00f2ff" font-weight="bold" letter-spacing="3" filter="url(#glow)">SALSABILA</text>
-  
-  <!-- Subtitle -->
-  <text x="150" y="160" text-anchor="middle" font-family="Barlow, sans-serif" 
-        font-size="8" fill="#00ff88" letter-spacing="2" opacity="0.7">CYBER ISLAMIC DASHBOARD</text>
-  
-  <!-- Garis dekorasi -->
-  <line x1="60" y1="175" x2="240" y2="175" stroke="url(#cyanGrad)" stroke-width="0.5" opacity="0.5"/>
-  <line x1="100" y1="180" x2="200" y2="180" stroke="url(#redGrad)" stroke-width="0.5" opacity="0.3"/>
-</svg>
 
-<img src="https://raw.githubusercontent.com/gumilar19/salsabila/main/icon-192.png" width="120" alt="SALSABILA Logo">
+<!-- LOGO SALSABILA - SVG -->
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+Cgk8ZGVmcz4KCQk8bGluZWFyR3JhZGllbnQgaWQ9ImN5YW5HcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KCQkJPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzAwZjJmZjtzdG9wLW9wYWNpdHk6MSIgLz4KCQkJPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMDBmZjg4O3N0b3Atb3BhY2l0eToxIiAvPgoJCTwvbGluZWFyR3JhZGllbnQ+CgkJPGxpbmVhckdyYWRpZW50IGlkPSJyZWRHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KCQkJPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6I2ZmMDAzYztzdG9wLW9wYWNpdHk6MSIgLz4KCQkJPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmY4ODAwO3N0b3Atb3BhY2l0eToxIiAvPgoJCTwvbGluZWFyR3JhZGllbnQ+CgkJPGZpbHRlciBpZD0iZ2xvdyIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTQwJSI+CgkJCTxmZ0F1c2lhYmx1ciBzdGREZXZpYXRpb249IjIiIHJlc3VsdD0iYmx1ciIvPgoJCQk8ZmVtZXJnZT4KCQkJCTxmZU1lcmdlTm9kZSBpbj0iYmx1ciIvPgoJCQkJPGZlTWVyZ2VOb2RlIGluPSJTb3VyY2VHcmFwaGljIi8+CgkJCTwvZmVtZXJnZT4KCQk8L2ZpbHRlcj4KCTwvZGVmcz4KCQoJPCEtLSBCYWNrZ3JvdW5kIC0tPgoJPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIyMDAiIHJ4PSIyMCIgZmlsbD0iIzBhMGMxMCIgc3Ryb2tlPSJ1cmwoI2N5YW5HcmFkKSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KCQoJPCEtLSBCaW50YW5nIHNlZ2kgZGVsYXBhbiBiZXNhciAtLT4KCTxwb2x5Z29uIHBvaW50cz0iMTUwLDMwIDE3MCw3NSAyMTUsOTAgMTcwLDEwNSAxNTAsMTUwIDEzMCwxMDUgODUsOTAgMTMwLDc1IiAKCQkgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2N5YW5HcmFkKSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWx0ZXI9InVybCgjZ2xvdykiIG9wYWNpdHk9IjAuOCIvPgoJCgk8IS0tIExpbmdrYXJhbiBrb25zZW50cmlzIC0tPgoJPGNpcmNsZSBjeD0iMTUwIiBjeT0iOTAiIHI9IjQwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjcmVkR3JhZCkiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC42IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KCTxjaXJjbGUgY3g9IjE1MCIgY3k9IjkwIiByPSIyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2N5YW5HcmFkKSIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuOCIgZmlsdGVyPSJ1cmwoI2dsb3cpIi8+CgkKCTwhLS0gS2FsaWdyYWZpIC0tPgoJPHRleHQgeD0iMTUwIiB5PSIxMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSdBbWlyaSwgc2VyaWYnIAoJCSBmb250LXNpemU9IjI4IiBmaWxsPSIjMDBmMmZmIiBmaWx0ZXI9InVybCgjZ2xvdykiIG9wYWNpdHk9IjAuOSI+U2FtZVBJTVQ72YHZhNmK2YUg2KrZhNin2YQ8L3RleHQ+CgkKCTwhLS0gVGVrcyBTQUxTQUJJTEEgLS0+Cgk8dGV4dCB4PSIxNTAiIHk9IjE0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9J09yYml0cm9uLCBzYW5zLXNlcmlmJyAKCQkgZm9udC1zaXplPSIxNCIgZmlsbD0iIzAwZjJmZiIgZm9udC13ZWlnaHQ9ImJvbGQiIGxldHRlci1zcGFjaW5nPSIzIiBmaWx0ZXI9InVybCgjZ2xvdykiPlNB TFNBRklMQTwvdGV4dD4KCQoJPCEtLSBTdWJ0aXRsZSAtLT4KCTx0ZXh0IHg9IjE1MCIgeT0iMTYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0nQmFybG93LCBzYW5zLXNlcmlmJyAKCQkgZm9udC1zaXplPSI4IiBmaWxsPSIjMDBmZjg4IiBsZXR0ZXItc3BhY2luZz0iMiIgb3BhY2l0eT0iMC43Ij5DWUJFUiBJU0xBTUlDIERBU0hCT0FSRDwvdGV4dD4KCQoJPCEtLSBHYXJpcyBkZWtvcmFzaSAtLT4KCTxsaW5lIHgxPSI2MCIgeTE9IjE3NSIgeDI9IjI0MCIgeTI9IjE3NSIgc3Ryb2tlPSJ1cmwoI2N5YW5HcmFkKSIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuNSIvPgoJPGxpbmUgeDE9IjEwMCIgeTE9IjE4MCIgeDI9IjIwMCIgeTI9IjE4MCIgc3Ryb2tlPSJ1cmwoI3JlZEdyYWQpIiBzdHJva2Utd2lkdGg9IjAuNSIgb3BhY2l0eT0iMC4zIi8+Cjwvc3ZnPg=="/>
+  <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+Cgk8ZGVmcz4KCQk8bGluZWFyR3JhZGllbnQgaWQ9ImN5YW5HcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KCQkJPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzAwZjJmZjtzdG9wLW9wYWNpdHk6MSIgLz4KCQkJPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMDBmZjg4O3N0b3Atb3BhY2l0eToxIiAvPgoJCTwvbGluZWFyR3JhZGllbnQ+CgkJPGxpbmVhckdyYWRpZW50IGlkPSJyZWRHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KCQkJPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6I2ZmMDAzYztzdG9wLW9wYWNpdHk6MSIgLz4KCQkJPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmY4ODAwO3N0b3Atb3BhY2l0eToxIiAvPgoJCTwvbGluZWFyR3JhZGllbnQ+CgkJPGZpbHRlciBpZD0iZ2xvdyIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTQwJSI+CgkJCTxmZ0F1c2lhYmx1ciBzdGREZXZpYXRpb249IjIiIHJlc3VsdD0iYmx1ciIvPgoJCQk8ZmVtZXJnZT4KCQkJCTxmZU1lcmdlTm9kZSBpbj0iYmx1ciIvPgoJCQkJPGZlTWVyZ2VOb2RlIGluPSJTb3VyY2VHcmFwaGljIi8+CgkJCTwvZmVtZXJnZT4KCQk8L2ZpbHRlcj4KCTwvZGVmcz4KCQoJPCEtLSBCYWNrZ3JvdW5kIC0tPgoJPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIyMDAiIHJ4PSIyMCIgZmlsbD0iIzBhMGMxMCIgc3Ryb2tlPSJ1cmwoI2N5YW5HcmFkKSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KCQoJPCEtLSBCaW50YW5nIHNlZ2kgZGVsYXBhbiBiZXNhciAtLT4KCTxwb2x5Z29uIHBvaW50cz0iMTUwLDMwIDE3MCw3NSAyMTUsOTAgMTcwLDEwNSAxNTAsMTUwIDEzMCwxMDUgODUsOTAgMTMwLDc1IiAKCQkgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2N5YW5HcmFkKSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWx0ZXI9InVybCgjZ2xvdykiIG9wYWNpdHk9IjAuOCIvPgoJCgk8IS0tIExpbmdrYXJhbiBrb25zZW50cmlzIC0tPgoJPGNpcmNsZSBjeD0iMTUwIiBjeT0iOTAiIHI9IjQwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjcmVkR3JhZCkiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC42IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KCTxjaXJjbGUgY3g9IjE1MCIgY3k9IjkwIiByPSIyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2N5YW5HcmFkKSIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuOCIgZmlsdGVyPSJ1cmwoI2dsb3cpIi8+CgkKCTwhLS0gS2FsaWdyYWZpIC0tPgoJPHRleHQgeD0iMTUwIiB5PSIxMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSdBbWlyaSwgc2VyaWYnIAoJCSBmb250LXNpemU9IjI4IiBmaWxsPSIjMDBmMmZmIiBmaWx0ZXI9InVybCgjZ2xvdykiIG9wYWNpdHk9IjAuOSI+U2FtZVBJTVQ72YHZhNmK2YUg2KrZhNin2YQ8L3RleHQ+CgkKCTwhLS0gVGVrcyBTQUxTQUJJTEEgLS0+Cgk8dGV4dCB4PSIxNTAiIHk9IjE0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9J09yYml0cm9uLCBzYW5zLXNlcmlmJyAKCQkgZm9udC1zaXplPSIxNCIgZmlsbD0iIzAwZjJmZiIgZm9udC13ZWlnaHQ9ImJvbGQiIGxldHRlci1zcGFjaW5nPSIzIiBmaWx0ZXI9InVybCgjZ2xvdykiPlNB TFNBRklMQTwvdGV4dD4KCQoJPCEtLSBTdWJ0aXRsZSAtLT4KCTx0ZXh0IHg9IjE1MCIgeT0iMTYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0nQmFybG93LCBzYW5zLXNlcmlmJyAKCQkgZm9udC1zaXplPSI4IiBmaWxsPSIjMDBmZjg4IiBsZXR0ZXItc3BhY2luZz0iMiIgb3BhY2l0eT0iMC43Ij5DWUJFUiBJU0xBTUlDIERBU0hCT0FSRDwvdGV4dD4KCQoJPCEtLSBHYXJpcyBkZWtvcmFzaSAtLT4KCTxsaW5lIHgxPSI2MCIgeTE9IjE3NSIgeDI9IjI0MCIgeTI9IjE3NSIgc3Ryb2tlPSJ1cmwoI2N5YW5HcmFkKSIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuNSIvPgoJPGxpbmUgeDE9IjEwMCIgeTE9IjE4MCIgeDI9IjIwMCIgeTI9IjE4MCIgc3Ryb2tlPSJ1cmwoI3JlZEdyYWQpIiBzdHJva2Utd2lkdGg9IjAuNSIgb3BhY2l0eT0iMC4zIi8+Cjwvc3ZnPg==" alt="SALSABILA Logo" width="300" height="200">
+</picture>
+
+<br><br>
 
 # ⚡ SALSABILA | سَلْسَبِيلًا
 
