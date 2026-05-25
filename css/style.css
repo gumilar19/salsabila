@@ -101,19 +101,35 @@ body::before {
   position: fixed;
   top: 10%;
   left: -5%;
-  font-size: 20vw;
+  font-size: 15vw;
   font-weight: 900;
   color: rgba(0, 242, 255, 0.03);
   z-index: -1;
   font-style: italic;
   pointer-events: none;
-  animation: floatBackground 20s linear infinite;
+  font-family: 'Orbitron', sans-serif;
+  
+  /* Tambahan efek animasi */
+  animation: floatBackground 20s linear infinite,
+             watermarkShine 4s ease-in-out infinite;
 }
 
 @keyframes floatBackground {
   0% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(20px) rotate(1deg); }
   100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Efek shine tambahan */
+@keyframes watermarkShine {
+  0%, 100% {
+    text-shadow: 0 0 0px rgba(0, 242, 255, 0);
+    filter: blur(0px);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(0, 242, 255, 0.15);
+    filter: blur(2px);
+  }
 }
 
 /* ==================== NAVIGATION ==================== */
