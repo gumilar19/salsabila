@@ -2,14 +2,14 @@
 
 # ⚡ SALSABILA | سَلْسَبِيلًا
 
-### *Next Generation Islamic Cyber Dashboard*
+### *Next Generation Islamic Dashboard*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PWA](https://img.shields.io/badge/PWA-Ready-blueviolet)](https://web.dev/progressive-web-apps/)
 [![API](https://img.shields.io/badge/API-MyQuran%20v3-cyan)](https://api.myquran.com/v3/doc)
 [![Made with JavaScript](https://img.shields.io/badge/Made%20with-JavaScript-f7df1e)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-> *"Data spiritual melayang di ruang holografik."*
+> *"Where spirituality meets futuristic technology"*
 
 [🌐 Live Demo](#) • [📦 Install PWA](#) • [📖 Documentation](#) • [🐛 Report Bug](#)
 
@@ -245,7 +245,7 @@ git push origin fitur-keren
 ```
 <div align="center">
 Made with ❤️ by Gumilar Utamas
-"SALSABILA – Mata air digital untuk jiwa yang haus akan ketenangan."
+"SALSABILA – Embracing blessings in the digital age."
 
 https://img.shields.io/github/stars/gumilar19/salsabila?style=social
 
