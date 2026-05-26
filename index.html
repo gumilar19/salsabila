@@ -267,7 +267,22 @@
 
   <div class="cyber-scanner"></div>
   <div class="particles-container" id="particles"></div>
-
+  
+  <!-- AUDIO PERMISSION BANNER -->
+  <div id="audioPermissionBanner" style="position:fixed; bottom:30px; left:20px; right:20px; background: linear-gradient(135deg, #00f2ff, #0088aa); color:#000; padding:14px 24px; border-radius:12px; z-index:99999; cursor:pointer; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; box-shadow:0 0 30px rgba(0,242,255,0.5); border:1px solid rgba(255,255,255,0.3); backdrop-filter:blur(4px); font-family: 'Barlow', monospace; font-weight:bold;">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <i class="fas fa-volume-up" style="font-size:1.8rem; animation:pulse 1s infinite;"></i>
+      <span style="font-size:0.9rem;">🔊 <strong>IZINKAN SUARA</strong> — Klik banner ini untuk mengaktifkan suara adzan otomatis saat waktu sholat tiba.</span>
+    </div>
+    <button id="closeAudioBanner" style="background:rgba(0,0,0,0.3); border:none; color:white; padding:6px 14px; border-radius:30px; cursor:pointer; font-size:0.8rem;">✕ Tutup</button>
+  </div>
+  
+  <style>
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+  </style>
   <!-- PWA INSTALL BANNER -->
   <div id="pwaBanner" class="pwa-banner hidden-banner">
     <span><i class="fas fa-mobile-alt"></i> Install SALSABILA di homescreen!</span>
@@ -529,7 +544,7 @@
       <div class="footer-column"><h4>TEKNIS</h4><ul><li><a href="#"><i class="fas fa-book"></i> API: Al-Quran Cloud, AlAdhan</a></li><li><a href="#"><i class="fas fa-bug"></i> Laporkan Masalah</a></li><li><a href="#"><i class="fas fa-server"></i> Status Server: <span style="color: var(--primary-cyan)">ONLINE</span></a></li></ul></div>
       <div class="footer-column"><h4>PENGEMBANG</h4><p class="footer-info-text"><i class="fas fa-map-marker-alt"></i> Gumitama, Padalarang, Jawa Barat, Indonesia</p><p class="footer-info-text"><i class="fas fa-envelope"></i> gumitamaa@gmail.com</p><div class="footer-socials"><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-linkedin"></i></a><a href="#"><i class="fab fa-instagram"></i></a></div></div>
     </div>
-    <div class="footer-legal-notice"><p><strong>DISKLAIMER:</strong> Jadwal sholat menggunakan API MyQuran v3 (sumber resmi Kementerian Agama RI) dan AlAdhan API. Akurasi kompas kiblat bergantung pada sensor magnetik perangkat keras pengguna. Adzan diambil dari file MP3 eksternal (AlAdhan CDN) dan hanya aktif jika pengguna mengaktifkan fitur "Adzan ON". Kalender Hijriah menggunakan API AlAdhan dengan berbagai metode perhitungan. Al-Qur'an & terjemahan menggunakan API equran.id dengan dukungan tafsir dan audio murottal dari 5 pilihan qari. Do'a harian bersumber dari API equran.id. Dashboard ini adalah PWA (Progressive Web App) yang dapat diinstall di homescreen dan mendukung notifikasi push untuk pengingat sholat.</p></div>
+    <div class="footer-legal-notice"><p><strong>DISKLAIMER:</strong> Jadwal sholat menggunakan algoritma dan data dari API eksternal (Aladhan/Al-Quran Cloud). Akurasi kompas kiblat bergantung pada sensor magnetik perangkat keras pengguna. Adzan diambil dari file MP3 eksternal dan hanya aktif jika pengguna mengaktifkan fitur "Adzan ON". Kalender Hijriah menggunakan API AlAdhan dengan berbagai metode perhitungan.</p></div>
     <div class="footer-copyright">© <span id="currentYear"></span> SALSABILA ISLAMIC DASHBOARD by Gumilar Utamas.</div>
   </footer>
 
