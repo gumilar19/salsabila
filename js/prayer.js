@@ -12,6 +12,7 @@ window.PrayerModule = (function() {
   let playedAdzanPrayers = {};     // Mencegah adzan berulang untuk sholat yang sama
   let sentNotificationPrayers = {}; // Mencegah notifikasi berulang
   let notifPermission = localStorage.getItem('notifPermission') === 'granted';
+  let sentAdzanToday = {};     // Mencegah adzan berulang untuk hari yang sama
   
   // Mapping nama sholat untuk display
   const prayerNameMap = {
@@ -195,6 +196,9 @@ window.PrayerModule = (function() {
         prayerTimesData = jadwal;
         renderPrayerScheduleGrid(jadwal);
         updateAllCountdowns();
+		
+		sentAdzanToday = {};
+		playedAdzanPrayers = {};
       } else {
         throw new Error('Data jadwal tidak valid');
       }
@@ -642,7 +646,106 @@ window.PrayerModule = (function() {
       delete playedAdzanPrayers[prayer]; 
     }, 60000);
   }
+    // FUNGSI TEST ADZAN (Panggil untuk testing)
+  function testAdzan() {
+    console.log("🔊 Testing adzan...");
+    const adzanAudio = document.getElementById('adzanAudio');
+    if (adzanAudio) {
+      adzanAudio.currentTime = 0;
+      adzanAudio.play()
+        .then(() => console.log("✅ Adzan test berhasil"))
+        .catch(e => console.error("❌ Adzan test gagal - Browser block autoplay:", e));
+    } else {
+      console.error("❌ Element audio #adzanAudio tidak ditemukan!");
+    }
+  }
   
+  // CEK DAN TRIGGER ADZAN (DENGAN TOLERANSI LEBIH BESAR)
+  function checkAndTriggerAdzan() {
+    if (!adzanEnabled) {
+      return;
+    }
+    if (!prayerTimesData || Object.keys(prayerTimesData).length === 0) {
+      return;
+    }
+    
+    const now = new Date();
+    const todayStr = now.toDateString();
+    
+    for (let prayer of fardhuOrder) {
+      const prayerTimeStr = prayerTimesData[prayer];
+      if (!prayerTimeStr) continue;
+      
+      const [hours, minutes] = prayerTimeStr.split(":").map(Number);
+      const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+      
+      // Selisih dalam detik (positif jika sudah lewat waktu sholat)
+      const diffSeconds = (now - prayerDate) / 1000;
+      
+      // PERLEBAR TOLERANSI: 0-60 detik (bukan 0-5 detik)
+      const shouldTrigger = diffSeconds >= 0 && diffSeconds <= 60;
+      const adzanKey = `${todayStr}_${prayer}`;
+      
+      if (shouldTrigger && !playedAdzanPrayers[prayer] && !sentAdzanToday[adzanKey]) {
+        console.log(`🕌 Adzan triggered for ${prayer} | Waktu: ${prayerTimeStr} | Selisih: ${diffSeconds} detik`);
+        playAdzan(prayer);
+        sentAdzanToday[adzanKey] = true;
+        
+        // Reset setelah 5 menit
+        setTimeout(() => { 
+          delete playedAdzanPrayers[prayer];
+          delete sentAdzanToday[adzanKey];
+        }, 300000);
+      }
+    }
+  }
+  // CEK DAN TRIGGER ADZAN SAAT WAKTU SHOLAT TIBA
+function checkAndTriggerAdzan() {
+  if (!adzanEnabled) return;
+  if (!prayerTimesData || Object.keys(prayerTimesData).length === 0) return;
+  
+  const now = new Date();
+  const todayStr = now.toDateString();
+  
+  for (let prayer of fardhuOrder) {
+    const prayerTimeStr = prayerTimesData[prayer];
+    if (!prayerTimeStr) continue;
+    
+    const [hours, minutes] = prayerTimeStr.split(":").map(Number);
+    const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+    
+    // Selisih dalam detik (positif jika sudah lewat waktu sholat)
+    const diffSeconds = (now - prayerDate) / 1000;
+    
+    // Trigger jika waktu sholat sudah tiba (0-5 detik) dan belum diputar hari ini
+    const shouldTrigger = diffSeconds >= 0 && diffSeconds <= 5;
+    const adzanKey = `${todayStr}_${prayer}`;
+    
+    if (shouldTrigger && !playedAdzanPrayers[prayer] && !sentAdzanToday[adzanKey]) {
+      console.log(`🕌 Adzan triggered for ${prayer} at ${new Date().toLocaleTimeString()}`);
+      playAdzan(prayer);
+      sentAdzanToday[adzanKey] = true;
+      
+      // Reset setelah 5 menit
+      setTimeout(() => { 
+        delete playedAdzanPrayers[prayer];
+        delete sentAdzanToday[adzanKey];
+      }, 300000);
+    }
+  }
+}
+
+// RESET TRACKING ADZAN SETIAP HARI BARU
+function resetDailyTracking() {
+  const lastDate = localStorage.getItem('lastAdzanDate');
+  const today = new Date().toDateString();
+  
+  if (lastDate !== today) {
+    sentAdzanToday = {};
+    playedAdzanPrayers = {};
+    localStorage.setItem('lastAdzanDate', today);
+  }
+}
   // Cek trigger iqamah (3 menit setelah waktu sholat)
   function checkIqamahTrigger() {
     const now = new Date();
@@ -720,6 +823,8 @@ window.PrayerModule = (function() {
     
     // Set interval untuk countdown dan iqamah (setiap detik)
     setInterval(() => {
+	  resetDailyTracking();        // <-- TAMBAHKAN BARIS INI
+      checkAndTriggerAdzan();      // <-- TAMBAHKAN BARIS INI
       updateAllCountdowns();
       updateIqamahTimer();
       checkIqamahTrigger();
@@ -753,17 +858,179 @@ window.PrayerModule = (function() {
         adzanEnabled = !adzanEnabled;
         updateAdzanUI();
         
-        const adzanAudio = document.getElementById('adzanAudio');
+        /* const adzanAudio = document.getElementById('adzanAudio');
         if (adzanEnabled && adzanAudio) {
           adzanAudio.play().catch(e => console.log);
         } else if (adzanAudio) {
           adzanAudio.pause();
-        }
+        } */
+		
+		// Opsional: tampilkan toast/notifikasi bahwa adzan sudah ON
+    if (adzanEnabled) {
+      console.log("🔊 Adzan diaktifkan - akan berbunyi saat waktu sholat tiba");
+    } else {
+      console.log("🔇 Adzan dimatikan");
+    }
       });
     }
     
     // Set initial UI
     updateAdzanUI();
+	
+	    // ==================== AUDIO PERMISSION BANNER (SOLUSI B) ====================
+    const audioBanner = document.getElementById('audioPermissionBanner');
+    const closeBannerBtn = document.getElementById('closeAudioBanner');
+    let audioActivated = localStorage.getItem('audioActivated') === 'true';
+    
+    // Fungsi untuk mengaktifkan audio context
+    function activateAudioContext() {
+      const adzanAudio = document.getElementById('adzanAudio');
+      if (adzanAudio) {
+        adzanAudio.play().then(() => {
+          adzanAudio.pause();
+          adzanAudio.currentTime = 0;
+          audioActivated = true;
+          localStorage.setItem('audioActivated', 'true');
+          console.log("✅ Audio context berhasil diaktifkan - Adzan siap berbunyi");
+          
+          // Sembunyikan banner
+          if (audioBanner) {
+            audioBanner.style.display = 'none';
+          }
+          
+          // Tampilkan notifikasi sukses
+          showToastNotification("🔊 Suara adzan telah diaktifkan! Adzan akan berbunyi otomatis saat waktu sholat tiba.");
+          
+        }).catch(e => {
+          console.log("⏳ Perlu interaksi user untuk mengaktifkan audio:", e);
+          // Tampilkan banner lagi jika gagal
+          if (audioBanner && !audioActivated) {
+            audioBanner.style.display = 'flex';
+          }
+        });
+      }
+    }
+    
+    // Fungsi toast notifikasi sederhana
+    function showToastNotification(message) {
+      // Cek apakah toast sudah ada
+      let toast = document.getElementById('audioToastNotification');
+      if (toast) {
+        toast.remove();
+      }
+      
+      toast = document.createElement('div');
+      toast.id = 'audioToastNotification';
+      toast.innerHTML = `
+        <div style="background: #00f2ff; color: #000; padding: 12px 20px; border-radius: 8px; position: fixed; bottom: 100px; left: 20px; right: 20px; z-index: 99998; text-align: center; font-weight: bold; box-shadow: 0 0 20px rgba(0,242,255,0.5); animation: slideInUp 0.3s ease;">
+          ${message}
+        </div>
+        <style>
+          @keyframes slideInUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+          }
+        </style>
+      `;
+      document.body.appendChild(toast);
+      
+      // Hilangkan setelah 3 detik
+      setTimeout(() => {
+        if (toast) toast.remove();
+      }, 3000);
+    }
+    
+    // Jika audio sudah pernah diaktifkan sebelumnya, langsung sembunyikan banner
+    if (audioActivated) {
+      if (audioBanner) audioBanner.style.display = 'none';
+    }
+    
+    // Event klik pada banner utama
+    if (audioBanner) {
+      audioBanner.addEventListener('click', (e) => {
+        // Jangan trigger jika yang diklik adalah tombol close
+        if (e.target.id === 'closeAudioBanner') return;
+        activateAudioContext();
+      });
+    }
+    
+    // Event klik tombol close banner
+    if (closeBannerBtn) {
+      closeBannerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (audioBanner) {
+          audioBanner.style.display = 'none';
+          // Simpan preferensi bahwa user menutup banner (tidak mengaktifkan audio)
+          localStorage.setItem('audioBannerClosed', 'true');
+        }
+      });
+    }
+    
+    // Jika banner pernah ditutup tapi audio belum aktif, jangan tampilkan lagi
+    const bannerClosed = localStorage.getItem('audioBannerClosed') === 'true';
+    if ((audioActivated || bannerClosed) && audioBanner) {
+      audioBanner.style.display = 'none';
+    }
+    
+    // Tambahkan tombol test adzan (opsional)
+    const testAdzanBtn = document.getElementById('testAdzanBtn');
+    if (testAdzanBtn) {
+      testAdzanBtn.addEventListener('click', () => {
+        const adzanAudio = document.getElementById('adzanAudio');
+        if (adzanAudio) {
+          adzanAudio.currentTime = 0;
+          adzanAudio.play()
+            .then(() => {
+              console.log("✅ Test adzan berhasil");
+              setTimeout(() => {
+                adzanAudio.pause();
+                adzanAudio.currentTime = 0;
+              }, 3000);
+            })
+            .catch(e => console.error("❌ Test adzan gagal:", e));
+        }
+      });
+    }
+    
+    // Perlebar toleransi adzan menjadi 60 detik (modified checkAndTriggerAdzan)
+    // Override fungsi checkAndTriggerAdzan yang sudah ada
+    window.checkAndTriggerAdzanExtended = function() {
+      if (!adzanEnabled) return;
+      if (!prayerTimesData || Object.keys(prayerTimesData).length === 0) return;
+      
+      const now = new Date();
+      const todayStr = now.toDateString();
+      
+      for (let prayer of fardhuOrder) {
+        const prayerTimeStr = prayerTimesData[prayer];
+        if (!prayerTimeStr) continue;
+        
+        const [hours, minutes] = prayerTimeStr.split(":").map(Number);
+        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+        
+        const diffSeconds = (now - prayerDate) / 1000;
+        
+        // Toleransi 0-60 detik
+        const shouldTrigger = diffSeconds >= 0 && diffSeconds <= 60;
+        const adzanKey = `${todayStr}_${prayer}`;
+        
+        if (shouldTrigger && !playedAdzanPrayers[prayer] && !sentAdzanToday[adzanKey]) {
+          console.log(`🕌 Adzan triggered for ${prayer} | Waktu: ${prayerTimeStr} | Selisih: ${diffSeconds} detik`);
+          playAdzan(prayer);
+          sentAdzanToday[adzanKey] = true;
+          
+          setTimeout(() => { 
+            delete playedAdzanPrayers[prayer];
+            delete sentAdzanToday[adzanKey];
+          }, 300000);
+        }
+      }
+    };
+    
+    // Ganti fungsi checkAndTriggerAdzan dengan versi extended
+    // (Hapus yang lama, gunakan yang baru)
+    window.originalCheckAndTrigger = checkAndTriggerAdzan;
+    checkAndTriggerAdzan = window.checkAndTriggerAdzanExtended;
   }
   
   // ==================== PUBLIC API ====================
